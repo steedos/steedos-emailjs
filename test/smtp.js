@@ -6,6 +6,7 @@ petrochina.com.cn
 	smtp: msg.petrochina.com.cn ：465
 
 */
+
 var MimeBuilder = require('emailjs-mime-builder')
 var SmtpClient = require('emailjs-smtp-client')
 var fs = require('fs');
@@ -28,14 +29,6 @@ client.onidle = function(){
 		        to: "hotoa@petrochina.com.cn"
 		    }).getEnvelope()
     )
-}
-
-function asciiToUInt8Array(str) {
-    var bufView = new Uint8Array(str.length);
-    for (var i = 0, strLen = str.length; i < strLen; i++) {
-        bufView[i] = str.charCodeAt(i);
-    }
-    return bufView;
 }
 
 client.onready = function(){
