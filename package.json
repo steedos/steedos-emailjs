@@ -29,6 +29,7 @@
     "emailjs-mime-codec": "^1.0.1",
     "emailjs-tcp-socket": "^1.0.1",
     "emailjs-utf7": "^3.0.1",
-    "emailjs-stringencoding": "^1.0.1"
+    "emailjs-stringencoding": "^1.0.1",
+    "emailjs-mime-builder": "^1.0.1"
   }
 }
