@@ -21,7 +21,7 @@ client.onidle = function(){
     }
 
     alreadySending = true;
-    
+
     client.useEnvelope(
     	new MimeBuilder().addHeader({
 		        from: "HOTOA <hotoa@petrochina.com.cn>",
@@ -39,7 +39,7 @@ function asciiToUInt8Array(str) {
 }
 
 client.onready = function(){
-	var attachment_data = fs.readFileSync('D:/中文.txt','utf-8'); 
+	var attachment_data = fs.readFileSync('中文.txt','utf-8'); 
 
 	console.log(attachment_data)
 
