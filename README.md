@@ -6,7 +6,7 @@
 
 3、进入项目：`cd steedos-emailjs`
 
-4、安装相关package: `node install`
+4、安装相关package: `npm install`
 
 5、进入项目test文件夹：`cd test`
 
