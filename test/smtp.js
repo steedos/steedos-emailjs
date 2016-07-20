@@ -10,7 +10,7 @@ petrochina.com.cn
 var MimeBuilder = require('emailjs-mime-builder')
 var SmtpClient = require('emailjs-smtp-client')
 var fs = require('fs');
-var client = new SmtpClient('msg.petrochina.com.cn', 465,{auth:{user:'hotoa@petrochina.com.cn',pass:'hotoa=7l'}})
+var client = new SmtpClient('msg.petrochina.com.cn', 465,{auth:{user:'hotoa@petrochina.com.cn',pass:'邮箱密码'}})
 
 var alreadySending  = false;
 
