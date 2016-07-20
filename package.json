@@ -31,6 +31,6 @@
     "emailjs-utf7": "^3.0.1",
     "emailjs-stringencoding": "^1.0.1",
     "emailjs-mime-builder": "^1.0.1",
-    "emailjs-mime-parser":"^1.0.1"
+    "emailjs-mime-parser":"^1.0.0"
   }
 }
