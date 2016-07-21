@@ -12,6 +12,10 @@ var SmtpClient = require('emailjs-smtp-client')
 var fs = require('fs');
 var client = new SmtpClient('msg.petrochina.com.cn', 465,{auth:{user:'hotoa@petrochina.com.cn',pass:'邮箱密码'}})
 
+var FROM = "hotoa@petrochina.com.cn";
+
+var TO = ["hotoa@petrochina.com.cn", "baozhoutao@hotoa.com"];
+
 var alreadySending  = false;
 
 client.onidle = function(){
@@ -25,8 +29,8 @@ client.onidle = function(){
 
     client.useEnvelope(
     	new MimeBuilder().addHeader({
-		        from: "HOTOA <hotoa@petrochina.com.cn>",
-		        to: "hotoa@petrochina.com.cn"
+		       from: FROM,
+        		to: TO
 		    }).getEnvelope()
     )
 }
@@ -36,7 +40,7 @@ client.onready = function(){
 
 	console.log(attachment_data)
 
-	var node = new MimeBuilder("multipart/mixed").addHeader({ Subject: "中文测试Subject"});
+	var node = new MimeBuilder("multipart/mixed").addHeader({ Subject: "中文测试Subject"}).addHeader({ From: FROM}).addHeader({ To: TO});
 
 	node.createChild("text/plain").setContent("中文测试Body");
 
