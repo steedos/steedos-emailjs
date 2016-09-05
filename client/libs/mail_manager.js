@@ -218,8 +218,10 @@ MailManager.getNewMessages = function(){
 	});
 }
 
-MailManager.saveDrafts = function(to, cc, bcc, subject, body, attachments){ 
-	
+
+MailManager.deleteMessages = function(path, uid,callback){
+
+	return ImapClientManager.deleteMessages(null, path, uid,callback);
 }
 
 

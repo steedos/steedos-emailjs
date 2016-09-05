@@ -236,18 +236,20 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 	
 }
 
-ImapClientManager.deleteMessages = function(path, uid,callback){
+ImapClientManager.deleteMessages = function(client,path, uid,callback){
 
 	console.log("[ImapClientManager.deleteMessages] path is " + path + "; uid is " + uid);
-	var message = MailManager.getMessageByUid(path, uid);
-
-	ImapClientManager.setFlags(null, path, uid, null, {byUid:true}, function(messages){
+	if (!client)
+		client = this.getClient();
 	
-		client.deleteMessages(path ,messages.uid).then(function(){ 
-		
-		console.log("uid values is " + messages.uid);
+	client.connect().then(function(){
+		client.deleteMessages(path, uid, {byUid:true}).then(function(){ 
+			console.log("uid values is " + uid);
+			client.close();
+			if(typeof(callback) == 'function'){
+					callback();
+			}
 		})
-	callback();
 	})
 }
 

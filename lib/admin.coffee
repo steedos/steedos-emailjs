@@ -5,7 +5,7 @@ db.mail_accounts.adminConfig =
 		{name: "email"},
 	]
 	selector: {owner: -1}
-	routerAdmin: "/mail"
+	routerAdmin: "/emailjs"
 
 db.mail_domains.adminConfig = 
 	icon: "globe"
@@ -13,7 +13,7 @@ db.mail_domains.adminConfig =
 	tableColumns: [
 		{name: "domain"},
 	]
-	routerAdmin: "/mail"
+	routerAdmin: "/emailjs"
 
 
 
