@@ -1,0 +1,166 @@
+/* iCheck plugin Flat skin, blue
+----------------------------------- */
+.steedos-mail {
+    .icheckbox_flat-blue,.iradio_flat-blue {
+        display: inline-block;
+        *display: inline;
+        vertical-align: middle;
+        margin: 0;
+        padding: 0;
+        width: 20px;
+        height: 20px;
+        background: url(blue.png) no-repeat;
+        border: none;
+        cursor: pointer;
+    }
+
+    .icheckbox_flat-blue {
+        background-position: 0 0;
+    }
+    .icheckbox_flat-blue.checked {
+        background-position: -22px 0;
+    }
+    .icheckbox_flat-blue.disabled {
+        background-position: -44px 0;
+        cursor: default;
+    }
+    .icheckbox_flat-blue.checked.disabled {
+        background-position: -66px 0;
+    }
+
+    .iradio_flat-blue {
+        background-position: -88px 0;
+        .checked {
+            background-position: -110px 0;
+            .disabled {
+                background-position: -154px 0;
+            }
+        }
+        .disabled {
+            background-position: -132px 0;
+            cursor: default;
+        }
+    }
+
+    /* Retina support */
+    @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+           only screen and (-moz-min-device-pixel-ratio: 1.5),
+           only screen and (-o-min-device-pixel-ratio: 3/2),
+           only screen and (min-device-pixel-ratio: 1.5) {
+        .icheckbox_flat-blue,.iradio_flat-blue {
+            background-image: url(/images/apps/mail/blue.png);
+            -webkit-background-size: 176px 22px;
+            background-size: 176px 22px;
+        }
+    }
+
+
+    .mail-compose{
+        .note-editable{
+            min-height: 400px;
+        }
+
+        .cc{
+            padding-left: 45px; 
+        }
+
+        .text_link{
+            font-size: 12px;
+            line-height: 34px;
+            margin-right: 15px;
+            color: #5e696e;
+            cursor: pointer;
+            text-decoration: underline;
+            vertical-align: top;
+            display: inline-block;
+            zoom: 1;
+        }
+
+        .remove_cc, .remove_bcc{
+            display: none;
+        }
+
+        .mail_cc, .mail_bcc{
+            display: none;
+        }
+
+
+    }
+
+    .attachment-info-box {
+        display: block;
+        height: 45px;
+        background: #fff;
+        width: 100%;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        border-radius: 0;
+
+        .mailbox-attachment-delete{
+            line-height: 18px;
+        }
+    }
+
+    .attachment-info-box-icon {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        display: block;
+        float: left;
+        height: 45px;
+        width: 45px;
+        text-align: center;
+        font-size: 25px;
+        line-height: 45px;
+        background: rgba(0,0,0,0.2);
+    }
+
+    .attachment-info-box-content{
+        padding: 0px 10px;
+        margin-left: 45px;
+        height: 45px;
+        background-color: #f5f5f5;
+    }
+
+    .attachment-info-box-text{
+        display: block;
+        font-size: 14px;
+        padding-top: 3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mail_list{
+        
+        .mailbox-subject {
+            width:60%;
+        }
+
+        .mailbox-messages {
+            min-height: 380px;
+        }
+
+        .mailbox-subject .subject{
+             width: 300px;
+        }
+
+        .mailbox-subject .body{
+             width: 400px;
+        }   
+            
+        .mailbox-subject div {
+           
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mail-search{
+           cursor: pointer;
+        }
+
+    }
+
+}

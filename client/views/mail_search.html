@@ -1,0 +1,141 @@
+<template name='mail_search'>
+	<!-- <div class="input-group">
+      <input type="text" name="q" class="form-control search-mail-input" placeholder="搜索邮件">
+          <span class="input-group-btn">
+            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+            </button>
+          </span>
+    </div> -->
+	<div class="input-group pull-right" style='width:33%'>
+		<input type="text" id="keyword0" class="form-control search-mail-input" placeholder="搜索邮件">
+		<span class="input-group-btn">
+			<button type="submit" name="search" id="search-btn" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-search"></i>
+			<span class="fa fa-caret-down"></span></button>
+			<ul class="dropdown-menu">
+				<li><a href="#">主题</a></li>
+				<li><a href="#">内容</a></li>
+				<li><a href="#">附件名称</a></li>
+				<li class="divider"></li>
+				<li><a href="#" id='advanced_search'>高级搜索</a></li>
+			</ul>
+		</span>
+    </div>
+
+	
+	<div class="modal" id='advanced_search_modal' tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- <div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span></button>
+					<h4 class="modal-title">高级搜索</h4>
+				</div> -->
+				<div class="modal-body">
+				    <div class="box box-warning">
+				      <!--   <div class="box-header with-border">
+				          <h3 class="box-title">General Elements</h3>
+				        </div> -->
+				        <!-- /.box-header -->
+				        <div class="box-body">
+				        	<div class="form-group">
+						    	<label>关键字</label>
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+									<input type="email" class="form-control" placeholder="主题" id='keyword'>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-4">
+									<div class="input-group">
+										<span class="input-group-addon"><input type="checkbox"></span>
+										<div class="form-control">主题</div>
+									</div>
+								</div>
+								<div class="col-xs-4">
+									<div class="input-group">
+										<span class="input-group-addon"><input type="checkbox"></span>
+										<div class="form-control">内容</div>
+									</div>
+								</div>
+								<div class="col-xs-4">
+									<div class="input-group">
+										<span class="input-group-addon"><input type="checkbox"></span>
+										<div class="form-control">附件名称</div>
+									</div>
+								</div>
+							</div>
+							<br>
+						    <div class="form-group">
+						    	<label>发件人</label>
+								<div class="input-group">
+									<span class="input-group-addon">@</span>
+									<input type="email" class="form-control" placeholder="发件人" id='from'>
+								</div>
+							</div>
+						    <div class="form-group">
+						    	<label>收件人</label>
+								<div class="input-group">
+									<span class="input-group-addon">@</span>
+									<input type="email" class="form-control" placeholder="收件人" id='to'>
+								</div>
+							</div>
+
+							<label>时间范围:</label>
+							<div class="row">
+								<!-- <div class="col-xs-4">
+									<button type="button" class="btn btn-default pull-left" id="daterange-btn">
+										<span>
+											<i class="fa fa-calendar"></i> 时间段选择
+										</span>
+										<i class="fa fa-caret-down"></i>
+									</button>
+								</div> -->
+								<div class="col-xs-12">
+									<div class="input-group">
+										<span class="input-group-addon"><input type="radio"></span>
+										<div class="row">
+											<div class="col-xs-6">
+												<div class="input-group">
+													<span class="input-group-addon">
+													<i class="fa fa-calendar"></i>
+													</span>
+													<input type="text" class="form-control pull-left" id="search_date_start">
+												</div>
+											</div>
+											<div class="col-xs-6">
+												<div class="input-group">
+													<span class="input-group-addon">
+														至
+													</span>
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="input-group">
+																<span class="input-group-addon">
+																<i class="fa fa-calendar"></i>
+																</span>
+																<input type="text" class="form-control pull-right" id="search_date_end">
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+							<!-- /.input group -->
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		<!-- /.modal-content -->
+		</div>
+	<!-- /.modal-dialog -->
+	</div>
+
+</template>
