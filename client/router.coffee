@@ -12,7 +12,7 @@ checkAccountLogin = (context, redirect) ->
 		FlowRouter.go '/admin/view/mail_accounts';
 
 mailRoutes = FlowRouter.group
-	prefix: '/mail',
+	prefix: '/emailjs',
 	name: 'mailRoute',
 	triggersEnter: [ checkUserSigned, checkMailAccountIsNull, checkAccountLogin],
 

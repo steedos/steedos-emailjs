@@ -236,6 +236,20 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 	
 }
 
+ImapClientManager.deleteMessages = function(client, path, uid){
+	if (!client)
+		client = this.getClient();
+
+	console.log("ImapClientManager.deleteMessages ...");
+	
+	client.connect().then(function(){
+		client.deleteMessages(path ,uid).then(function(){ 
+		
+		console.log("uid values is " + uid);
+			client.close();
+		})
+	});
+}
 
 ImapClientManager.upload = function(client, path, message, callback){
 	if (!client)

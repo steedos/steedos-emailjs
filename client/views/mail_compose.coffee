@@ -91,6 +91,10 @@ Template.mail_compose.events
         event.target.parentNode.parentNode.parentNode.remove();
     
     'click #compose-send': (event)->
+        if $("#mail_to").val() == null || $("#mail_to").val().length < 1
+            toastr.warning("请填写收件人")
+            return 
+
         console.log("--------------compose-send-----------------")
         attachments = new Array();
 

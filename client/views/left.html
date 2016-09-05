@@ -1,6 +1,6 @@
 <template name="layout_left">
 <div class="left">
-    <a href="/mail/b/compose" class="btn btn-primary btn-block margin-bottom btn-compose">新建</a>
+    <a href="/emailjs/b/compose" class="btn btn-primary btn-block margin-bottom btn-compose">新建</a>
 
     <div class="box box-solid">
       <div class="box-header with-border">
@@ -14,28 +14,28 @@
       <div class="box-body no-padding" style="display: block;">
         <ul class="nav nav-pills nav-stacked">
             {{#with getBox 'Inbox'}}
-              <li class="{{getLiClass path}}"><a href="/mail/b/{{path}}"><i class="fa fa-inbox"></i> {{t path}}
+              <li class="{{getLiClass path}}"><a href="/emailjs/b/{{path}}"><i class="fa fa-inbox"></i> {{t path}}
               <span class="label label-primary pull-right">{{getUnseenCount}} / {{info.exists}}</span></a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Sent'}}
-              <li class="{{getLiClass path}}"><a href="/mail/b/{{path}}"><i class="fa fa-envelope-o"></i> {{t path}}</a></li>
+              <li class="{{getLiClass path}}"><a href="/emailjs/b/{{path}}"><i class="fa fa-envelope-o"></i> {{t path}}</a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Drafts'}}
-              <li class="{{getLiClass path}}"><a href="/mail/b/{{path}}"><i class="fa fa-file-text-o"></i> {{t path}}</a></li>
+              <li class="{{getLiClass path}}"><a href="/emailjs/b/{{path}}"><i class="fa fa-file-text-o"></i> {{t path}}</a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Junk'}}
-              <li class="{{getLiClass path}}"><a href="/mail/b/{{path}}"><i class="fa fa-filter"></i> {{t path}}
+              <li class="{{getLiClass path}}"><a href="/emailjsemailjs/b/{{path}}"><i class="fa fa-filter"></i> {{t path}}
               <span class="label label-warning pull-right">{{info.exists}}</span></a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Trash'}}
-              <li class="{{getLiClass path}}"><a href="/mail/b/{{path}}"><i class="fa fa-trash-o"></i> {{t path}}</a></li>
+              <li class="{{getLiClass path}}"><a href="/emailjs/b/{{path}}"><i class="fa fa-trash-o"></i> {{t path}}</a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Archive'}}
               <li class="{{getLiClass path}}" style="border-bottom: 1px solid #ddd"><a href="/mail/b/{{path}}"><i class="fa fa-archive"></i> {{t path}}</a></li>
             {{/with}}
 
             {{#each getOtherBoxs}}
-              <li class="{{getLiClass path}}"><a href="/mail/b/{{path}}">&emsp;<i class="fa fa-folder-o" aria-hidden="true"></i> {{name}}</a></li>
+              <li class="{{getLiClass path}}"><a href="/emailjs/b/{{path}}">&emsp;<i class="fa fa-folder-o" aria-hidden="true"></i> {{name}}</a></li>
             {{/each}}
         </ul>
       </div>

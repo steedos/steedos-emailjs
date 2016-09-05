@@ -71,6 +71,7 @@ Template.mail_list.helpers
 
 
 Template.mail_list.events
+     'click #message-delete': (event)->
 
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
