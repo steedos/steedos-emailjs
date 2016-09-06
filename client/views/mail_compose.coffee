@@ -74,12 +74,6 @@ Template.mail_compose.events
         $(".add_bcc").css("display","inline-block");
         $(".remove_bcc").hide();
 
-    #'click #compose-draft': (event)->
-
-        #MailManager.composeSend();
-        #MailCollection.getMessageCollection("Drafts").insert(MailManager.getComposeMessages());
-        #MailCollection.getComposeMessage("Drafts").find().fetch()
-
     'change #attachment_file': (event, template) ->
         if !$("#attachment_file").val()
             return ;

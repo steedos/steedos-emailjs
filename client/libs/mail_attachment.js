@@ -1,10 +1,7 @@
 
 var fs, path, os, exec, dirname, dirtemp ;
 
-if(Steedos.isNode()){
-	dirname = process.env.USERPROFILE + "\\Downloads";
-	dirtemp = process.env.TEMP;
-}
+
 
 if(window.require){
 	fs = window.require("fs");
@@ -13,17 +10,26 @@ if(window.require){
 	exec = window.require('child_process').exec;
 }
 
+
+if(Steedos.isNode()){
+
+	dirname = path.join(path.normalize(process.env.HOME? process.env.HOME : process.env.USERPROFILE), "Downloads");
+	
+	dirtemp = process.env.TEMP;
+}
+
+
 MailAttachment = {};
 
 
-MailAttachment.openFile = function(filePath, fileName){
+MailAttachment.openFile = function(dirname, name){
 
 	var cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
 
-	cmd += path.join(path.normalize(filePath), '\"' + fileName + '\"');
+	cmd += path.join(path.normalize(dirname), '\"' + name + '\"');
     
     exec(cmd, function(error,stdout,stderr){
-    	console.log("文件已关闭：" + filePath);
+    	console.log("文件已关闭：" + dirname);
     });
 }
 
@@ -35,18 +41,19 @@ MailAttachment.save = function(name, data, callback){
 	fs.writeFile(filePath, new Buffer(data), function (err) {
         if (err) throw err;
         console.log("Export Account Success!");
-        callback(dirname, name);
+        callback(dirname, name, filePath);
     })
 }
 
-function getAttachmentName(filePath){
-	var atts = filePath.split("\/");
 
-	var atts2 = filePath.split("\\");
+MailAttachment.download = function(path, uid, bodyPart, callback){
 
-	var attchmentname = atts.length > atts2.length? atts[atts.length - 1] : atts2[atts2.length - 1];
+	ImapClientManager.getAttachmentByPart(path, uid, bodyPart, function(filename, data){
+		MailAttachment.save(filename, data, function(dirname, name, filePath){
+			callback(dirname, name, filePath);
+		})
+	});
 
-	return attchmentname;
 }
 
 
@@ -117,6 +124,15 @@ MailAttachment.getAttachmentIcon = function(fileName){
 	return icon[key];
 }
 
+function getAttachmentName(filePath){
+	var atts = filePath.split("\/");
+
+	var atts2 = filePath.split("\\");
+
+	var attchmentname = atts.length > atts2.length? atts[atts.length - 1] : atts2[atts2.length - 1];
+
+	return attchmentname;
+}
 
 MailAttachment.getAttachmentNode = function(filePath){
 

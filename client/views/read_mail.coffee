@@ -53,10 +53,10 @@ Template.read_mail.events
 
 		att = message.attachments[att_index];
 
-		MailManager.getAttachment path, uid, att.bodyPart, (messages) ->
-			# MailAttachment.save att.name, data, (filePath, fileName) ->
-			# 	toastr.success("附件已存储");
-			# 	MailAttachment.openFile(filePath, fileName);
+		MailAttachment.download path, uid, att.bodyPart, (dirname, name, filePath)->
+			toastr.success("附件已存储");
+			MailAttachment.openFile(dirname, name);
+
 
 	'click .last_mail': (event, template)->
 		console.log("click last_mail")
