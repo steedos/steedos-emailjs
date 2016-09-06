@@ -111,9 +111,7 @@ MailManager.getMessageByUid = function(path, uid){
 	return MailCollection.getMessageCollection(path).findOne({uid: uid});
 }
 
-MailManager.getAttachment = function(path, uid, bodyPart, callback){
-	ImapClientManager.getAttachmentByPart(path, uid, bodyPart, callback);
-}
+
 
 MailManager.getUnseenUid = function(){
 	return MailCollection.mail_unseen.findOne();

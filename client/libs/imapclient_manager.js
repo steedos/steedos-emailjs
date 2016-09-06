@@ -153,18 +153,15 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 					console.log("listMessages messages 开始解析：" + message.uid);
 					console.log("[getAttachmentByPart] part.type is " + bodyPart.type);
 					var bodyMime = message['body[' + bodyPart.part + ']'];
-					var data = base64DecodeToUint8Array(bodyMime);
-					MailAttachment.save(bodyPart.dispositionParameters.filename, data, function(filePath, fileName){
-						toastr.success("附件已存储");
-						MailAttachment.openFile(filePath, fileName);
-					})
+					var data = ImapClientManager.base64DecodeToUint8Array(bodyMime);
+
+					callback(bodyPart.dispositionParameters.filename, data);
 				});
 			}catch(err){
 				console.error(err)
 			}
 
 			client.close();
-			callback(messages);
 		});
 	});
 }
@@ -236,9 +233,16 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 	
 }
 
-ImapClientManager.deleteMessages = function(client,path, uid,callback){
+ImapClientManager.deleteMessages = function(client, path, uid, callback){
 
-	console.log("[ImapClientManager.deleteMessages] path is " + path + "; uid is " + uid);
+	ImapClientManager.setFlags(null, path, uid, {set: ['\\Deleted']}, {byUid:true}, function(){
+    })
+	callback();
+}
+
+ImapClientManager.completeDeleteMessages = function(client, path, uid, callback){
+
+		console.log("[ImapClientManager.completeDeleteMessages] path is " + path + "; uid is " + uid);
 	if (!client)
 		client = this.getClient();
 	
@@ -252,6 +256,7 @@ ImapClientManager.deleteMessages = function(client,path, uid,callback){
 		})
 	})
 }
+
 
 ImapClientManager.upload = function(client, path, message, callback){
 	if (!client)
@@ -304,7 +309,7 @@ function base64Decode(str){
 	return MimeCodec.base64Decode(str);
 }
 
-function base64DecodeToUint8Array(str){
+ImapClientManager.base64DecodeToUint8Array = function(str){
 	return MimeCodec.base64.decode(str)
 }
 

@@ -44,14 +44,15 @@ MailForward.getAttachmentsHtml = function(){
 	var message = MailManager.getMessage(Session.get("mailMessageId"));
 
 	message.attachments.forEach(function(item){
-		var node = MailAttachment.getAttachmentNode(item.name);
-    	$("#compose_attachment_list").append(node);
+		MailAttachment.download(Session.get("mailBox"), message.uid, item.bodyPart, function(dirname, name, filePath){
+           
+			var node = MailAttachment.getAttachmentNode(filePath);
+			console.log("name : "+ name + " ; dirname : " + dirname +" ; filePath : " + filePath );
+    		$("#compose_attachment_list").append(node);
+		});
+		
 	});
     
 }
-
-
-
-
 
 
