@@ -71,9 +71,9 @@ Template.mail_list.helpers
 
 
 Template.mail_list.events
-     'click #message-delete': (event)->
-
-       # MailManager.deleteMessages(Session.get("mailBox"),);
+    'click #message-delete': (event, template) ->
+        # MailManager.deleteMessages(Session.get("mailBox"),);
+        console.log("message delete");
 
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
