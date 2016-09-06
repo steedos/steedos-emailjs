@@ -23,50 +23,79 @@ SmtpClientManager.getClient = function(){
 
 
 SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments){
-	
-	console.log("SmtpClientManager.sendMai start");
 
-	var auth = AccountManager.getAuth();
-	var from = auth.user;
+	var client;
+	try{
+		toastr.info("邮件发送中...");
+		$(document.body).addClass('loading');
+	    
+		console.log("SmtpClientManager.sendMai start");
 
-	var	client = SmtpClientManager.getClient();
+		var auth = AccountManager.getAuth();
+		var from = auth.user;
 
-    var alreadySending  = false;
+		var	client = SmtpClientManager.getClient();
 
-	client.onidle = function(){
-	    console.log("Connection has been established");
-	    if(alreadySending ){
-	    	client.close();
-	    	return 
-	    }
+	    var alreadySending  = false;
 
-	    alreadySending = true;
+		client.onidle = function(){
+		    console.log("Connection has been established");
+		    if(alreadySending ){
+		    	client.close();
+		    	return 
+		    }
 
-	    var evnelope = {from: from, to: to};
+		    alreadySending = true;
 
-	    if(cc && cc.length > 0){
-	    	evnelope.cc = cc;
-	    }
+		    var evnelope = {from: from, to: to};
 
-	    if(bcc && bcc.length > 0){
-	    	evnelope.bcc = bcc ;
-	    }
+		    if(cc && cc.length > 0){
+		    	evnelope.cc = cc;
+		    }
 
-	    client.useEnvelope(new MimeBuilder().addHeader(evnelope).getEnvelope());
+		    if(bcc && bcc.length > 0){
+		    	evnelope.bcc = bcc ;
+		    }
+
+		    client.useEnvelope(new MimeBuilder().addHeader(evnelope).getEnvelope());
+		}
+
+		client.onready = function(){	
+
+			var message = MailMimeBuilder.getMessageMime(from, to, cc, bcc, subject, body, attachments);
+
+			client.send(message);
+
+		    client.end();
+		}
+	    
+
+	    client.ondone = function(success){ 
+	    	if(success){
+        		$(document.body).removeClass('loading');
+        		toastr.success("发送成功");
+   			}else{
+   				$(document.body).removeClass('loading');
+        		toastr.success("发送不成功");
+   			}
+        }
+
+        client.onerror = function(err){
+        	client.onclose(isError);
+        }
+
+        client.connect();
+
+	}catch(e){
+		console.log("发送不成功！错误: " + e)
 	}
+	finally{
 
-	client.onready = function(){	
+     	client.close();
+     	
+    }
 
-		var message = MailMimeBuilder.getMessageMime(from, to, cc, bcc, subject, body, attachments);
-
-		client.send(message);
-
-	    client.end();
-	}
-    client.connect();
-
-	client.close();
 }
 
 
-
+// $(document.body).addClass('loading');toastr.info("邮件发送中...");$(document.body).removeClass('loading');toastr.success("发送成功")
