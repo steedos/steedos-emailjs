@@ -12,6 +12,11 @@ Template.mail_list.helpers
     box: ->
         return MailManager.getBox(Session.get("mailBox"));
 
+    isDraftsBox: ->
+        if MailManager.getBox(Session.get("mailBox")).path == "Drafts"
+            return  true
+        return false
+
     boxExists: ->
         if Session.get("mailBoxFilter")
             return Session.get("mailBoxFilter").length;
@@ -71,9 +76,16 @@ Template.mail_list.helpers
 
 
 Template.mail_list.events
+
     'click #message-delete': (event, template) ->
         # MailManager.deleteMessages(Session.get("mailBox"),);
         console.log("message delete");
+
+    'click #message-delete': (event, template) ->
+        # MailManager.deleteMessages(Session.get("mailBox"),);
+        console.log("message delete");
+        origin/master
+        Stashed changes
 
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
@@ -101,3 +113,7 @@ Template.mail_list.events
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     $("#mail_list_load").hide();
+
+
+
+

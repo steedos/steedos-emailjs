@@ -7,11 +7,11 @@ Template.mail_compose.helpers
         message = MailManager.getMessage(Session.get("mailMessageId"));
 
         if Session.get("mailMessageId")
-            if Session.get("mailReply")
-                to = message.from;
-                rev.values = to;
+            if Session.get("mailJumpDraft")
+                rev.values = message.to;
+            else if Session.get("mailReply")
+                rev.values = message.from;
             else if Session.get("mailReplyAll")
-            
                 to = message.from.concat(message.to);
                 
                 fromUserAddress = to.filterProperty("address", AccountManager.getAuth().user);
@@ -28,18 +28,24 @@ Template.mail_compose.helpers
 
         message = MailManager.getMessage(Session.get("mailMessageId"));
 
-        if Session.get("mailMessageId")&& Session.get("mailReplyAll")
-            rev.values  = message.cc;
+        if Session.get("mailMessageId")
+            if Session.get("mailJumpDraft")
+                rev.values  = message.cc;
+            else if Session.get("mailReplyAll")
+                rev.values  = message.cc;
            
         return rev;
 
     mail_bcc: () ->
-        return {name: "mail_bcc", title: '密&emsp;送', atts:{id: "mail_bcc", name: "mail_bcc"}};
+        return rev = {name: "mail_bcc", title: '密&emsp;送', atts:{id: "mail_bcc", name: "mail_bcc"}};
 
     subject: () ->
         if Session.get("mailMessageId")
-                subject = MailManager.getMessage(Session.get("mailMessageId")).subject;
-            if Session.get("mailForward")
+            message = MailManager.getMessage(Session.get("mailMessageId"));
+            subject = message.subject;
+            if Session.get("mailJumpDraft")
+                return subject;
+            else if Session.get("mailForward")
                 return "转发: " + subject;
             else if Session.get("mailReply") || Session.get("mailReplyAll") 
                 return "回复: " + subject;  
@@ -48,10 +54,14 @@ Template.mail_compose.helpers
 
     body: () ->
         if Session.get("mailMessageId")
-            
-            return  MailForward.getBody();
+            message = MailManager.getMessage(Session.get("mailMessageId"));
+            if Session.get("mailJumpDraft")
+                console.log("mailJumpDraft：bodyHtml.data" + message.bodyHtml.data)
+                return message.bodyHtml.data;
+
+            return  MailForward.getBody(message);
          
-        return "";
+        return " 内";
 
 Template.mail_compose.events
     'click .add_cc': (event, template) ->
@@ -111,11 +121,13 @@ Template.mail_compose.events
 
         message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user ,$("#mail_to").val(),$("#mail_cc").val(), $("#mail_bcc").val(),$(".form-control.subject").val(), $('#compose-textarea').summernote('code') ,attachments);
 
-        ImapClientManager.upload(null, "Drafts", message);
+        ImapClientManager.upload null, MailManager.getBox("Drafts").path, message, ()->
+            toastr.success("暂存成功");
 
 Template.mail_compose.onRendered ->
-    if Session.get("mailMessageId") && Session.get("mailForward")
-        MailForward.getAttachmentsHtml();
+    if Session.get("mailMessageId") 
+        if Session.get("mailForward") || Session.get("mailJumpDraft")
+            MailForward.getAttachmentsHtml();
 
     if $("#mail_cc").val()?.length > 0
         $(".add_cc").click()

@@ -12,9 +12,7 @@ function getAddressHtml(address){
 }
 
 
-MailForward.getBody = function(){
-
-	var message = MailManager.getMessage(Session.get("mailMessageId"))
+MailForward.getBody = function(message){
 
 	var html = "<br>"
 

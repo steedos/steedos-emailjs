@@ -21,6 +21,7 @@ mailRoutes.route '/',
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
+		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", "Inbox");
 		Session.set("mailMessageId", null); 
 		Session.set("mailPage",1);
@@ -32,6 +33,7 @@ mailRoutes.route '/b/:mailBox/',
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
+		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", params.mailBox); 
 		Session.set("mailMessageId", null); 
 		Session.set("mailPage",1);
@@ -44,6 +46,7 @@ mailRoutes.route '/b/:mailBox/:mailMessageId',
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
+		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", params.mailBox); 
 		Session.set("mailMessageId", params.mailMessageId); 
 		BlazeLayout.render 'masterLayout',
@@ -54,6 +57,7 @@ mailRoutes.route '/b/forward/:mailBox/:mailMessageId',
 		Session.set("mailForward", true);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
+		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", params.mailBox); 
 		Session.set("mailMessageId", params.mailMessageId); 
 		BlazeLayout.render 'masterLayout',
@@ -63,6 +67,7 @@ mailRoutes.route '/b/reply/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
 		Session.set("mailReply", true);
 		Session.set("mailReplyAll", false);
+		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", params.mailBox); 
 		Session.set("mailMessageId", params.mailMessageId); 
 		BlazeLayout.render 'masterLayout',
@@ -71,10 +76,21 @@ mailRoutes.route '/b/reply/:mailBox/:mailMessageId',
 mailRoutes.route '/b/replyAll/:mailBox/:mailMessageId', 
 	action: (params, queryParams)->
 		Session.set("mailReplyAll", true);
+		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", params.mailBox); 
 		Session.set("mailMessageId", params.mailMessageId); 
 		BlazeLayout.render 'masterLayout',
 			main: "mail_home"
+
+mailRoutes.route '/b/jumpDraft/:mailBox/:mailMessageId', 
+	action: (params, queryParams)->
+		Session.set("mailJumpDraft", true);
+		Session.set("mailBox", params.mailBox); 
+		Session.set("mailMessageId", params.mailMessageId); 
+		BlazeLayout.render 'masterLayout',
+			main: "mail_home"
+
+
 
 
 

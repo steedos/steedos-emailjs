@@ -26,7 +26,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments){
 
 	var client;
 	try{
-		toastr.info("邮件发送中...");
+		//toastr.info("邮件发送中...");
 		$(document.body).addClass('loading');
 	    
 		console.log("SmtpClientManager.sendMai start");
@@ -72,10 +72,8 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments){
 	    client.ondone = function(success){ 
 	    	if(success){
 	    		toastr.success("发送成功");
-        		$(document.body).removeClass('loading');
    			}else{
    				toastr.success("发送不成功");
-   				$(document.body).removeClass('loading');
    			}
         }
 
@@ -86,12 +84,10 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments){
         client.connect();
 
 	}catch(e){
-		console.log("发送不成功！错误: " + e)
-	}
-	finally{
-
+		console.error(e);
+	}finally{
+		$(document.body).removeClass('loading');
      	client.close();
-     	
     }
 
 }
