@@ -34,7 +34,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments){
 		var auth = AccountManager.getAuth();
 		var from = auth.user;
 
-		var	client = SmtpClientManager.getClient();
+		client = SmtpClientManager.getClient();
 
 	    var alreadySending  = false;
 
@@ -69,14 +69,13 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments){
 		    client.end();
 		}
 	    
-
 	    client.ondone = function(success){ 
 	    	if(success){
+	    		toastr.success("发送成功");
         		$(document.body).removeClass('loading');
-        		toastr.success("发送成功");
    			}else{
+   				toastr.success("发送不成功");
    				$(document.body).removeClass('loading');
-        		toastr.success("发送不成功");
    			}
         }
 
@@ -97,5 +96,3 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments){
 
 }
 
-
-// $(document.body).addClass('loading');toastr.info("邮件发送中...");$(document.body).removeClass('loading');toastr.success("发送成功")
