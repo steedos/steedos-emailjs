@@ -2,7 +2,7 @@ Template.read_mail.helpers
 	message: ->
 		id = Session.get("mailMessageId");
 
-		s = Session.get("loadding");
+		s = Session.get("mailMessageLoadding");
 
 		console.log("read_mail loadding is " + s);
 		return MailManager.getMessage(id) ;
@@ -18,7 +18,7 @@ Template.read_mail.helpers
 	    return modifiedString;
 
 	showLoadding: ->
-		return Session.get("loadding");
+		return Session.get("mailMessageLoadding");
 
 	mailBody: (message)->
 		return if message.bodyHtml.data then message.bodyHtml.data else message.bodyText.data;

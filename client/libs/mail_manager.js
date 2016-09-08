@@ -86,12 +86,12 @@ MailManager.getMessage = function(id){
 
 	if(message.summary == true){
 		
-		if(Session.get("loadding") != true){
-			Session.set("loadding",true);
-			console.log("loadding message " + message.uid);
+		if(Session.get("mailMessageLoadding") != true){
+			Session.set("mailMessageLoadding",true);
+			console.log("mailMessageLoadding  " + message.uid);
 			ImapClientManager.getMessageByUid(path, message.uid, getMesssageBodyPart(message),function(messages){
-				Session.set("loadding",false);
-				console.log("set loadding is false");
+				Session.set("mailMessageLoadding",false);
+				console.log("set mailMessageLoadding is false");
 				messages.forEach(function(m){
 					console.log("[updateSeenMessage] uid " + m.uid +" flags: " + m.flags)
 					if(m.flags.indexOf("\\Seen") == -1){

@@ -1,5 +1,6 @@
 <template name="mail_compose">
 <div class="mail-compose">
+  {{#with message}}
   <div class="box box-primary">
     <div class="box-header with-border">
       <h3 class="box-title">新邮件</h3>
@@ -30,20 +31,20 @@
     <!-- /.box-header -->
     <div class="box-body">
       <div class="form-group">
-        {{>Template.dynamic  template="select_mail" data=mail_to}}
+        {{>Template.dynamic  template="select_mail" data=(mail_to this)}}
       </div>
 
       <div class="form-group">
-        {{>Template.dynamic  template="select_mail" data=mail_cc}}
+        {{>Template.dynamic  template="select_mail" data=(mail_cc this)}}
       </div>
 
       <div class="form-group">
-        {{>Template.dynamic  template="select_mail" data=mail_bcc}}
+        {{>Template.dynamic  template="select_mail" data= (mail_bcc this)}}
       </div>
       <div class="form-group">
         <div class="input-group">
           <span class="input-group-addon">主&emsp;题</span>
-          <input class="form-control subject" type="text" placeholder="" value="{{subject}}">
+          <input class="form-control subject" type="text" placeholder="" value="{{subject this}}">
         </div>
       </div>
 
@@ -60,13 +61,14 @@
       </div>
 
       <div class="form-group">
-          <div id="compose-textarea">{{{body}}}</div>
+        <div id="compose-textarea"></div>
       </div>
     </div>
     <!-- /.box-body -->
     
     <!-- /.box-footer -->
   </div>
+  {{/with}}
   <!-- /. box -->
 </div>
 </template>
