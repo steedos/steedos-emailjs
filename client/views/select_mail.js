@@ -1,7 +1,7 @@
 Template.select_mail.events({
-    'click .select_contacts': function(event, templage){
+    'click .select_contacts': function(event, template){
         console.log("----select_contacts----");
-        Modal.show("contacts_modal", {targetId: event.target.dataset.id, target: templage.data.target});
+        Modal.show("contacts_modal", {targetId: event.target.dataset.id, target: template.data.target});
     }
 })
 
