@@ -22,7 +22,7 @@ SmtpClientManager.getClient = function(){
 }
 
 
-SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments){
+SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, callback){
 
 	var client;
 	try{
@@ -72,6 +72,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments){
 	    client.ondone = function(success){ 
 	    	if(success){
 	    		toastr.success("发送成功");
+	    		callback(FlowRouter.go('/emailjs/b/Inbox'));
    			}else{
    				toastr.success("发送不成功");
    			}

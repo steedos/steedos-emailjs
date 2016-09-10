@@ -11,7 +11,7 @@ MailManager.initMail = function(){
 			})
 		});
 
-		setTimeout(setInterval(function(){MailManager.getNewMessages()},1000 * 120), 1000 * 120);
+		setTimeout(setInterval(function(){MailManager.getNewInboxMessages()},1000 * 120), 1000 * 120);
 	}
 }
 
@@ -197,22 +197,41 @@ MailManager.getNextMessage = function(){
 	Session.set("mailMessageId",message._id);
 }
 
-MailManager.getNewMessages = function(){
+
+MailManager.selectMailBox = function(mailBox){
+
+	ImapClientManager.selectMailBox(null, mailBox, {readOnly:true}, function(){
+		console.log("MailManager.selectMailBox run 。。。。。 ");
+	});
+}
+
+
+MailManager.getNewInboxMessages = function(){
 	var box = MailManager.getBox("Inbox");
 	if(!box)
 		return ;
 
-	ImapClientManager.getNewMessage(box.path, function(message){
-		if(message.length > 0){
+	ImapClientManager.getNewMessage(box.path, function(messages){
+		if(messages.length > 0){
 			ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
 				ImapClientManager.updateUnseenMessages();
 			});
+			console.log("MailManager.getNewInboxMessages length" + messages.length);
 		}
 
-		messages.forEach(function(message){
-			console.log("[getNewMessage] uid is " + message.uid);
-		});
+	});
+}
 
+
+MailManager.getNewBoxMessage = function(path){
+
+	$("#mail_list_load").show();
+
+	ImapClientManager.getNewMessage(path, function(messages){
+		messages.forEach(function(message){
+			console.log("MailManager.getNewBoxMessage" + message.uid);
+	    });
+	    $("#mail_list_load").hide();
 	});
 }
 

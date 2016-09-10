@@ -76,16 +76,12 @@ Template.mail_list.helpers
 
 
 Template.mail_list.events
+    'click .list-refresh': (event, template) ->
+        MailManager.getNewBoxMessage(Session.get("mailBox"));
 
-    'click #message-delete': (event, template) ->
+    'click .message-delete': (event, template) ->
         # MailManager.deleteMessages(Session.get("mailBox"),);
         console.log("message delete");
-
-    'click #message-delete': (event, template) ->
-        # MailManager.deleteMessages(Session.get("mailBox"),);
-        console.log("message delete");
-        origin/master
-        Stashed changes
 
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
