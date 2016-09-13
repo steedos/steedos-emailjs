@@ -16,7 +16,7 @@ SmtpClientManager.getClient = function(){
 		return ;
 	var domain = AccountManager.getMailDomain(auth.user);
 	
-	var client = new SmtpClient(domain.smtp, domain.smtp_port,{auth:auth});
+	var client = new SmtpClient(domain.smtp_server, domain.smtp_port,{auth:auth});
 
 	return client;
 }

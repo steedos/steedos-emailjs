@@ -15,7 +15,7 @@ ImapClientManager.getClient = function(){
 		return ;
 	var domain = AccountManager.getMailDomain(auth.user);
 	
-	var client = new ImapClient(domain.imap, domain.imap_port,{auth:auth});
+	var client = new ImapClient(domain.imap_server, domain.imap_port,{auth:auth});
 	client.logLevel = client.LOG_LEVEL_INFO;
 	client._onError(function(){
 		console.error("[ImapClientManager.ImapClient] error"); 

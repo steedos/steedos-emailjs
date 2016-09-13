@@ -10,9 +10,10 @@ AccountManager.getAuth = function(){
 }
 
 AccountManager.getMailDomain = function(user){
-
+	user_domain = user.split("@")[1];
+	return db.mail_domains.findOne({domain: user_domain});
 	// return {domain:"@hotoa.com",imap:"imap.mxhichina.com",imap_port:143,smtp:"smtp.mxhichina.com",smtp_port:25}
-	return {domain:"@petrochina.com.cn",imap:"msg.petrochina.com.cn",imap_port:993,smtp:"msg.petrochina.com.cn",smtp_port:465}
+	//return {domain:"@petrochina.com.cn",imap:"msg.petrochina.com.cn",imap_port:993,smtp:"msg.petrochina.com.cn",smtp_port:465}
 }
 
 Session.set("mail_auth_success", false);
