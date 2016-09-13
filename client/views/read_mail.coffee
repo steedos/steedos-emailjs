@@ -57,7 +57,6 @@ Template.read_mail.events
 			toastr.success("附件已存储");
 			MailAttachment.openFile(dirname, name);
 
-
 	'click .last_mail': (event, template)->
 		console.log("click last_mail")
 		MailManager.getLastMessage();
@@ -66,6 +65,18 @@ Template.read_mail.events
 		console.log("click next_mail");
 		MailManager.getNextMessage();
 		
+	'click .mail-delete': (event, template)->
+		console.log("click mail-delete");
+		path = Session.get("mailBox");
+
+		message = MailManager.getMessage(Session.get("mailMessageId"))
+
+		uid = message.uid;
+		if path == 'Trash'
+			ImapClientManager.completeDeleteMessages null, path, uid, ()->
+		else
+			ImapClientManager.deleteMessages null, path, uid, ()->
+
 
 Template.read_mail.onRendered ->
 	$(window).on 'keydown', (event)->

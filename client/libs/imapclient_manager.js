@@ -195,8 +195,6 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	});
 }
 
-
-
 //imap search 说明文档：https://tools.ietf.org/html/rfc3501#section-6.4.4
 ImapClientManager.search = function(client, path, query, callback){
 	if (!client)
@@ -233,26 +231,34 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 	
 }
 
-ImapClientManager.deleteMessages = function(client, path, uid, callback){
+ImapClientManager.deleteMessages = function(client, path, uid,callback){
 
-	ImapClientManager.setFlags(null, path, uid, {set: ['\\Deleted']}, {byUid:true}, function(){
-    })
-	callback();
+    console.log("[deleteMessages]uid " + uid);
+    if (!client)
+		client = this.getClient();
+	client.connect().then(function(){
+		client.moveMessages(path, uid, 'Trash', {byUid:true}).then(function(){
+			console.log("[deleteMessages]path is " + path);
+			client.close();
+		
+			toastr.success("邮件删除成功");
+			FlowRouter.go('/emailjs/b/Inbox');
+		})	
+   	})
 }
 
 ImapClientManager.completeDeleteMessages = function(client, path, uid, callback){
 
-		console.log("[ImapClientManager.completeDeleteMessages] path is " + path + "; uid is " + uid);
+	console.log("[ImapClientManager.completeDeleteMessages] path is " + path + "; uid is " + uid);
 	if (!client)
 		client = this.getClient();
 	
 	client.connect().then(function(){
 		client.deleteMessages(path, uid, {byUid:true}).then(function(){ 
-			console.log("uid values is " + uid);
+			console.log("[completeDeleteMessages]uid values is " + uid);
 			client.close();
-			if(typeof(callback) == 'function'){
-					callback();
-			}
+			FlowRouter.go('/emailjs/b/Inbox');
+			toastr.success("邮件彻底删除");
 		})
 	})
 }

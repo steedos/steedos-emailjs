@@ -20,7 +20,7 @@
       <!-- /.mailbox-read-info -->
       <div class="mailbox-controls with-border text-center">
         <div class="btn-group">
-          <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="Delete">
+          <button type="button" class="btn btn-default btn-sm mail-delete" data-toggle="tooltip" data-container="body" title="Delete">
             <i class="fa fa-trash-o"></i></button>
           <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="回复"><a href="/emailjs/b/reply/{{path}}/{{_id}}">
             <i class="fa fa-reply"></i></a></button>
@@ -30,8 +30,6 @@
             <i class="fa fa-share"></i></a></button>
         </div>
         <!-- /.btn-group -->
-        <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="Print">
-          <i class="fa fa-print"></i></button>
       </div>
       <!-- /.mailbox-controls -->
       {{#if showLoadding}}
@@ -78,8 +76,7 @@
         <button type="button" class="btn btn-default"><a href="/emailjs/b/replyAll/{{path}}/{{_id}}"><i class="fa fa-reply-all" aria-hidden="true"></i> 全部回复 </a></button>
         <button type="button" class="btn btn-default" ><a href="/emailjs/b/forward/{{path}}/{{_id}}"><i class="fa fa-share"></i> 转发 </a></button>
       </div>
-      <button type="button" class="btn btn-default"><i class="fa fa-trash-o"></i> Delete</button>
-      <button type="button" class="btn btn-default"><i class="fa fa-print"></i> Print</button>
+      <button type="button" class="btn btn-default mail-delete"><i class="fa fa-trash-o"></i> Delete</button>
     </div>
 
     {{/with}}

@@ -236,13 +236,6 @@ MailManager.getNewBoxMessage = function(path){
 }
 
 
-MailManager.deleteMessages = function(path, uid,callback){
-
-	return ImapClientManager.deleteMessages(null, path, uid,callback);
-}
-
-
-
 // Meteor.startup(function(){
 // 	MailManager.initMail();
 // })
