@@ -109,6 +109,10 @@ Template.mail_compose.onRendered ->
         if Session.get("mailForward") || Session.get("mailJumpDraft")
             MailForward.getAttachmentsHtml();
 
+    setTimeout ()->
+        $(".form-control.subject").focus();
+    ,100;
+
     if $("#mail_cc").val()?.length > 0
         $(".add_cc").click()
 

@@ -39,6 +39,7 @@ mailRoutes.route '/b/:mailBox/',
 		Session.set("mailMessageId", null); 
 		Session.set("mailPage",1);
 		Session.set("mailBoxFilter", ""); 
+		Session.set("mailMessageLoadding",false);
 		BlazeLayout.render 'masterLayout',
 			main: "mail_home"
 
