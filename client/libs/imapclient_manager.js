@@ -204,6 +204,12 @@ ImapClientManager.search = function(client, path, query, callback){
 		client.search(path, query, {byUid: true}).then(function(result){
 			console.log("search values is " + result);
 
+			if(!result || result.length == 0){
+				
+				callback(result, []);
+				return;
+			}
+
 			MailCollection.mail_search.update({},{uids:result});
 			var sequence = result.toString();
 			var options = {byUid: true};

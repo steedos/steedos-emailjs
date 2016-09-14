@@ -225,13 +225,13 @@ MailManager.getNewInboxMessages = function(){
 
 MailManager.getNewBoxMessage = function(path){
 
-	$("#mail_list_load").show();
+	Session.set("mailLoading",true);
 
 	ImapClientManager.getNewMessage(path, function(messages){
 		messages.forEach(function(message){
 			console.log("MailManager.getNewBoxMessage" + message.uid);
 	    });
-	    $("#mail_list_load").hide();
+	    Session.set("mailLoading",false);
 	});
 }
 

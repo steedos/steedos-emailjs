@@ -1,7 +1,7 @@
 <template name="mail_list">
 	<div class="box box-primary mail_list" data-exists="{{boxExists}}">
   {{#with box}}
-      <div class="box-header with-border">
+      <div class="box-header with-border" style="padding-bottom: 15px;">
         <h3 class="box-title">{{t this.name}}</h3>
 
         <div class="box-tools pull-right">
@@ -62,7 +62,7 @@
         <!-- /.mail-box-messages -->
       </div>
 
-      <div class="overlay" id="mail_list_load">
+      <div class="overlay {{isLoading}}" id="mail_list_load">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
       

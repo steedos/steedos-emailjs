@@ -1,25 +1,34 @@
+Template.mail_search.subjectSearch = ()->
+    searchKey = $("#keyword0").val();
+    if searchKey.trim() == ''
+        Session.set("mailBoxFilter","");
+        return;
+
+    Session.set("mailLoading",true);
+    
+    console.log("keydown search-mail-input searchKey:" + searchKey);
+
+    queryKey = {};
+
+    queryKey.keyword = searchKey;
+
+    queryKey.subject = true;
+
+    MailManager.search queryKey, (result,messages) ->
+        if !result || result.length == 0
+            toastr.info("未搜索到数据");
+        else
+            Session.set("mailBoxFilter", result);
+        
+        Session.set("mailLoading",false);
+
 Template.mail_search.events
     'keydown .search-mail-input': (event, template) ->
         if event.keyCode == 13
-            searchKey = event.target.value
+            Template.mail_search.subjectSearch();
 
-            if searchKey.trim() == ''
-                Session.set("mailBoxFilter","");
-                return;
-
-            Session.set("mailLoading",true);
-            
-            console.log("keydown search-mail-input searchKey:" + searchKey);
-
-            queryKey = {};
-
-            queryKey.keyword = searchKey;
-
-            queryKey.subject = true;
-
-            MailManager.search queryKey, (result,messages) ->
-                Session.set("mailBoxFilter", result);
-                Session.set("mailLoading",false);
+    'click #mail-search-btn': (event, template) ->
+        Template.mail_search.subjectSearch();        
 
     'click #advanced_search': (event, template) ->
         $("#advanced_search_modal").show();

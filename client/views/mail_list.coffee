@@ -31,8 +31,15 @@ Template.mail_list.helpers
         else
             return t("mail_inbox")
 
+    isLoading: ->
+        if Session.get("mailLoading")
+            $("#mail_list_load").show();
+        else
+            $("#mail_list_load").hide()
+        return Session.get("mailLoading");
+
     boxMessages: ->
-        $("#mail_list_load").show();
+        Session.set("mailLoading",true);
 
         rev ;
 
@@ -40,8 +47,7 @@ Template.mail_list.helpers
             rev = MailManager.getBoxMessagesByUids(Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize);
 
         rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
-          $("#mail_list_load").hide()
-          console.log("mail_list_load hide");
+          Session.set("mailLoading",false);
 
         return rev;
 
