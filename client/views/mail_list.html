@@ -15,8 +15,9 @@
       <div class="box-body no-padding">
         <div class="mailbox-controls">
           <!-- Check all button -->
-          <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
-          </button>
+          <label class="btn btn-default btn-sm " style="width: 31px;height: 30px; padding-left: 8px;">
+            <input type="checkbox" class="mailbox-messages-checkAll" style="margin: 2px 0 0;">
+          </label>
           <div class="btn-group">
             <button type="button" class="btn btn-default btn-sm  message-delete"><i class="fa fa-trash-o"></i></button>
             <!-- <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
@@ -39,8 +40,8 @@
             <tbody>
             {{#each boxMessages}}
             <tr>
-              <td><div class="icheckbox_flat-blue" aria-checked="false" aria-disabled="false" style="position: relative;"><input type="checkbox" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div></td>
-              <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
+              <td class="mailbox-checkbox"><input type="checkbox" value="{{uid}}" name="uids"></td>
+              <!-- <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td> -->
               <td class="mailbox-name">
               {{#if isDraftsBox}}
                 <a href="/emailjs/b/jumpDraft/{{box.path}}/{{_id}}">{{fromName from}}</a>
@@ -70,8 +71,9 @@
       <div class="box-footer no-padding">
         <div class="mailbox-controls">
           <!-- Check all button -->
-          <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
-          </button>
+          <label class="btn btn-default btn-sm " style="width: 31px;height: 30px; padding-left: 8px;">
+            <input type="checkbox" class="mailbox-messages-checkAll" style="margin: 2px 0 0;">
+          </label>
           <div class="btn-group">
             <button type="button" class="btn btn-default btn-sm message-delete"><i class="fa fa-trash-o"></i></button>
             <!-- <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>

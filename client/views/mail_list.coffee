@@ -1,3 +1,11 @@
+Template.mail_list.getCheckedUids = ()->
+    uids = new Array();
+    $('input[name="uids"]', $(".mailbox-messages")).each ->
+        if $(this).prop('checked')
+            uids.push($(this).val());
+
+    return uids;
+
 Template.mail_list.helpers
     t:(key)->
         key2 = "mail_" + key.toLowerCase();
@@ -111,6 +119,16 @@ Template.mail_list.events
             MailManager.search searchKey, (result,messages) ->
                 Session.set("mailBoxFilter", result);
                 Session.set("mailLoading",false);
+
+    'change .mailbox-messages-checkAll': (event, template) ->
+        $('input[name="uids"]', $(".mailbox-messages")).each ->
+            $(this).prop('checked', event.target.checked);
+
+        $('.mailbox-messages-checkAll').each ->
+            $(this).prop('checked', event.target.checked);
+
+
+
 
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
