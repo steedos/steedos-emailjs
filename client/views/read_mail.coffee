@@ -72,11 +72,12 @@ Template.read_mail.events
 		message = MailManager.getMessage(Session.get("mailMessageId"))
 
 		uid = message.uid;
+	
 		if path == 'Trash'
-			ImapClientManager.completeDeleteMessages null, path, uid, ()->
+			MailManager.completeDeleteMessages path, uid, ()->	
 		else
-			ImapClientManager.deleteMessages null, path, uid, ()->
-
+			MailManager.deleteMessages path, uid, ()->
+				
 
 Template.read_mail.onRendered ->
 	$(window).on 'keydown', (event)->

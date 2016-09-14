@@ -175,7 +175,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	client.connect().then(function(){
 		console.log("listMessages start, sequence is " + sequence);
 		client.listMessages(path, sequence, query, options).then(function(messages){
-			console.log("listMessages messages ok");
+			
 			messages.forEach(function(message){
 				
 				console.log("listMessages messages 开始解析：" + message.uid);
@@ -189,6 +189,9 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 				else
 					MailCollection.getMessageCollection(path).insert(hMessage);
 			});
+			
+			console.log("ImapClientManager.listMessages messages ok");
+
 			client.close();
 			callback(messages);
 		});
@@ -246,9 +249,9 @@ ImapClientManager.deleteMessages = function(client, path, uid,callback){
 		client.moveMessages(path, uid, 'Trash', {byUid:true}).then(function(){
 			console.log("[deleteMessages]path is " + path);
 			client.close();
-		
-			toastr.success("邮件删除成功");
-			FlowRouter.go('/emailjs/b/Inbox');
+			if(typeof(callback) == 'function'){
+				callback();
+			}
 		})	
    	})
 }
@@ -263,8 +266,9 @@ ImapClientManager.completeDeleteMessages = function(client, path, uid, callback)
 		client.deleteMessages(path, uid, {byUid:true}).then(function(){ 
 			console.log("[completeDeleteMessages]uid values is " + uid);
 			client.close();
-			FlowRouter.go('/emailjs/b/Inbox');
-			toastr.success("邮件彻底删除");
+			if(typeof(callback) == 'function'){
+				callback();
+			}
 		})
 	})
 }
@@ -506,6 +510,39 @@ ImapClientManager.mailBoxMessages = function(path, callback){
 	});
 }
 
+ImapClientManager.mailBoxNewMessages = function(path,callback){
+	var box = MailManager.getBox(path);
+
+	if(!box)
+		return ;
+
+	var infoExists = box.info.exists;
+
+	if (infoExists < 1){
+		if(typeof(callback) == "function"){
+			callback();	
+		}
+		return ;
+	}
+	
+	var sequence_s = infoExists <= 10 ? 1 : (infoExists - 10 + 1);
+
+	var sequence = sequence_s + ":" + infoExists;
+
+	var options = {};
+
+	console.info("listMessages[mailBoxNewMessages] path[" + path + '] sequence[' + sequence + ']');
+
+	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
+		ImapClientManager.updateLoadedMxistsIndex(path, sequence_s - 1);
+		if(typeof(callback) == "function"){
+			callback(messages);	
+		}
+	});
+}
+
+
+
 ImapClientManager.getNewMessage = function(path, callback){
 	var box = MailManager.getBox(path);
 
@@ -518,6 +555,8 @@ ImapClientManager.getNewMessage = function(path, callback){
 		ImapClientManager.listMessages(null, path, sequence, options, callback);
 	}
 }
+
+
 
 ImapClientManager.getMessageByUid = function(path, sequence, bodyPart, callback){
 	var options = {byUid: true};
