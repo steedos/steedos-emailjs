@@ -6,6 +6,7 @@ checkMailAccountIsNull = (context, redirect) ->
 	if !AccountManager.getAuth()
 		FlowRouter.go '/admin/view/mail_accounts';
 		toastr.warning("请配置邮件账户");
+		$(document.body).removeClass('loading');
 
 checkAccountLogin = (context, redirect) ->
 	if !AccountManager.checkAccount()

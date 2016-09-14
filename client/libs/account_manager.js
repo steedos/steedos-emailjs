@@ -25,27 +25,40 @@ AccountManager.checkAccount = function(){
 
 	$(document.body).addClass('loading');
 
-	console.log("AccountManager.checkAccount...");
+	try{
+		console.log("AccountManager.checkAccount...");
+		var userAuth = AccountManager.getAuth();
 
-	var imapClient = ImapClientManager.getClient();
-	var pro = imapClient.connect();
-
-	pro.then(function(){
-		imapClient.close();
-		console.log("账户验证完成");
-		if(!Session.get("mail_auth_success")){
-			MailManager.initMail();	
+		if(!AccountManager.getMailDomain(userAuth.user)){
+			toastr.error("账户验证失败, 无效的邮件域名");
+			$(document.body).removeClass('loading');
+			return false;
 		}
 
-		Session.set("mail_auth_success", true);
-	});
+		var imapClient = ImapClientManager.getClient();
+		var pro = imapClient.connect();
 
-	pro.catch(function(err){
-		imapClient.close();
-		FlowRouter.go('/admin/view/mail_accounts');
+		pro.then(function(){
+			imapClient.close();
+			console.log("账户验证完成");
+			if(!Session.get("mail_auth_success")){
+				MailManager.initMail();	
+			}
+
+			Session.set("mail_auth_success", true);
+		});
+
+		pro.catch(function(err){
+			imapClient.close();
+			FlowRouter.go('/admin/view/mail_accounts');
+			$(document.body).removeClass('loading');
+			toastr.error("账户验证失败，错误信息：" + pro._v.message);
+		});
+	}catch(e){
+		toastr.error("账户验证失败，错误信息：" + e.message);
 		$(document.body).removeClass('loading');
-		toastr.error("账户验证失败，错误信息：" + pro._v.message);
-	});
+		return false;
+	}
 
 	return true;
 }
