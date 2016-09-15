@@ -22,12 +22,12 @@
         <div class="btn-group">
           <button type="button" class="btn btn-default btn-sm mail-delete" data-toggle="tooltip" data-container="body" title="Delete">
             <i class="fa fa-trash-o"></i></button>
-          <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="回复"><a href="/emailjs/b/reply/{{path}}/{{_id}}">
-            <i class="fa fa-reply"></i></a></button>
-          <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="全部回复"><a href="/emailjs/b/replyAll/{{path}}/{{_id}}">
-            <i class="fa fa-reply-all"></i></a></button>
-          <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="转发"><a href="/emailjs/b/forward/{{path}}/{{_id}}">
-            <i class="fa fa-share"></i></a></button>
+          <a href="/emailjs/b/reply/{{path}}/{{_id}}"><button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="回复">
+            <i class="fa fa-reply"></i></button></a>
+          <a href="/emailjs/b/replyAll/{{path}}/{{_id}}"><button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="全部回复">
+            <i class="fa fa-reply-all"></i></button></a>
+          <a href="/emailjs/b/forward/{{path}}/{{_id}}"><button type="button" class="btn btn-default btn-sm mail-forward" data-toggle="tooltip" data-container="body" title="转发">
+            <i class="fa fa-share"></i></button></a>
         </div>
         <!-- /.btn-group -->
       </div>
@@ -72,9 +72,8 @@
     <div class="box-footer">
       <div class="pull-right">
         <a href="/emailjs/b/reply/{{path}}/{{_id}}"><button type="button" class="btn btn-default"><i class="fa fa-reply"></i> 回复 </button></a>
-        
-        <button type="button" class="btn btn-default"><a href="/emailjs/b/replyAll/{{path}}/{{_id}}"><i class="fa fa-reply-all" aria-hidden="true"></i> 全部回复 </a></button>
-        <button type="button" class="btn btn-default" ><a href="/emailjs/b/forward/{{path}}/{{_id}}"><i class="fa fa-share"></i> 转发 </a></button>
+        <a href="/emailjs/b/replyAll/{{path}}/{{_id}}"><button type="button" class="btn btn-default"><i class="fa fa-reply-all" aria-hidden="true"></i> 全部回复 </button></a>
+        <a href="/emailjs/b/forward/{{path}}/{{_id}}"><button type="button" class="btn btn-default mail-forward" ><i class="fa fa-share"></i> 转发 </button></a>
       </div>
       <button type="button" class="btn btn-default mail-delete"><i class="fa fa-trash-o"></i> Delete</button>
     </div>
