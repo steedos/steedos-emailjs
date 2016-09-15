@@ -43,7 +43,7 @@ Template.mail_list.helpers
         if Session.get("mailLoading")
             $("#mail_list_load").show();
         else
-            $("#mail_list_load").hide()
+            $("#mail_list_load").hide();
         return Session.get("mailLoading");
 
     boxMessages: ->

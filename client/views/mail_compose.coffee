@@ -46,6 +46,13 @@ Template.mail_compose.helpers
     showLoadding: ->
         return Session.get("mailMessageLoadding");
 
+    isSending: ->
+        if Session.get("mailSending")
+            $("#mail_sending").show();
+        else
+            $("#mail_sending").hide();
+        return Session.get("mailSending");
+
 Template.mail_compose.events
     'click .add_cc': (event, template) ->
         $(".mail_cc").show();
@@ -88,7 +95,7 @@ Template.mail_compose.events
             attachments.push
                 name: @dataset.name
                 path: @dataset.path
-
+        
         SmtpClientManager.sendMail($("#mail_to").val(), $("#mail_cc").val(), $("#mail_bcc").val(), $(".form-control.subject").val(), $('#compose-textarea').summernote('code'), attachments);
 
     'click #compose-draft': (event)->
@@ -107,8 +114,8 @@ Template.mail_compose.events
 Template.mail_compose.onRendered ->
     if Session.get("mailMessageId") 
         if Session.get("mailForward") || Session.get("mailJumpDraft")
+            
             MailForward.getAttachmentsHtml();
-
     setTimeout ()->
         $(".form-control.subject").focus();
     ,100;
@@ -134,8 +141,7 @@ Template.mail_compose.onRendered ->
                 dialogsInBody: true
         else
             $("#compose-textarea").html("加载中...");
-
-
+    
 
 
 

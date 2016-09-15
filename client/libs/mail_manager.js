@@ -255,7 +255,7 @@ MailManager.completeDeleteMessages = function(path, uid){
         console.log("ImapClientManager.CompleteDeleteMessages run :");
         toastr.success("邮件已彻底删除");
         FlowRouter.go('/emailjs/b/Trash');
-        Session.set("mailLoading",true);
+        $("#mail_list_load").show();
         MailCollection.getMessageCollection(path).remove({uid: uid});
 
         var mailBox = MailManager.getBox(path);

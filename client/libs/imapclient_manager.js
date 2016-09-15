@@ -275,6 +275,7 @@ ImapClientManager.completeDeleteMessages = function(client, path, uid, callback)
 
 
 ImapClientManager.upload = function(client, path, message, callback){
+	$("#mail_sending").show();
 	if (!client)
 		client = this.getClient();
 
@@ -284,6 +285,7 @@ ImapClientManager.upload = function(client, path, message, callback){
 		client.upload(path, message).then(function(){
 			console.log("ImapClientManager upload close client.")
 			client.close();
+			$("#mail_sending").hide();
 			if(typeof(callback) == 'function'){
 				callback();
 			}

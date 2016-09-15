@@ -11,7 +11,6 @@ function getAddressHtml(address){
 	return adds;
 }
 
-
 MailForward.getBody = function(message){
 
 	var html = "<br>"
@@ -42,15 +41,14 @@ MailForward.getAttachmentsHtml = function(){
 	var message = MailManager.getMessage(Session.get("mailMessageId"));
 
 	message.attachments.forEach(function(item){
+		$("#mail_attachment").show();
 		MailAttachment.download(Session.get("mailBox"), message.uid, item.bodyPart, function(dirname, name, filePath){
            
 			var node = MailAttachment.getAttachmentNode(filePath);
-			console.log("name : "+ name + " ; dirname : " + dirname +" ; filePath : " + filePath );
+			console.log("name : "+ name + " ; dirname : " + dirname +" ; filePath : " + filePath);
     		$("#compose_attachment_list").append(node);
-		});
-		
+    		$("#mail_attachment").hide();
+		});	
 	});
-    
 }
-
 

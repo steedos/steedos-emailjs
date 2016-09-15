@@ -23,12 +23,10 @@ SmtpClientManager.getClient = function(){
 
 
 SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, callback){
-
+	$("#mail_sending").show();
 	var client;
 	try{
 		//toastr.info("邮件发送中...");
-		$(document.body).addClass('loading');
-	    
 		console.log("SmtpClientManager.sendMai start");
 
 		var auth = AccountManager.getAuth();
@@ -72,9 +70,11 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 	    client.ondone = function(success){ 
 	    	if(success){
 	    		toastr.success("发送成功");
-	    		callback(FlowRouter.go('/emailjs/b/Inbox'));
+	    		callback(FlowRouter.go('/emailjs/b/Sent'));
+	    		$("#mail_sending").hide();
    			}else{
    				toastr.success("发送不成功");
+   				$("#mail_sending").hide();
    			}
         }
 
@@ -87,8 +87,8 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 	}catch(e){
 		console.error(e);
 	}finally{
-		$(document.body).removeClass('loading');
      	client.close();
+     	
     }
 
 }
