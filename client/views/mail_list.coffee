@@ -94,9 +94,16 @@ Template.mail_list.events
         $("#mail_list_load").show();
         MailManager.getNewBoxMessages(Session.get("mailBox"));
 
-    'click .message-delete': (event, template) ->
-        # MailManager.deleteMessages(Session.get("mailBox"),);
-        console.log("message delete");
+    'click .list-message-delete': (event, template) ->
+        console.log("list-message-delete");
+        path = Session.get("mailBox");
+        uids = Template.mail_list.getCheckedUids();
+    
+        if path == 'Trash'
+            MailManager.completeDeleteMessages path, uids, ()->  
+        else
+            MailManager.deleteMessages path, uids, ()->
+                
 
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));

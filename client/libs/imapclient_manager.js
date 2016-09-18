@@ -240,13 +240,12 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 	
 }
 
-ImapClientManager.deleteMessages = function(client, path, uid,callback){
+ImapClientManager.deleteMessages = function(client, path, uids,callback){
 
-    console.log("[deleteMessages]uid " + uid);
     if (!client)
 		client = this.getClient();
 	client.connect().then(function(){
-		client.moveMessages(path, uid, 'Trash', {byUid:true}).then(function(){
+		client.moveMessages(path, uids, 'Trash', {byUid:true}).then(function(){
 			console.log("[deleteMessages]path is " + path);
 			client.close();
 			if(typeof(callback) == 'function'){
@@ -256,15 +255,15 @@ ImapClientManager.deleteMessages = function(client, path, uid,callback){
    	})
 }
 
-ImapClientManager.completeDeleteMessages = function(client, path, uid, callback){
+ImapClientManager.completeDeleteMessages = function(client, path, uids, callback){
 
-	console.log("[ImapClientManager.completeDeleteMessages] path is " + path + "; uid is " + uid);
+	console.log("[ImapClientManager.completeDeleteMessages] path is " + path + "; uids is " + uids);
 	if (!client)
 		client = this.getClient();
 	
 	client.connect().then(function(){
-		client.deleteMessages(path, uid, {byUid:true}).then(function(){ 
-			console.log("[completeDeleteMessages]uid values is " + uid);
+		client.deleteMessages(path, uids, {byUid:true}).then(function(){ 
+			console.log("[completeDeleteMessages]uid values is " + uids);
 			client.close();
 			if(typeof(callback) == 'function'){
 				callback();
@@ -272,7 +271,6 @@ ImapClientManager.completeDeleteMessages = function(client, path, uid, callback)
 		})
 	})
 }
-
 
 ImapClientManager.upload = function(client, path, message, callback){
 	$("#mail_sending").show();

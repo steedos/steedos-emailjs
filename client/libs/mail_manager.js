@@ -234,33 +234,37 @@ MailManager.getNewBoxMessages = function(path){
     });
 }
 
-MailManager.deleteMessages = function(path, uid){
+
+MailManager.deleteMessages = function(path, uids){
     // $("#mail_list_load").show();
-    ImapClientManager.deleteMessages(null, path, uid, function(){
+    ImapClientManager.deleteMessages(null, path, uids, function(){
         toastr.success("邮件已删除");
         FlowRouter.go('/emailjs/b/' + path);
-        $("#mail_list_load").show();
-        MailCollection.getMessageCollection(path).remove({uid: uid});   
-
+        //$("#mail_list_load").show();
+        uids.forEach(function(uid){
+            console.log("MailManager.deleteMessages11 :" + uid );
+            MailCollection.getMessageCollection(path).remove({'uid':uid});  
+            })
         var mailBox = MailManager.getBox(path);
         ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
-            MailManager.getNewBoxMessages(path);
+            MailManager.getNewBoxMessages(m.path);
         })   
     })
 }
 
-MailManager.completeDeleteMessages = function(path, uid){
+
+MailManager.completeDeleteMessages = function(path, uids){
     console.log("MailManager.completeDeleteMessages :" );
-    ImapClientManager.completeDeleteMessages(null, path, uid, function(){
+    ImapClientManager.completeDeleteMessages(null, path, uids, function(){
         console.log("ImapClientManager.CompleteDeleteMessages run :");
         toastr.success("邮件已彻底删除");
         FlowRouter.go('/emailjs/b/Trash');
         $("#mail_list_load").show();
-        MailCollection.getMessageCollection(path).remove({uid: uid});
+        MailCollection.getMessageCollection(path).remove({'uid':{$in:uids}});
 
         var mailBox = MailManager.getBox(path);
         ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
-            MailManager.getNewBoxMessages(path);
+            MailManager.getNewBoxMessages(m.path);
         })   
     })
 }
