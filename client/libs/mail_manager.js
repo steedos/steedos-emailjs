@@ -236,11 +236,10 @@ MailManager.getNewBoxMessages = function(path){
 
 
 MailManager.deleteMessages = function(path, uids){
-    // $("#mail_list_load").show();
+    $("#mail_list_load").show();
     ImapClientManager.deleteMessages(null, path, uids, function(){
         toastr.success("邮件已删除");
         FlowRouter.go('/emailjs/b/' + path);
-        $("#mail_list_load").show();
         
         if(Object.prototype.toString.call(uids) === '[object Array]'){
             uids.forEach(function(uid){
@@ -261,13 +260,13 @@ MailManager.deleteMessages = function(path, uids){
 
 
 MailManager.completeDeleteMessages = function(path, uids){
+    $("#mail_list_load").show();
     console.log("MailManager.completeDeleteMessages :" );
     ImapClientManager.completeDeleteMessages(null, path, uids, function(){
         console.log("ImapClientManager.CompleteDeleteMessages run :");
         toastr.success("邮件已彻底删除");
         FlowRouter.go('/emailjs/b/Trash');
-        $("#mail_list_load").show();
-
+       
         if(Object.prototype.toString.call(uids) === '[object Array]'){
             uids.forEach(function(uid){
                 MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid,10)});
