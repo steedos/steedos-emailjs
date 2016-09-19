@@ -240,11 +240,18 @@ MailManager.deleteMessages = function(path, uids){
     ImapClientManager.deleteMessages(null, path, uids, function(){
         toastr.success("邮件已删除");
         FlowRouter.go('/emailjs/b/' + path);
-        //$("#mail_list_load").show();
-        uids.forEach(function(uid){
-            console.log("MailManager.deleteMessages11 :" + uid );
-            MailCollection.getMessageCollection(path).remove({'uid':uid});  
+        $("#mail_list_load").show();
+        
+        if(Object.prototype.toString.call(uids) === '[object Array]'){
+            uids.forEach(function(uid){
+                MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid,10)});
             })
+        }
+        else
+        {
+            MailCollection.getMessageCollection(path).remove({'uid':uids});
+        }
+
         var mailBox = MailManager.getBox(path);
         ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
             MailManager.getNewBoxMessages(m.path);
@@ -260,7 +267,16 @@ MailManager.completeDeleteMessages = function(path, uids){
         toastr.success("邮件已彻底删除");
         FlowRouter.go('/emailjs/b/Trash');
         $("#mail_list_load").show();
-        MailCollection.getMessageCollection(path).remove({'uid':{$in:uids}});
+
+        if(Object.prototype.toString.call(uids) === '[object Array]'){
+            uids.forEach(function(uid){
+                MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid,10)});
+            })
+        }
+        else
+        {
+            MailCollection.getMessageCollection(path).remove({'uid':uids});
+        }
 
         var mailBox = MailManager.getBox(path);
         ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
