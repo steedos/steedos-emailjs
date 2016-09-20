@@ -17,12 +17,18 @@ Template.read_mail.helpers
 	showLoadding: ->
 		return Session.get("mailMessageLoadding");
 
+	attachmentLoadding: ->
+	    if Session.get("donwLoadding")
+	        $("#attachment_donwLoadding").show();
+	    else
+	        $("#attachment_donwLoadding").hide();
+	    return Session.get("donwLoadding");
+
 	mailBody: (message)->
 		if message.bodyHtml.data
 			data = message.bodyHtml.data;
 
 			return MailManager.resetHrefs(data);
-			# return message.bodyHtml.data;
 		else
 			return message.bodyText.data;
 
@@ -46,6 +52,7 @@ Template.read_mail.helpers
 
 Template.read_mail.events
 	'click .mailbox-attachment-name': (event, template)->
+		$("#attachment_donwLoadding").show();
 		att_index = parseInt(event.target.dataset.index);
 
 		path = Session.get("mailBox");
@@ -58,6 +65,7 @@ Template.read_mail.events
 
 		MailAttachment.download path, uid, att.bodyPart, (dirname, name, filePath)->
 			toastr.success("附件已存储");
+			$("#attachment_donwLoadding").hide();
 			MailAttachment.openFile(dirname, name);
 
 	'click .last_mail': (event, template)->
