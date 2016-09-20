@@ -22,7 +22,7 @@ Template.read_mail.helpers
 			data = message.bodyHtml.data;
 
 			return MailManager.resetHrefs(data);
-			#return message.bodyHtml.data;
+			# return message.bodyHtml.data;
 		else
 			return message.bodyText.data;
 

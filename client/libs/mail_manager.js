@@ -292,7 +292,12 @@ MailManager.resetHrefs = function(data){
     var html = "";
 
     nodes.each(function(){
-        html += this.outerHTML;
+        if(this.outerHTML){
+            html += this.outerHTML;
+        }else{
+            html += this.textContent;
+        }
+        
     });
 
     return html;
