@@ -321,8 +321,8 @@ function uint8ArrayToString(charset, uint8Array){
 	return (new Encoding.TextDecoder(charset).decode(uint8Array));
 }
 
-function base64Decode(str){
-	return MimeCodec.base64Decode(str);
+function base64Decode(str, fromCharset){
+	return MimeCodec.base64Decode(str, fromCharset);
 }
 
 ImapClientManager.base64DecodeToUint8Array = function(str){
@@ -335,7 +335,7 @@ function quotedPrintableDecode(str, fromCharset){
 
 function decode(str, part){
 	if(part.encoding == 'base64'){
-		return base64Decode(str);
+		return base64Decode(str, part.parameters.charset);
 	}else if(part.encoding == 'quoted-printable'){
 		return quotedPrintableDecode(str, part.parameters.charset);
 	}else{
