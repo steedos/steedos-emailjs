@@ -2,9 +2,6 @@ Template.read_mail.helpers
 	message: ->
 		id = Session.get("mailMessageId");
 
-		s = Session.get("mailMessageLoadding");
-
-		console.log("read_mail loadding is " + s);
 		return MailManager.getMessage(id) ;
 
 	path: ->
@@ -21,7 +18,13 @@ Template.read_mail.helpers
 		return Session.get("mailMessageLoadding");
 
 	mailBody: (message)->
-		return if message.bodyHtml.data then message.bodyHtml.data else message.bodyText.data;
+		if message.bodyHtml.data
+			data = message.bodyHtml.data;
+
+			return MailManager.resetHrefs(data);
+			#return message.bodyHtml.data;
+		else
+			return message.bodyText.data;
 
 	fromName: (from)->
         if(from && from.length > 0)
