@@ -60,10 +60,13 @@ Package.onUse(function(api) {
 	api.addFiles('lib/core.coffee', ['client', 'server']);
 	api.addFiles('lib/models/mail_accounts.coffee', ['client', 'server']);
 	api.addFiles('lib/models/mail_domains.coffee', ['client', 'server']);
+	api.addFiles('lib/models/mail_addressBook.coffee', ['client', 'server']);
+
 	api.addFiles('lib/admin.coffee', ['client', 'server']);
 
 	api.addFiles('server/publications/mail_accounts.coffee', 'server');
 	api.addFiles('server/publications/mail_domains.coffee', 'server');
+	api.addFiles('server/publications/mail_addressBook.coffee', 'server');
 
 	api.addFiles('client/subcribe.coffee', 'client');
 	api.addFiles('client/router.coffee', 'client');
