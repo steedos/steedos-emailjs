@@ -134,7 +134,7 @@ Template.mail_compose.onRendered ->
                 else
                     body =  MailForward.getBody(message);
 
-            $("#compose-textarea").html(body);
+            $("#compose-textarea").html(MailManager.resetHrefs(body));
 
             $("#compose-textarea").summernote
                 lang: "zh-CN"

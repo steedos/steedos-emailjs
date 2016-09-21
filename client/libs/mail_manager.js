@@ -284,11 +284,10 @@ MailManager.completeDeleteMessages = function(path, uids){
     })
 }
 
+
 MailManager.resetHrefs = function(data){ 
     data = data.replace("<html","<div ").replace("</html>","</div>");
-    debugger;
     var nodes = $(data);
-
     nodes.find("style").remove();
 
     nodes.find("a").attr("target","_blank");
