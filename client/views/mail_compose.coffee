@@ -108,7 +108,7 @@ Template.mail_compose.events
 
         message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user ,$("#mail_to").val(),$("#mail_cc").val(), $("#mail_bcc").val(),$(".form-control.subject").val(), $('#compose-textarea').summernote('code') ,attachments);
 
-        ImapClientManager.upload null, MailManager.getBox("Drafts").path, message, ()->
+        ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
             toastr.success("存草稿成功");
 
 Template.mail_compose.onRendered ->

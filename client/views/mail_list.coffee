@@ -21,7 +21,7 @@ Template.mail_list.helpers
         return MailManager.getBox(Session.get("mailBox"));
 
     isDraftsBox: ->
-        if MailManager.getBox(Session.get("mailBox")).path == "Drafts"
+        if MailManager.getBoxBySpecialUse("\\Drafts").path == "Drafts"
             return  true
         return false
 
@@ -99,10 +99,7 @@ Template.mail_list.events
         path = Session.get("mailBox");
         uids = Template.mail_list.getCheckedUids();
     
-        if path == 'Trash'
-            MailManager.completeDeleteMessages path, uids, ()->  
-        else
-            MailManager.deleteMessages path, uids, ()->
+        MailManager.isTrashBox(path,uids);
                 
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));

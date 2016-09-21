@@ -84,11 +84,7 @@ Template.read_mail.events
 
 		uid = message.uid;
 	
-		if path == 'Trash'
-			MailManager.completeDeleteMessages path, uid, ()->	
-		else
-			MailManager.deleteMessages path, uid, ()->
-				
+		MailManager.isTrashBox(path, uid);
 
 Template.read_mail.onRendered ->
 	$(window).on 'keydown', (event)->

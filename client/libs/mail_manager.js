@@ -305,6 +305,13 @@ MailManager.resetHrefs = function(data){
 
     return html;
 }
+MailManager.isTrashBox = function(path, uid){
+    if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
+        MailManager.completeDeleteMessages(path, uid);  
+    }else{
+        MailManager.deleteMessages(path, uid);
+    }
+}
 
 // Meteor.startup(function(){
 //  MailManager.initMail();
