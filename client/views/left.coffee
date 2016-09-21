@@ -15,5 +15,12 @@ Template.layout_left.helpers
     	return if path == Session.get("mailBox") then "active" else ""
 
     t:(key)->
-    	return t("mail_" + key.toLowerCase());
+        key2 = "mail_" + key.toLowerCase();
+        str = t(key2);
+
+        if str == key2
+            
+            return t(key);
+
+        return str;
 
