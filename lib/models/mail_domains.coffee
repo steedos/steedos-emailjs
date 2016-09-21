@@ -69,8 +69,6 @@ if Meteor.isClient
 db.mail_domains.attachSchema(db.mail_domains._simpleSchema)
 
 
-
-
 #if Meteor.isServer
 	#db.mail_domains.after.insert (domain,) ->
 

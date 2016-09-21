@@ -104,7 +104,6 @@ Template.mail_list.events
         else
             MailManager.deleteMessages path, uids, ()->
                 
-
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
 
@@ -134,8 +133,6 @@ Template.mail_list.events
 
         $('.mailbox-messages-checkAll').each ->
             $(this).prop('checked', event.target.checked);
-
-
 
 
 Template.mail_list.onRendered ->

@@ -15,6 +15,13 @@ db.mail_domains.adminConfig =
 	]
 	routerAdmin: "/emailjs"
 
+db.mail_addressBook.adminConfig = 
+	icon: "globe"
+	color: "blue"
+	tableColumns: [
+		{name: "name"},
+	]
+	routerAdmin: "/emailjs"
 
 
 Meteor.startup ->
@@ -27,6 +34,9 @@ Meteor.startup ->
 	AdminConfig?.collections_add
 		mail_domains: db.mail_domains.adminConfig
 
+	@mail_addressBook = db.mail_addressBook
+	AdminConfig?.collections_add
+		mail_addressBook: db.mail_addressBook.adminConfig
 
 
 if Meteor.isClient
