@@ -21,7 +21,8 @@ Template.mail_list.helpers
         return MailManager.getBox(Session.get("mailBox"));
 
     isDraftsBox: ->
-        if MailManager.getBoxBySpecialUse("\\Drafts").path == "Drafts"
+        path = Session.get("mailBox");
+        if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
             return  true
         return false
 
