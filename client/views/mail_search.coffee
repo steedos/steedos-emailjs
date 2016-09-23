@@ -23,9 +23,10 @@ Template.mail_search.subjectSearch = ()->
         Session.set("mailLoading",false);
 
 Template.mail_search.events
-    'keydown .search-mail-input': (event, template) ->
-        if event.keyCode == 13
-            Template.mail_search.subjectSearch();
+
+    #'click .search-mail-input': (event, template) ->
+    #    if event.keyCode == 13
+    #    Template.mail_search.subjectSearch();
 
     'click #mail-search-btn': (event, template) ->
         Template.mail_search.subjectSearch();        

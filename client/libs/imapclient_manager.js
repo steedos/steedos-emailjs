@@ -200,6 +200,9 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 
 //imap search 说明文档：https://tools.ietf.org/html/rfc3501#section-6.4.4
 ImapClientManager.search = function(client, path, query, callback){
+
+	console.log(query);
+
 	if (!client)
 		client = this.getClient();
 
@@ -215,6 +218,9 @@ ImapClientManager.search = function(client, path, query, callback){
 
 			MailCollection.mail_search.update({},{uids:result});
 			var sequence = result.toString();
+			if(result.length > 10 ){
+				sequence = result.splice(0,10);
+			}
 			var options = {byUid: true};
 
 			client.close();
