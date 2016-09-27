@@ -6,8 +6,8 @@ MailManager.initMail = function(){
     if(window.require && AccountManager.getAuth()){
         ImapClientManager.mailBox(null, function(){
             ImapClientManager.initMailboxInfo(function(){
-                ImapClientManager.updateUnseenMessages();   
-                $(document.body).removeClass('loading');    
+                ImapClientManager.updateUnseenMessages();
+                $(document.body).removeClass('loading');
             })
         });
 
@@ -85,7 +85,7 @@ MailManager.getMessage = function(id){
         return {};
 
     if(message.summary == true){
-        
+
         if(Session.get("mailMessageLoadding") != true){
             Session.set("mailMessageLoadding",true);
             console.log("mailMessageLoadding  " + message.uid);
@@ -103,7 +103,7 @@ MailManager.getMessage = function(id){
             });
         }
     }
-    
+
     return message;
 }
 
@@ -121,13 +121,13 @@ MailManager.getUnseenUid = function(){
 /*
 queryKey : {
     keyword:'',
-    subject: true, 
-    body: true, 
-    attachment: true, 
-    from: '', 
-    to: '', 
+    subject: true,
+    body: true,
+    attachment: true,
+    from: '',
+    to: '',
     date: {
-        start :yyyy-mm-dd, 
+        start :yyyy-mm-dd,
         end: yyyy-mm-dd
         }
     }
@@ -138,14 +138,14 @@ MailManager.search = function(queryKey, callback){
         return;
 
     var query = {};
-    
+
     var path = Session.get("mailBox");
 
     if(queryKey.keyword){
         if(queryKey.attachment)
             query.TEXT = queryKey.keyword;
-        else{ 
-            
+        else{
+
             if(queryKey.body){
                 query.BODY = queryKey.keyword;
             }
@@ -163,16 +163,18 @@ MailManager.search = function(queryKey, callback){
     if(queryKey.to){
         query.TO = queryKey.to;
     }
-    
-    //var query = {header: ['Subject', queryKey]};
 
+    //query = {header: [queryKey.keyword]};
+    query = {header: ['subject', queryKey.keyword]};
+    //query = {keyword: 'queryKey.keyword'};
+    //console.log("MailManager.search query ：" + query );
     ImapClientManager.search(null, path, query, callback);
 }
 
 MailManager.getLastMessage = function(){
     var id = Session.get("mailMessageId");
     var path = Session.get("mailBox");
-    
+
     var currentMessage = MailCollection.getMessageCollection(path).findOne(id);
     if (!currentMessage)
         return ;
@@ -185,12 +187,12 @@ MailManager.getLastMessage = function(){
 
 MailManager.getNextMessage = function(){
     var id = Session.get("mailMessageId");
-    var path = Session.get("mailBox");  
-    
+    var path = Session.get("mailBox");
+
     var currentMessage = MailCollection.getMessageCollection(path).findOne(id);
     if (!currentMessage)
         ImapClientManager.mailBoxMessages(Session.get("mailBox"));
-    
+
     var message = MailCollection.getMessageCollection(path).findOne({uid: {$lt: currentMessage.uid}}, {sort: {uid: -1}, limit:1});
     if (!message)
         return;
@@ -240,7 +242,7 @@ MailManager.deleteMessages = function(path, uids){
     ImapClientManager.deleteMessages(null, path, uids, function(){
         toastr.success("邮件已删除");
         FlowRouter.go('/emailjs/b/' + path);
-        
+
         if(Object.prototype.toString.call(uids) === '[object Array]'){
             uids.forEach(function(uid){
                 MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid,10)});
@@ -254,7 +256,7 @@ MailManager.deleteMessages = function(path, uids){
         var mailBox = MailManager.getBox(path);
         ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
             MailManager.getNewBoxMessages(m.path);
-        })   
+        })
     })
 }
 
@@ -266,7 +268,7 @@ MailManager.completeDeleteMessages = function(path, uids){
         console.log("ImapClientManager.CompleteDeleteMessages run :");
         toastr.success("邮件已彻底删除");
         FlowRouter.go('/emailjs/b/Trash');
-       
+
         if(Object.prototype.toString.call(uids) === '[object Array]'){
             uids.forEach(function(uid){
                 MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid,10)});
@@ -280,12 +282,12 @@ MailManager.completeDeleteMessages = function(path, uids){
         var mailBox = MailManager.getBox(path);
         ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
             MailManager.getNewBoxMessages(m.path);
-        })   
+        })
     })
 }
 
 
-MailManager.resetHrefs = function(data){ 
+MailManager.resetHrefs = function(data){
     data = data.replace("<html","<div ").replace("</html>","</div>");
     var nodes = $(data);
     nodes.find("style").remove();
@@ -300,14 +302,14 @@ MailManager.resetHrefs = function(data){
         }else{
             html += this.textContent;
         }
-        
+
     });
 
     return html;
 }
 MailManager.isTrashBox = function(path, uid){
     if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
-        MailManager.completeDeleteMessages(path, uid);  
+        MailManager.completeDeleteMessages(path, uid);
     }else{
         MailManager.deleteMessages(path, uid);
     }
@@ -316,4 +318,18 @@ MailManager.isTrashBox = function(path, uid){
 // Meteor.startup(function(){
 //  MailManager.initMail();
 // })
-    
+
+MailManager.isMailBox = function(){
+    path = Session.get("mailBox");
+
+    if((path == "Inbox") || (path == "Sent") || (path == "Drafts") || (path =="Junk") || (path =="Archive")){
+        path = Session.get("mailBox");
+        console.log("path :1111");
+    }
+    else{
+        str = MailManager.getBoxBySpecialUse(Session.get("mailBox")).specialUse;
+        path = str.replace('\\','');
+        console.log(".list-message-delete + path: " + path );
+    }
+    return path;
+}

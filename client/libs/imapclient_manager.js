@@ -14,11 +14,11 @@ ImapClientManager.getClient = function(){
 	if(!auth)
 		return ;
 	var domain = AccountManager.getMailDomain(auth.user);
-	
+
 	var client = new ImapClient(domain.imap_server, domain.imap_port,{auth:auth});
 	client.logLevel = client.LOG_LEVEL_INFO;
 	client._onError(function(){
-		console.error("[ImapClientManager.ImapClient] error"); 
+		console.error("[ImapClientManager.ImapClient] error");
 	});
 
 	client.client.onerror(function(e){
@@ -82,7 +82,7 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 		client = this.getClient();
 
 	var query = ['uid', 'flags'];
-	
+
 	query.push('body[' + bodyPart.part + ']');
 
 	client.connect().then(function(){
@@ -91,7 +91,7 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 			console.log("listMessages messages ok");
 			try{
 				messages.forEach(function(message){
-					
+
 					console.log("listMessages messages 开始解析：" + message.uid);
 
 					var local_message = MailManager.getMessageByUid(path, message.uid);
@@ -102,7 +102,7 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 						local_message.summary = false;
 
 						var bodyMime = message['body[' + bodyPart.part + ']'];
-						
+
 						if(bodyMime){
 
 							if(bodyPart.type == 'text/plain' ){
@@ -110,7 +110,7 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 								local_message.bodyText.data = decode(bodyMime, bodyPart);
 
 							}else if(bodyPart.type == 'text/html'){
-								
+
 								local_message.bodyHtml.data = decode(bodyMime, bodyPart);
 
 							}
@@ -120,7 +120,7 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 						MailCollection.getMessageCollection(path).update(local_message._id ,local_message);
 
 					}
-					
+
 				});
 			}catch(err){
 				console.error(err)
@@ -134,13 +134,13 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 
 
 ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callback){
-	
+
 	var	client = this.getClient();
-	
+
 	var options = {byUid: true};
 
 	var query = ['uid', 'flags'];
-	
+
 	query.push('body[' + bodyPart.part + ']');
 
 	client.connect().then(function(){
@@ -149,7 +149,7 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 			console.log("listMessages messages ok");
 			try{
 				messages.forEach(function(message){
-					
+
 					console.log("listMessages messages 开始解析：" + message.uid);
 					console.log("[getAttachmentByPart] part.type is " + bodyPart.type);
 					var bodyMime = message['body[' + bodyPart.part + ']'];
@@ -175,9 +175,9 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	client.connect().then(function(){
 		console.log("listMessages start, sequence is " + sequence);
 		client.listMessages(path, sequence, query, options).then(function(messages){
-			
+
 			messages.forEach(function(message){
-				
+
 				console.log("listMessages messages 开始解析：" + message.uid);
 
 				var hMessage = handerMessage(message);
@@ -189,7 +189,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 				else
 					MailCollection.getMessageCollection(path).insert(hMessage);
 			});
-			
+
 			console.log("ImapClientManager.listMessages messages ok");
 
 			client.close();
@@ -209,27 +209,26 @@ ImapClientManager.search = function(client, path, query, callback){
 	client.connect().then(function(){
 		client.search(path, query, {byUid: true}).then(function(result){
 			console.log("search values is " + result);
-
 			if(!result || result.length == 0){
-				
+
 				callback(result, []);
 				return;
 			}
 
 			MailCollection.mail_search.update({},{uids:result});
 			var sequence = result.toString();
-			if(result.length > 10 ){
-				sequence = result.splice(0,10);
-			}
+			// if(result.length > 10 ){
+			// 	sequence = result.splice(0,10);
+			// }
 			var options = {byUid: true};
 
 			client.close();
-			
+
 			ImapClientManager.listMessages(null, path, sequence, options, function(messages){
 				callback(result, messages);
-			});
-		});
-	});
+			})
+		})
+	})
 }
 
 ImapClientManager.setFlags = function(client, path, sequence, flags, options, callback){
@@ -241,9 +240,9 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 			// console.log("[ImapClientManager.setFlags] messages：" + JSON.stringify(messages));
 			client.close();
 			callback(messages);
-		}); 
+		});
 	});
-	
+
 }
 
 ImapClientManager.deleteMessages = function(client, path, uids,callback){
@@ -257,7 +256,7 @@ ImapClientManager.deleteMessages = function(client, path, uids,callback){
 			if(typeof(callback) == 'function'){
 				callback();
 			}
-		})	
+		})
    	})
 }
 
@@ -266,9 +265,9 @@ ImapClientManager.completeDeleteMessages = function(client, path, uids, callback
 	console.log("[ImapClientManager.completeDeleteMessages] path is " + path + "; uids is " + uids);
 	if (!client)
 		client = this.getClient();
-	
+
 	client.connect().then(function(){
-		client.deleteMessages(path, uids, {byUid:true}).then(function(){ 
+		client.deleteMessages(path, uids, {byUid:true}).then(function(){
 			console.log("[completeDeleteMessages]uid values is " + uids);
 			client.close();
 			if(typeof(callback) == 'function'){
@@ -370,7 +369,7 @@ function handerBodystructure(messages, bodystructure){
 		console.log("new attachments");
 		messages.attachments = new Array();
 	}
-	
+
 	if(bodystructure){
 		if (bodystructure.type == 'multipart/alternative' || bodystructure.type == 'multipart/mixed'){
 			bodystructure.childNodes.forEach(function(bs, index){
@@ -495,11 +494,11 @@ ImapClientManager.mailBoxMessages = function(path, callback){
 
 	if (loadedMxistsIndex < 1){
 		if(typeof(callback) == "function"){
-			callback();	
+			callback();
 		}
 		return ;
 	}
-	
+
 	var sequence_s = loadedMxistsIndex <= 10 ? 1 : (loadedMxistsIndex - 10 + 1);
 
 	var sequence = sequence_s + ":" + loadedMxistsIndex;
@@ -511,7 +510,7 @@ ImapClientManager.mailBoxMessages = function(path, callback){
 	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
 		ImapClientManager.updateLoadedMxistsIndex(path, sequence_s - 1);
 		if(typeof(callback) == "function"){
-			callback();	
+			callback();
 		}
 	});
 }
@@ -526,11 +525,11 @@ ImapClientManager.mailBoxNewMessages = function(path,callback){
 
 	if (infoExists < 1){
 		if(typeof(callback) == "function"){
-			callback();	
+			callback();
 		}
 		return ;
 	}
-	
+
 	var sequence_s = infoExists <= 10 ? 1 : (infoExists - 10 + 1);
 
 	var sequence = sequence_s + ":" + infoExists;
@@ -542,7 +541,7 @@ ImapClientManager.mailBoxNewMessages = function(path,callback){
 	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
 		ImapClientManager.updateLoadedMxistsIndex(path, sequence_s - 1);
 		if(typeof(callback) == "function"){
-			callback(messages);	
+			callback(messages);
 		}
 	});
 }
@@ -566,9 +565,9 @@ ImapClientManager.getNewMessage = function(path, callback){
 
 ImapClientManager.getMessageByUid = function(path, sequence, bodyPart, callback){
 	var options = {byUid: true};
-	
+
 	try{
-		ImapClientManager.getMessageBodyByPart(null, path, sequence, options, bodyPart, callback);	
+		ImapClientManager.getMessageBodyByPart(null, path, sequence, options, bodyPart, callback);
 	}catch(err){
 		console.log(err);
 	}
@@ -576,9 +575,9 @@ ImapClientManager.getMessageByUid = function(path, sequence, bodyPart, callback)
 
 ImapClientManager.getAttachment = function(path , sequence, bodyPart, callback){
 	var options = {byUid: true};
-	
+
 	try{
-		ImapClientManager.getMessageBodyByPart(null, path, sequence, options, bodyPart, callback);	
+		ImapClientManager.getMessageBodyByPart(null, path, sequence, options, bodyPart, callback);
 	}catch(err){
 		console.log(err);
 	}
@@ -596,9 +595,5 @@ ImapClientManager.updateSeenMessage = function(path, uid, callback){
 		})
 		callback();
 	})
-	
+
 }
-
-
-
-

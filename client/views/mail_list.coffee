@@ -12,7 +12,7 @@ Template.mail_list.helpers
         str = t(key2);
 
         if str == key2
-            
+
             return t(key);
 
         return str;
@@ -53,10 +53,10 @@ Template.mail_list.helpers
         rev ;
 
         if Session.get("mailBoxFilter")
-            rev = MailManager.getBoxMessagesByUids(Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize);
-
-        rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
-          Session.set("mailLoading",false);
+          rev = MailManager.getBoxMessagesByUids(Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize);
+        else
+          rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
+        Session.set("mailLoading",false);
 
         return rev;
 
@@ -96,34 +96,21 @@ Template.mail_list.events
         MailManager.getNewBoxMessages(Session.get("mailBox"));
 
     'click .list-message-delete': (event, template) ->
+        $("#mail_list_load").show();
         console.log("list-message-delete");
         path = Session.get("mailBox");
         uids = Template.mail_list.getCheckedUids();
-    
-        MailManager.isTrashBox(path,uids);
-                
+
+        MailManager.isTrashBox(path, uids);
+
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
 
     'click #page_back': (event, template) ->
         MailPage.pageBack(parseInt(template.firstNode.dataset.exists));
 
-    'keydown .search-mail': (event, template) ->
-        console.log("keydown mail-search" + event.keyCode);
-
-    'keydown .search-mail-input': (event, template) ->
-        if event.keyCode == 13
-            searchKey = event.target.value
-
-            if searchKey.trim() == ''
-                Session.set("mailBoxFilter","");
-                return;
-
-            Session.set("mailLoading",true);
-            console.log("keydown search-mail-input searchKey:" + searchKey);
-            MailManager.search searchKey, (result,messages) ->
-                Session.set("mailBoxFilter", result);
-                Session.set("mailLoading",false);
+    #'keydown .search-mail': (event, template) ->
+    #    console.log("keydown mail-search" + event.keyCode);
 
     'change .mailbox-messages-checkAll': (event, template) ->
         $('input[name="uids"]', $(".mailbox-messages")).each ->
@@ -136,7 +123,3 @@ Template.mail_list.events
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     $("#mail_list_load").hide();
-
-
-
-
