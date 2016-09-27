@@ -5,39 +5,18 @@ db.mail_domains._simpleSchema = new SimpleSchema
 
 	domain:
 		type: String,
-	smtp_server : 
-		type: String,	
-	smtp_port: 
-		type: Number, 
-	smtp_ssl: 
+		defaultValue: "petrochina.com.cn",
+	smtp_server :
+		type: String,
+		defaultValue: "msg.petrochina.com.cn",
+	smtp_ssl:
 		type: String,
 		optional: true,
 		allowedValues: [
 			"yes",
 			"no"
 		],
-		autoform: 
-			type: "select",
-			options: [{
-				label: "是",
-				value: "yes"
-			},
-			{
-				label: "否",
-				value: "no"
-			}]	
-	imap_server: 
-		type: String,
-	imap_port : 
-		type: Number, 
-	imap_ssl: 
-		type: String,
-		optional: true,
-		allowedValues: [
-			"yes",
-			"no"
-		],
-		autoform: 
+		autoform:
 			type: "select",
 			options: [{
 				label: "是",
@@ -47,8 +26,43 @@ db.mail_domains._simpleSchema = new SimpleSchema
 				label: "否",
 				value: "no"
 			}]
+	smtp_port :
+		type: String,
+		optional: true,
+		allowedValues: [
+			"465",
+			"25"
+		],
 
-	created: 
+	imap_server:
+		type: String,
+		defaultValue: "msg.petrochina.com.cn",
+	imap_ssl:
+		type: String,
+		optional: true,
+		allowedValues: [
+			"yes",
+			"no"
+		],
+		autoform:
+			type: "select",
+			options: [{
+				label: "是",
+				value: "yes"
+			},
+			{
+				label: "否",
+				value: "no"
+			}]
+	imap_port :
+		type: String,
+		optional: true,
+		allowedValues: [
+			"993",
+			"143"
+		],
+
+	created:
 		type: Date,
 		optional: true
 	created_by:
@@ -71,6 +85,3 @@ db.mail_domains.attachSchema(db.mail_domains._simpleSchema)
 
 #if Meteor.isServer
 	#db.mail_domains.after.insert (domain,) ->
-
-
-
