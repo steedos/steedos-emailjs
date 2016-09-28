@@ -11,7 +11,7 @@ MailManager.initMail = function(){
             })
         });
 
-        //setTimeout(setInterval(function(){MailManager.getNewInboxMessages()},1000 * 120), 1000 * 120);
+        setTimeout(setInterval(function(){MailManager.getNewInboxMessages()},1000 * 120), 1000 * 120);
     }
 }
 
@@ -216,7 +216,7 @@ MailManager.getNewInboxMessages = function(){
     ImapClientManager.getNewMessage(box.path, function(messages){
         if(messages.length > 0){
             ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
-                ImapClientManager.updateUnseenMessages();
+                ImapClientManager.timingUpdateUnseenMessages();
             });
             console.log("MailManager.getNewInboxMessages length" + messages.length);
         }

@@ -208,7 +208,7 @@ ImapClientManager.search = function(client, path, query, callback){
 
 	client.connect().then(function(){
 		client.search(path, query, {byUid: true}).then(function(result){
-			console.log("search values is " + result);
+			console.log("search  result is " + result);
 			if(!result || result.length == 0){
 
 				callback(result, []);
@@ -217,9 +217,38 @@ ImapClientManager.search = function(client, path, query, callback){
 
 			MailCollection.mail_search.update({},{uids:result});
 			var sequence = result.toString();
-			// if(result.length > 10 ){
-			// 	sequence = result.splice(0,10);
-			// }
+			var options = {byUid: true};
+
+			client.close();
+
+			ImapClientManager.listMessages(null, path, sequence, options, function(messages){
+				callback(result, messages);
+			})
+		})
+	})
+}
+ImapClientManager.timingSearch = function(client, path, query, callback){
+
+	console.log(query);
+
+	if (!client)
+		client = this.getClient();
+
+	client.connect().then(function(){
+		client.search(path, query, {byUid: true}).then(function(result){
+			console.log("timingSearch  result is " + result);
+			if(!result || result.length == 0){
+
+				callback(result, []);
+				return;
+			}
+
+			MailCollection.mail_search.update({},{uids:result});
+
+			var sequence = result.toString();
+			if(result.length > 10 ){
+				sequence = result.splice(result.length-10, result.length-1);
+		 	}
 			var options = {byUid: true};
 
 			client.close();
@@ -311,9 +340,18 @@ ImapClientManager.initMailboxInfo = function(callback){
 }
 
 
+ImapClientManager.timingUpdateUnseenMessages = function(){
+	ImapClientManager.timingSearch(null ,"Inbox", {unseen: true}, function(result){
+		console.log("timing Update unseen  result is " + result);
+
+		MailCollection.mail_unseen.update({},{uids:result});
+	});
+}
+
 ImapClientManager.updateUnseenMessages = function(){
 	ImapClientManager.search(null ,"Inbox", {unseen: true}, function(result){
 		console.log("unseen is " + result);
+
 		MailCollection.mail_unseen.update({},{uids:result});
 	});
 }
@@ -546,8 +584,6 @@ ImapClientManager.mailBoxNewMessages = function(path,callback){
 	});
 }
 
-
-
 ImapClientManager.getNewMessage = function(path, callback){
 	var box = MailManager.getBox(path);
 
@@ -557,6 +593,7 @@ ImapClientManager.getNewMessage = function(path, callback){
 	if(box.info){
 		var sequence = box.info.uidNext + ":*";
 		var options = {byUid: true};
+		console.log("[ImapClientManager.getNewMessage] path is " + path );
 		ImapClientManager.listMessages(null, path, sequence, options, callback);
 	}
 }
