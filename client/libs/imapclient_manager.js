@@ -19,7 +19,7 @@ ImapClientManager.getClient = function(){
 
 	if (!domain.imap_ssl){
 		options.useSecureTransport = false;
-		options.ignoreTLS = false;
+		options.ignoreTLS = true;
 	}
 
 	var client = new ImapClient(domain.imap_server, domain.imap_port, options);

@@ -20,7 +20,7 @@ SmtpClientManager.getClient = function(){
 
 	if (!domain.smtp_ssl){
 		options.useSecureTransport = false;
-		options.ignoreTLS = false;
+		options.ignoreTLS = true;
 	}
 	
 	var client = new SmtpClient(domain.smtp_server, domain.smtp_port, options);
