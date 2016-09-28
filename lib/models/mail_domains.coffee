@@ -5,62 +5,22 @@ db.mail_domains._simpleSchema = new SimpleSchema
 
 	domain:
 		type: String,
-		defaultValue: "petrochina.com.cn",
 	smtp_server :
 		type: String,
-		defaultValue: "msg.petrochina.com.cn",
 	smtp_ssl:
-		type: String,
-		optional: true,
-		allowedValues: [
-			"yes",
-			"no"
-		],
-		autoform:
-			type: "select",
-			options: [{
-				label: "是",
-				value: "yes"
-			},
-			{
-				label: "否",
-				value: "no"
-			}]
+		type: Boolean,
+		defaultValue: "false",
 	smtp_port :
-		type: String,
-		optional: true,
-		allowedValues: [
-			"465",
-			"25"
-		],
-
+		type: Number,
+		defaultValue: "25",
 	imap_server:
 		type: String,
-		defaultValue: "msg.petrochina.com.cn",
 	imap_ssl:
-		type: String,
-		optional: true,
-		allowedValues: [
-			"yes",
-			"no"
-		],
-		autoform:
-			type: "select",
-			options: [{
-				label: "是",
-				value: "yes"
-			},
-			{
-				label: "否",
-				value: "no"
-			}]
+		type: Boolean,
+		defaultValue: "false",
 	imap_port :
-		type: String,
-		optional: true,
-		allowedValues: [
-			"993",
-			"143"
-		],
+		type: Number,
+		defaultValue: "143",
 
 	created:
 		type: Date,
