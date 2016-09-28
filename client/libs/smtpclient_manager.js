@@ -15,8 +15,15 @@ SmtpClientManager.getClient = function(){
 	if(!auth)
 		return ;
 	var domain = AccountManager.getMailDomain(auth.user);
+
+	var options = {auth:auth};
+
+	if (!domain.smtp_ssl){
+		options.useSecureTransport = false;
+		options.ignoreTLS = false;
+	}
 	
-	var client = new SmtpClient(domain.smtp_server, domain.smtp_port,{auth:auth});
+	var client = new SmtpClient(domain.smtp_server, domain.smtp_port, options);
 
 	return client;
 }

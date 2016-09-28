@@ -15,8 +15,17 @@ ImapClientManager.getClient = function(){
 		return ;
 	var domain = AccountManager.getMailDomain(auth.user);
 
-	var client = new ImapClient(domain.imap_server, domain.imap_port,{auth:auth});
+	var options = {auth:auth};
+
+	if (!domain.imap_ssl){
+		options.useSecureTransport = false;
+		options.ignoreTLS = false;
+	}
+
+	var client = new ImapClient(domain.imap_server, domain.imap_port, options);
+
 	client.logLevel = client.LOG_LEVEL_INFO;
+	
 	client._onError(function(){
 		console.error("[ImapClientManager.ImapClient] error");
 	});
