@@ -97,7 +97,6 @@ Template.mail_list.events
 
     'click .list-message-delete': (event, template) ->
         $("#mail_list_load").show();
-        console.log("list-message-delete");
         path = Session.get("mailBox");
         uids = Template.mail_list.getCheckedUids();
 

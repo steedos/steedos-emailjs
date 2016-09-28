@@ -11,7 +11,7 @@ MailManager.initMail = function(){
             })
         });
 
-        setTimeout(setInterval(function(){MailManager.getNewInboxMessages()},1000 * 120), 1000 * 120);
+        //setTimeout(setInterval(function(){MailManager.getNewInboxMessages()},1000 * 120), 1000 * 120);
     }
 }
 
@@ -318,18 +318,3 @@ MailManager.isTrashBox = function(path, uid){
 // Meteor.startup(function(){
 //  MailManager.initMail();
 // })
-
-MailManager.isMailBox = function(){
-    path = Session.get("mailBox");
-
-    if((path == "Inbox") || (path == "Sent") || (path == "Drafts") || (path =="Junk") || (path =="Archive")){
-        path = Session.get("mailBox");
-        console.log("path :1111");
-    }
-    else{
-        str = MailManager.getBoxBySpecialUse(Session.get("mailBox")).specialUse;
-        path = str.replace('\\','');
-        console.log(".list-message-delete + path: " + path );
-    }
-    return path;
-}
