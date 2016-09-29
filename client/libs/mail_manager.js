@@ -78,9 +78,9 @@ function getMesssageBodyPart(message){
     return  message.bodyHtml? message.bodyHtml.bodyPart: message.bodyText.bodyPart
 }
 
-MailManager.getMessage = function(id){
+MailManager.getMessage = function(uid){
     var path = Session.get("mailBox");
-    var message = MailCollection.getMessageCollection(path).findOne(id);
+    var message = MailCollection.getMessageCollection(path).findOne({uid: uid});
     if (!message)
         return {};
 
@@ -172,10 +172,10 @@ MailManager.search = function(queryKey, callback){
 }
 
 MailManager.getLastMessage = function(){
-    var id = Session.get("mailMessageId");
+    var uid = parseInt(Session.get("mailMessageId"));
     var path = Session.get("mailBox");
 
-    var currentMessage = MailCollection.getMessageCollection(path).findOne(id);
+    var currentMessage = MailCollection.getMessageCollection(path).findOne({uid: uid});
     if (!currentMessage)
         return ;
 
@@ -186,10 +186,10 @@ MailManager.getLastMessage = function(){
 }
 
 MailManager.getNextMessage = function(){
-    var id = Session.get("mailMessageId");
+    var uid = parseInt(Session.get("mailMessageId"));
     var path = Session.get("mailBox");
 
-    var currentMessage = MailCollection.getMessageCollection(path).findOne(id);
+    var currentMessage = MailCollection.getMessageCollection(path).findOne({uid: uid});
     if (!currentMessage)
         ImapClientManager.mailBoxMessages(Session.get("mailBox"));
 

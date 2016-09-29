@@ -1,8 +1,8 @@
 Template.read_mail.helpers
 	message: ->
-		id = Session.get("mailMessageId");
+		uid = Session.get("mailMessageId");
 
-		return MailManager.getMessage(id) ;
+		return MailManager.getMessage(parseInt(uid)) ;
 
 	path: ->
 		return Session.get("mailBox");
@@ -80,17 +80,17 @@ Template.read_mail.events
 		console.log("click mail-delete");
 		path = Session.get("mailBox");
 
-		message = MailManager.getMessage(Session.get("mailMessageId"))
+		message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
 
 		uid = message.uid;
 	
 		MailManager.isTrashBox(path, uid);
 
-Template.read_mail.onRendered ->
-	$(window).on 'keydown', (event)->
-		if event.which == 37
-			MailManager.getLastMessage();
-		else if event.which == 39
-			MailManager.getNextMessage();
- 		console.log(event.which);
+# Template.read_mail.onRendered ->
+# 	$(window).on 'keydown', (event)->
+# 		if event.which == 37
+# 			MailManager.getLastMessage();
+# 		else if event.which == 39
+# 			MailManager.getNextMessage();
+#  		console.log(event.which);
    

@@ -1,6 +1,6 @@
 Template.mail_compose.helpers
     message: ->
-        return MailManager.getMessage(Session.get("mailMessageId"));
+        return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
 
     mail_to: (message) ->
 
@@ -126,7 +126,7 @@ Template.mail_compose.onRendered ->
     this.autorun ()->
         if !Session.get("mailMessageLoadding")
 
-            message = MailManager.getMessage(Session.get("mailMessageId"))
+            message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
             body = "";
             if Session.get("mailMessageId")
                 if Session.get("mailJumpDraft")

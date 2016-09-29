@@ -38,7 +38,7 @@ MailForward.getBody = function(message){
 
 MailForward.getAttachmentsHtml = function(){
 	
-	var message = MailManager.getMessage(Session.get("mailMessageId"));
+	var message = MailManager.getMessage(parseInt(Session.get("mailMessageId")));
 
 	message.attachments.forEach(function(item){
 		$("#mail_attachment").show();

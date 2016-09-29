@@ -44,9 +44,9 @@
               <!-- <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td> -->
               <td class="mailbox-name">
               {{#if isDraftsBox}}
-                <a href="/emailjs/b/jumpDraft/{{box.path}}/{{_id}}">{{fromName from}}</a>
+                <a href="/emailjs/b/jumpDraft/{{box.path}}/{{uid}}">{{fromName from}}</a>
               {{else}}
-                <a href="/emailjs/b/{{box.path}}/{{_id}}">{{fromName from}}</a>
+                <a href="/emailjs/b/{{box.path}}/{{uid}}">{{fromName from}}</a>
               {{/if}}</td>
               <td class="mailbox-subject">
                 <div class="subject">{{#if isUnseen this}}<b>{{subject}}</b>{{else}}{{subject}}{{/if}}</div>

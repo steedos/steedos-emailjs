@@ -22,6 +22,18 @@ MailCollection.getMessageCollection = function(path){
 	return MailCollection["mail_" + path + "_messages"];
 }
 
+//selector: {"flags":{$ne:"\\Seen"}}
+//options: {sort: {uid:-1}, skip: 0, limit: 5}
+MailCollection.getInboxMessage = function(selector, options){
+	var inboxPath = MailManager.getBoxBySpecialUse("\\Inbox").path;
+
+    var conn = MailCollection.getMessageCollection(inboxPath);
+
+    var messages = conn.find(selector, options).fetch();
+
+    messages.forEach()
+}
+
 
 Meteor.startup(function(){
 	MailCollection.init();
