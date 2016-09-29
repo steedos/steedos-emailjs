@@ -169,6 +169,18 @@ MailManager.search = function(queryKey, callback){
     //query = {keyword: 'queryKey.keyword'};
     //console.log("MailManager.search query ：" + query );
     ImapClientManager.search(null, path, query, callback);
+    // ImapClientManager.search(null, path, query, function(result){
+    //   var sequence = result.toString();
+    //   var options = {byUid: true};
+    //   ImapClientManager.listMessages(null, path, sequence, options, function(messages){
+    //     callback(result, messages);
+    //   });
+    // });
+
+
+    //ImapClientManager.listMessages(null, path, sequence, options, function(messages){
+    // 	callback(result, messages);
+    // })
 }
 
 MailManager.getLastMessage = function(){

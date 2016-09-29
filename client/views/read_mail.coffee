@@ -9,7 +9,7 @@ Template.read_mail.helpers
 
 	attachmentIcon: (name)->
 		return MailAttachment.getAttachmentIcon(name);
-		
+
 	modifiedString: (date)->
 	    modifiedString = moment(date).format('YYYY-MM-DD HH:mm');
 	    return modifiedString;
@@ -57,7 +57,7 @@ Template.read_mail.events
 
 		path = Session.get("mailBox");
 
-		message = MailManager.getMessage(Session.get("mailMessageId"))
+		message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
 
 		uid = message.uid;
 
@@ -75,7 +75,7 @@ Template.read_mail.events
 	'click .next_mail': (event, template)->
 		console.log("click next_mail");
 		MailManager.getNextMessage();
-		
+
 	'click .mail-delete': (event, template)->
 		console.log("click mail-delete");
 		path = Session.get("mailBox");
@@ -83,7 +83,7 @@ Template.read_mail.events
 		message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
 
 		uid = message.uid;
-	
+
 		MailManager.isTrashBox(path, uid);
 
 # Template.read_mail.onRendered ->
@@ -93,4 +93,3 @@ Template.read_mail.events
 # 		else if event.which == 39
 # 			MailManager.getNextMessage();
 #  		console.log(event.which);
-   

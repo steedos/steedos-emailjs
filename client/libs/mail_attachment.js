@@ -10,7 +10,7 @@ if(Steedos.isNode()){
 	exec = nw.require('child_process').exec;
 
 	dirname = path.join(path.normalize(process.env.HOME? process.env.HOME : process.env.USERPROFILE), "Downloads");
-	
+
 	dirtemp = process.env.TEMP;
 }
 
@@ -23,7 +23,7 @@ MailAttachment.openFile = function(dirname, name){
 	var cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
 
 	cmd += path.join(path.normalize(dirname), '\"' + name + '\"');
-    
+
     exec(cmd, function(error,stdout,stderr){
     	console.log("文件已关闭：" + dirname);
     });
@@ -45,6 +45,7 @@ MailAttachment.save = function(name, data, callback){
 MailAttachment.download = function(path, uid, bodyPart, callback){
 
 	ImapClientManager.getAttachmentByPart(path, uid, bodyPart, function(filename, data){
+		console.log("MailAttachment.download! filename: "+ filename);
 		MailAttachment.save(filename, data, function(dirname, name, filePath){
 			callback(dirname, name, filePath);
 		})
@@ -140,4 +141,3 @@ MailAttachment.getAttachmentNode = function(filePath){
 	}
 	return node;
 }
-
