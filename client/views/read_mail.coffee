@@ -25,7 +25,10 @@ Template.read_mail.helpers
 	    return Session.get("donwLoadding");
 
 	mailBody: (message)->
-		if message.bodyHtml.data
+		if !message || message.uid == undefined
+			return '';
+
+		if message.bodyHtml?.data
 			data = message.bodyHtml.data;
 
 			return MailManager.resetHrefs(data);

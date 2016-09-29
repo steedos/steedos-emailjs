@@ -2,16 +2,18 @@ MailManager = {};
 
 MailManager.initMail = function(){
     $(document.body).addClass('loading');
+    Session.set("mailInit", false);
     //MailCollection.init();
     if(window.require && AccountManager.getAuth()){
         ImapClientManager.mailBox(null, function(){
             ImapClientManager.initMailboxInfo(function(){
                 ImapClientManager.updateUnseenMessages();
+                Session.set("mailInit", true);
                 $(document.body).removeClass('loading');
             })
         });
 
-       setTimeout(setInterval(function(){MailManager.getNewInboxMessages()},1000 * 120), 1000 * 120);
+        setTimeout(MailQuartz.getNewMessages, 1000 * 120);
     }
 }
 
@@ -44,7 +46,9 @@ MailManager.getBoxBySpecialUse = function(specialUse){
 MailManager.getOtherBoxs = function(){
     var unPath = ["Inbox", "Sent", "Drafts", "Junk", "Trash", "Archive"]
 
-    return MailCollection.mail_box.find({path:{$nin:unPath}}).fetch();
+    var unSpecialUse = ["\\Inbox", "\\Sent", "\\Drafts", "\\Junk", "\\Trash", "\\Archive"]
+
+    return MailCollection.mail_box.find({path:{$nin:unPath}, specialUse:{$nin:unSpecialUse}}).fetch();
 }
 
 MailManager.getBoxs = function(){

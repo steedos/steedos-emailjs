@@ -86,6 +86,15 @@ Package.onUse(function(api) {
 
 	api.addFiles('client/libs/mail_forward.js', 'client');
 
+	api.addFiles('client/libs/mail_quartz.js', 'client');
+
+	api.addFiles('client/layout/master.html', 'client');
+    api.addFiles('client/layout/master.coffee', 'client');
+    api.addFiles('client/layout/master.less', 'client');
+    api.addFiles('client/layout/sidebar.html', 'client');
+    api.addFiles('client/layout/sidebar.coffee', 'client');
+
+
 	api.addFiles('client/views/mail.less', 'client');
 
 	api.addFiles('client/views/contact_modal.html', 'client');

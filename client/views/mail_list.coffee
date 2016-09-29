@@ -51,11 +51,11 @@ Template.mail_list.helpers
         Session.set("mailLoading",true);
 
         rev ;
-
-        if Session.get("mailBoxFilter")
-          rev = MailManager.getBoxMessagesByUids(Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize);
-        else
-          rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
+        if Session.get("mailInit")
+            if Session.get("mailBoxFilter")
+              rev = MailManager.getBoxMessagesByUids(Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize);
+            else
+              rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
         Session.set("mailLoading",false);
 
         return rev;
@@ -70,6 +70,7 @@ Template.mail_list.helpers
         return modifiedString;
 
     modifiedFromNow: (date)->
+        $(".mailbox-messages img").initial({charCount:1});
         modifiedFromNow = moment(date).fromNow();
         return modifiedFromNow;
 
@@ -88,6 +89,9 @@ Template.mail_list.helpers
     fromName: (from)->
         if(from && from.length > 0)
             return if from[0].name then from[0].name else from[0].address
+
+    getLiClass: (uid)->
+        return if uid+"" == Session.get("mailMessageId") then "active" else ""
 
 
 Template.mail_list.events

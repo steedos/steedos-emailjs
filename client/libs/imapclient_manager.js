@@ -346,10 +346,10 @@ ImapClientManager.initMailboxInfo = function(callback){
 		ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
 			ImapClientManager.updateLoadedMxistsIndex(mailBox.path, m.exists);
 			if(mailBox.path.toLocaleLowerCase() === 'inbox')
-				ImapClientManager.mailBoxMessages(mailBox.path);
+				ImapClientManager.mailBoxMessages(mailBox.path, callback);
 		});
 	});
-	callback();
+	
 }
 
 ImapClientManager.updateUnseenMessages = function(){
@@ -392,6 +392,9 @@ function decode(str, part){
 
 function handerBodyPart(bodyPart){
 	var object = {};
+	if(bodyPart.part == undefined){
+		bodyPart.part = 1;
+	}
 	object.part = bodyPart.part;
 	object.size = bodyPart.size;
 	object.bodyPart = bodyPart;
@@ -405,7 +408,7 @@ function handerBodyPart(bodyPart){
 }
 
 
-function handerBodystructure(messages, bodystructure){
+ImapClientManager.handerBodystructure = function(messages, bodystructure){
 	console.log("邮件标题：" + messages.subject  + " 附件：" + JSON.stringify(messages.attachments));
 	if(!messages.attachments){
 		console.log("new attachments");
@@ -413,7 +416,8 @@ function handerBodystructure(messages, bodystructure){
 	}
 
 	if(bodystructure){
-		if (bodystructure.type == 'multipart/alternative' || bodystructure.type == 'multipart/mixed'){
+		console.log("bodystructure.type " + bodystructure.type);
+		if (bodystructure.type == 'multipart/alternative' || bodystructure.type == 'multipart/mixed' || bodystructure.type == 'multipart/related'){
 			bodystructure.childNodes.forEach(function(bs, index){
 				if(bs.type == 'application/octet-stream'){
 					messages.attachments.push(handerBodyPart(bs));
@@ -423,14 +427,14 @@ function handerBodystructure(messages, bodystructure){
 					messages.bodyHtml = handerBodyPart(bs);
 				}else{
 					console.log("[handerBodystructure] bs.type is " + bs.type);
-					handerBodystructure(messages, bs);
+					ImapClientManager.handerBodystructure(messages, bs);
 				}
 			});
 		}else{
 			if(bodystructure.type == 'text/plain'){
-				messages.bodyText = handerBodyPart(bs);
+				messages.bodyText = handerBodyPart(bodystructure);
 			}else if(bodystructure.type == 'text/html'){
-				messages.bodyHtml = handerBodyPart(bs);
+				messages.bodyHtml = handerBodyPart(bodystructure);
 			}
 		}
 	}
@@ -457,9 +461,9 @@ function handerMessage(message){
 
 	// rev.attachments = new Array(), bodyText = "", bodyHtml = "";
 	try{
-		handerBodystructure(rev, rev.bodystructure);
+		ImapClientManager.handerBodystructure(rev, rev.bodystructure);
 	}catch(err){
-		console.log(err);
+		console.error(err);
 	}
 	console.log("handerBodystructure ok");
 
@@ -541,7 +545,7 @@ ImapClientManager.mailBoxMessages = function(path, callback){
 		return ;
 	}
 
-	var sequence_s = loadedMxistsIndex <= 10 ? 1 : (loadedMxistsIndex - 10 + 1);
+	var sequence_s = loadedMxistsIndex <= MailPage.pageSize ? 1 : (loadedMxistsIndex - MailPage.pageSize + 1);
 
 	var sequence = sequence_s + ":" + loadedMxistsIndex;
 
@@ -572,7 +576,7 @@ ImapClientManager.mailBoxNewMessages = function(path,callback){
 		return ;
 	}
 
-	var sequence_s = infoExists <= 10 ? 1 : (infoExists - 10 + 1);
+	var sequence_s = infoExists <= MailPage.pageSize ? 1 : (infoExists - MailPage.pageSize + 1);
 
 	var sequence = sequence_s + ":" + infoExists;
 

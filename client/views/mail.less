@@ -1,6 +1,8 @@
 /* iCheck plugin Flat skin, blue
 ----------------------------------- */
 .steedos-mail {
+    background-color: #f5f5f5;
+
     /* Retina support */
     @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
            only screen and (-moz-min-device-pixel-ratio: 1.5),
@@ -12,6 +14,7 @@
             background-size: 176px 22px;
         }
     }
+
 
 
     .mail-compose{
@@ -104,7 +107,46 @@
         }
 
         .mailbox-messages {
-            min-height: 380px;
+            font-weight: 400;
+            .item{
+                padding: 5px;
+            }
+
+            .unseen{
+                font-weight: bold;
+            }
+
+            .product-checkbox{
+                float: left;
+            }
+
+            .product-img{
+                padding-left:5px;
+            }
+
+            .product-info {
+                margin-left: 75px;
+                a{
+                    color: #2e3133;
+                }
+                
+                .fa{
+                    padding-right: 10px;
+                }
+            }
+
+            .active{
+                background-color: #08C;
+               .product-info {
+                    a{
+                        color: #fff;
+                    }
+
+                    .product-description{
+                        color: #fff;
+                    }
+                } 
+            }
         }
 
         .mailbox-subject{

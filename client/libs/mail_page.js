@@ -1,7 +1,7 @@
 MailPage = {};
 
 //每页显示10条邮件
-MailPage.pageSize = 10;
+MailPage.pageSize = 20;
 
 //总页数
 MailPage.pageCount  = function(boxMessageNumber){

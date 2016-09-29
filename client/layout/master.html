@@ -1,0 +1,24 @@
+<template name="emailjsLayout">
+
+	{{#if subsReady}}
+		<div class="steedos emailjs">
+			{{# AdminLTE skin="green" sidebarMini="true" }}
+				{{> emailjsSidebar}}
+
+
+				<div class="content-wrapper" style="min-height: {{minHeight}}">
+					<div class="connection-status">
+						{{> status}}
+					</div>
+					{{> Template.dynamic template=main}}
+					</div>
+			{{/ AdminLTE}}
+			{{> steedosLoading}}
+		</div>
+	{{else}}
+		<div class="loading">
+			{{> steedosLoading}}
+		</div>
+	{{/if}}
+</template>
+

@@ -11,11 +11,15 @@
   </section> -->
   <section class="content steedos-mail">
     <div class="row">
-      <div class="col-md-3">
-        {{> layout_left}}
+      <div class="col-md-4">
+        {{> mail_list}}
       </div>
-      <div class="col-md-9">
-        {{> layout_right}}
+      <div class="col-md-8">
+        {{#if isComPose}}
+          {{> mail_compose}}
+        {{else}}
+          {{> read_mail}}
+        {{/if}}
       </div>
     </div>
   </section>

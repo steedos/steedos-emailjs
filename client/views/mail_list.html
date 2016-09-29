@@ -1,10 +1,10 @@
 <template name="mail_list">
 	<div class="box box-primary mail_list" data-exists="{{boxExists}}">
   {{#with box}}
-      <div class="box-header with-border" style="padding-bottom: 15px;">
-        <h3 class="box-title">{{t this.name}}</h3>
+      <div class="box-header with-border">
+        <!-- <h3 class="box-title">{{t this.name}}</h3> -->
 
-        <div class="box-tools pull-right">
+        <div class="pull-right">
           <div class="has-feedback">
             {{> mail_search}}
           </div>
@@ -35,13 +35,13 @@
           </div>
           <!-- /.pull-right -->
         </div>
-        <div class="table-responsive mailbox-messages">
-          <table class="table table-hover table-striped" style="width:100%">
+ <!--   <div class="table-responsive mailbox-messages">
+         <table class="table table-hover table-striped" style="width:100%">
             <tbody>
             {{#each boxMessages}}
             <tr>
               <td class="mailbox-checkbox"><input type="checkbox" value="{{uid}}" name="uids"></td>
-              <!-- <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td> -->
+             
               <td class="mailbox-name">
               {{#if isDraftsBox}}
                 <a href="/emailjs/b/jumpDraft/{{box.path}}/{{uid}}">{{fromName from}}</a>
@@ -50,16 +50,39 @@
               {{/if}}</td>
               <td class="mailbox-subject">
                 <div class="subject">{{#if isUnseen this}}<b>{{subject}}</b>{{else}}{{subject}}{{/if}}</div>
-                <!-- <div class="body">{{bodyText}}</div> -->
               </td>
               <td class="mailbox-attachment">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}</td>
               <td class="mailbox-date" title="{{modifiedString date}}">{{modifiedFromNow date}}</td>
             </tr>
             {{/each}}
             </tbody>
-          </table>
-          <!-- /.table -->
-        </div>
+          </table> 
+        </div>-->
+          <div class="products-list product-list-in-box mailbox-messages">
+            {{#each boxMessages}}
+              <li class="item {{#if isUnseen this}}unseen{{/if}} {{getLiClass uid}}">
+                  <div class="product-checkbox">
+                    <input type="checkbox" value="{{uid}}" name="uids">
+                  </div>
+                  <div class="product-img">
+                    <img class="img" data-name="{{fromName from}}" alt="Product Image">
+                  </div>
+                  <div class="product-info">
+                    <a href="{{#if isDraftsBox}}/emailjs/b/jumpDraft/{{box.path}}/{{uid}}{{else}}/emailjs/b/{{box.path}}/{{uid}}{{/if}}">
+                      <div>
+                        {{fromName from}}
+                        <span class="pull-right">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}{{modifiedFromNow date}}</span>
+                        <span class="product-description">
+                          {{subject}}
+                        </span>
+                      </div>
+                    </a>
+                  </div>
+              </li>
+            {{/each}}
+          </div>
+
+          
         <!-- /.mail-box-messages -->
       </div>
 
