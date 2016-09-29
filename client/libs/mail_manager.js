@@ -11,7 +11,7 @@ MailManager.initMail = function(){
             })
         });
 
-        setTimeout(setInterval(function(){MailManager.getNewInboxMessages()},1000 * 120), 1000 * 120);
+       setTimeout(setInterval(function(){MailManager.getNewInboxMessages()},1000 * 120), 1000 * 120);
     }
 }
 
@@ -216,7 +216,7 @@ MailManager.getNewInboxMessages = function(){
     ImapClientManager.getNewMessage(box.path, function(messages){
         if(messages.length > 0){
             ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
-                ImapClientManager.timingUpdateUnseenMessages();
+                ImapClientManager.updateUnseenMessages();
             });
             console.log("MailManager.getNewInboxMessages length" + messages.length);
         }
@@ -267,7 +267,7 @@ MailManager.completeDeleteMessages = function(path, uids){
     ImapClientManager.completeDeleteMessages(null, path, uids, function(){
         console.log("ImapClientManager.CompleteDeleteMessages run :");
         toastr.success("邮件已彻底删除");
-        FlowRouter.go('/emailjs/b/Trash');
+        FlowRouter.go('/emailjs/b/' + MailManager.getBoxBySpecialUse("\\Trash").path);
 
         if(Object.prototype.toString.call(uids) === '[object Array]'){
             uids.forEach(function(uid){
@@ -305,7 +305,7 @@ MailManager.resetHrefs = function(data){
 
     });
 
-    return html;
+     return html;
 }
 MailManager.isTrashBox = function(path, uid){
     if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
@@ -318,3 +318,11 @@ MailManager.isTrashBox = function(path, uid){
 // Meteor.startup(function(){
 //  MailManager.initMail();
 // })
+
+// MailManager.uniformPath = function(path){
+//   var str = MailManager.getBoxBySpecialUse(path);
+//   if(str.specialUse){
+//     path = str.specialUse.replace("\\", "");
+//   }
+//   return path;
+// }

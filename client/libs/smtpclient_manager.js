@@ -22,7 +22,7 @@ SmtpClientManager.getClient = function(){
 		options.useSecureTransport = false;
 		options.ignoreTLS = true;
 	}
-	
+
 	var client = new SmtpClient(domain.smtp_server, domain.smtp_port, options);
 
 	return client;
@@ -47,7 +47,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 		    console.log("Connection has been established");
 		    if(alreadySending ){
 		    	client.close();
-		    	return 
+		    	return
 		    }
 
 		    alreadySending = true;
@@ -65,7 +65,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 		    client.useEnvelope(new MimeBuilder().addHeader(evnelope).getEnvelope());
 		}
 
-		client.onready = function(){	
+		client.onready = function(){
 
 			var message = MailMimeBuilder.getMessageMime(from, to, cc, bcc, subject, body, attachments);
 
@@ -73,11 +73,11 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 
 		    client.end();
 		}
-	    
-	    client.ondone = function(success){ 
+
+	    client.ondone = function(success){
 	    	if(success){
 	    		toastr.success("发送成功");
-	    		callback(FlowRouter.go('/emailjs/b/Sent'));
+	    		callback(FlowRouter.go('/emailjs/b/'+ MailManager.getBoxBySpecialUse("\\Sent").path));
 	    		$("#mail_sending").hide();
    			}else{
    				toastr.success("发送不成功");
@@ -95,8 +95,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 		console.error(e);
 	}finally{
      	client.close();
-     	
+
     }
 
 }
-
