@@ -2,9 +2,9 @@ MailMimeBuilder = {};
 
 var MimeBuilder, fs;
 
-if(window.require){
-	MimeBuilder = window.require('emailjs-mime-builder');
-	fs = window.require('fs');
+if(Steedos.isNode()){
+	MimeBuilder = nw.require('emailjs-mime-builder');
+	fs = nw.require('fs');
 }
 
 MailMimeBuilder.getMessageMime = function(from, to, cc, bcc,subject, body, attachments){

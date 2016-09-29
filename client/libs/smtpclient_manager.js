@@ -2,11 +2,11 @@ SmtpClientManager = {};
 
 var MimeBuilder, SmtpClient, MimeCodec, fs;
 
-if(window.require){
-	MimeBuilder = window.require('emailjs-mime-builder');
-	SmtpClient  = window.require('emailjs-smtp-client');
-	MimeCodec = require('emailjs-mime-codec');
-	fs = window.require('fs');
+if(Steedos.isNode()){
+	MimeBuilder = nw.require('emailjs-mime-builder');
+	SmtpClient  = nw.require('emailjs-smtp-client');
+	MimeCodec = nw.require('emailjs-mime-codec');
+	fs = nw.require('fs');
 }
 
 

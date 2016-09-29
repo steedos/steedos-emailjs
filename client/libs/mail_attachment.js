@@ -3,15 +3,11 @@ var fs, path, os, exec, dirname, dirtemp ;
 
 
 
-if(window.require){
-	fs = window.require("fs");
-	path = require('path');
-	os = window.require('os');
-	exec = window.require('child_process').exec;
-}
-
-
 if(Steedos.isNode()){
+	fs = nw.require("fs");
+	path = nw.require('path');
+	os = nw.require('os');
+	exec = nw.require('child_process').exec;
 
 	dirname = path.join(path.normalize(process.env.HOME? process.env.HOME : process.env.USERPROFILE), "Downloads");
 	
