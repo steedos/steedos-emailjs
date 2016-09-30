@@ -1,6 +1,21 @@
 <template name="mail_list">
-	<div class="box box-primary mail_list" data-exists="{{boxExists}}">
-  {{#with box}}
+
+  <div class="navigation-bar">
+
+        <!-- <a href="/workflow/space/{{spaceId}}" class="btn btn-default" title='{{_ "Workflow"}}'>
+          <i class="ion ion-chevron-left"></i><span></span>
+        </a> -->
+
+        <button type="button" class="btn btn-default" data-toggle="offcanvas">
+          <i class="fa fa-bars"></i>
+        </button>
+
+        <div class="pull-right">
+          <a href="/emailjs/b/compose" class="btn btn-success btn-block margin-bottom btn-compose">新建</a>
+        </div>
+  </div>
+
+	<div class="mail_list" data-exists="{{boxExists}}">
       <div class="box-header with-border">
         <!-- <h3 class="box-title">{{t this.name}}</h3> -->
 
@@ -58,25 +73,29 @@
             </tbody>
           </table> 
         </div>-->
-          <div class="products-list product-list-in-box mailbox-messages">
+          <div class="products-list product-list-in-box mailbox-messages" style="height: {{minHeight}}">
             {{#each boxMessages}}
-              <li class="item {{#if isUnseen this}}unseen{{/if}} {{getLiClass uid}}">
-                  <div class="product-checkbox">
-                    <input type="checkbox" value="{{uid}}" name="uids">
-                  </div>
-                  <div class="product-img">
-                    <img class="img" data-name="{{fromName from}}" alt="Product Image">
-                  </div>
-                  <div class="product-info">
-                    <a href="{{#if isDraftsBox}}/emailjs/b/jumpDraft/{{box.path}}/{{uid}}{{else}}/emailjs/b/{{box.path}}/{{uid}}{{/if}}">
-                      <div>
-                        {{fromName from}}
-                        <span class="pull-right">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}{{modifiedFromNow date}}</span>
-                        <span class="product-description">
-                          {{subject}}
-                        </span>
+              <li class="item {{#if isUnseen this}}unseen{{else}}seen{{/if}} {{getLiClass uid}}">
+                  <div>
+                    <div class="message">
+                      <div class="product-checkbox">
+                        <input type="checkbox" value="{{uid}}" name="uids">
                       </div>
-                    </a>
+                      <!-- <div class="product-img">
+                        <img class="img" data-name="{{fromName from}}" alt="Product Image">
+                      </div> -->
+                      <div class="product-info">
+                        <a href="{{#if isDraftsBox}}/emailjs/b/jumpDraft/{{box.path}}/{{uid}}{{else}}/emailjs/b/{{box.path}}/{{uid}}{{/if}}">
+                          <div>
+                            {{fromName from}}
+                            <span class="pull-right">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}{{modifiedFromNow date}}</span>
+                            <span class="product-description">
+                              {{subject}}
+                            </span>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
                   </div>
               </li>
             {{/each}}
@@ -115,6 +134,5 @@
           <!-- /.pull-right -->
         </div>
       </div>
-  {{/with}}
     </div>
 </template>

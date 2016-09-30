@@ -28,7 +28,7 @@ MailPage.pageForward = function(boxMessageNumber){
 
 //起始数
 MailPage.PageStart = function(){
- 	return (Session.get("mailPage") - 1)*10+1;
+ 	return (Session.get("mailPage") - 1) * MailPage.pageSize +1;
 }
 
 //结束数

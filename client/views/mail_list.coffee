@@ -70,7 +70,7 @@ Template.mail_list.helpers
         return modifiedString;
 
     modifiedFromNow: (date)->
-        $(".mailbox-messages img").initial({charCount:1});
+        # $(".mailbox-messages img").initial({charCount:1});
         modifiedFromNow = moment(date).fromNow();
         return modifiedFromNow;
 
@@ -92,6 +92,9 @@ Template.mail_list.helpers
 
     getLiClass: (uid)->
         return if uid+"" == Session.get("mailMessageId") then "active" else ""
+
+    minHeight: ->
+        return Template.instance().minHeight.get() + "px"
 
 
 Template.mail_list.events
@@ -123,6 +126,23 @@ Template.mail_list.events
             $(this).prop('checked', event.target.checked);
 
 
+Template.mail_list.onCreated ->
+    self = this;
+
+    height = $(window).height() - 51 - 56 - 40*2 - 2;
+
+    self.minHeight = new ReactiveVar(height);
+
+    $(window).resize ->
+        height = $(window).height() - 51 - 56 - 40*2 - 2;
+        self.minHeight.set(height);
+
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     $("#mail_list_load").hide();
+
+    self = this;
+
+    height = $(window).height() - 51 - 56 - 40*2 - 2;
+
+    self.minHeight.set(height);

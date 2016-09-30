@@ -15,9 +15,33 @@
         }
     }
 
+    .mail-list{
+        padding-right: 0px;
+        border-right: 1px solid #d2d6de;
+    }
+
+    .mail-wrapper{
+        padding-left: 0px;
+    }
+
+    .mail-read{
+        background: #fff;
+
+        .mailbox-read-message{
+            overflow-y: auto;
+            padding: 0px;
+
+            .message-body{
+                padding: 10px;
+            }
+        }
+    }
 
 
     .mail-compose{
+        background-color: #fff;
+
+
         .note-editable{
             min-height: 400px;
         }
@@ -95,6 +119,7 @@
 
     .mail_list{
         width:100%;
+        background-color: #ffffff;
         .mailbox-checkbox{
             text-align: right;
             width: 35px;
@@ -108,13 +133,32 @@
 
         .mailbox-messages {
             font-weight: 400;
+            overflow-y: auto;
             .item{
-                padding: 5px;
+                padding: 0px;
+
+                .message{
+                    padding: 10px 5px;
+                }
             }
 
             .unseen{
                 font-weight: bold;
             }
+
+            .seen > div{
+                // display: inline-block;
+                border-left: solid 5px transparent;
+                margin-left: 1px;
+            }
+
+            .unseen > div{
+                // display: inline-block;
+                border-left: solid 5px #106EBE;
+                margin-left: 1px;
+            }
+
+
 
             .product-checkbox{
                 float: left;
@@ -125,7 +169,7 @@
             }
 
             .product-info {
-                margin-left: 75px;
+                margin-left: 25px;
                 a{
                     color: #2e3133;
                 }

@@ -53,7 +53,14 @@ Template.read_mail.helpers
 
 		return rev.toFixed(2) + unit;
 
+	minHeight: ->
+        return Template.instance().minHeight.get() + "px"
+
 Template.read_mail.events
+    'click #right_back': (event)->
+        backURL =  "/emailjs/b/" + Session.get("mailBox")
+        FlowRouter.go(backURL)
+
 	'click .mailbox-attachment-name': (event, template)->
 		$("#attachment_donwLoadding").show();
 		att_index = parseInt(event.target.dataset.index);
@@ -96,3 +103,21 @@ Template.read_mail.events
 # 		else if event.which == 39
 # 			MailManager.getNextMessage();
 #  		console.log(event.which);
+Template.read_mail.onCreated ->
+    self = this;
+
+    height = $(window).height() - 51;
+
+    self.minHeight = new ReactiveVar(height);
+
+    $(window).resize ->
+        height = $(window).height() - 51;
+        self.minHeight.set(height);
+
+Template.read_mail.onRendered ->
+
+    self = this;
+
+    height = $(window).height() - 51;
+
+    self.minHeight.set(height);

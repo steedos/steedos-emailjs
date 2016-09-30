@@ -305,6 +305,9 @@ MailManager.completeDeleteMessages = function(path, uids){
 
 MailManager.resetHrefs = function(data){
     data = data.replace("<html","<div ").replace("</html>","</div>");
+
+    data = "<div class='steedos-mail-body-html'>" + data + "</div>"
+
     var nodes = $(data);
     nodes.find("style").remove();
 
