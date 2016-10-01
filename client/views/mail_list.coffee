@@ -22,7 +22,7 @@ Template.mail_list.helpers
 
     isDraftsBox: ->
         path = Session.get("mailBox");
-        if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
+        if path == 'Drafts' || MailManager.getBoxBySpecialUse(path)?.specialUse == '\\Drafts'
             return  true
         return false
 
@@ -48,6 +48,7 @@ Template.mail_list.helpers
         return Session.get("mailLoading");
 
     boxMessages: ->
+        console.log("mailLoading ...");
         Session.set("mailLoading",true);
 
         rev ;
@@ -56,7 +57,7 @@ Template.mail_list.helpers
               rev = MailManager.getBoxMessagesByUids(Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize);
             else
               rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
-        Session.set("mailLoading",false);
+                        Session.set("mailLoading",false);
 
         return rev;
 
@@ -125,24 +126,8 @@ Template.mail_list.events
         $('.mailbox-messages-checkAll').each ->
             $(this).prop('checked', event.target.checked);
 
-
-Template.mail_list.onCreated ->
-    self = this;
-
-    height = $(window).height() - 51 - 56 - 40*2 - 2;
-
-    self.minHeight = new ReactiveVar(height);
-
-    $(window).resize ->
-        height = $(window).height() - 51 - 56 - 40*2 - 2;
-        self.minHeight.set(height);
-
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
+    $(".mailbox-messages").perfectScrollbar();
     $("#mail_list_load").hide();
 
-    self = this;
-
-    height = $(window).height() - 51 - 56 - 40*2 - 2;
-
-    self.minHeight.set(height);

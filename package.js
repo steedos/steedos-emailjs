@@ -125,6 +125,8 @@ Package.onUse(function(api) {
 	api.addFiles('client/views/mail_home.html', 'client');
 	api.addFiles('client/views/mail_home.coffee', 'client');
 
+	api.addFiles('client/views/mail_button.html', 'client');
+	api.addFiles('client/views/mail_button.coffee', 'client');
  
  	api.export('MailMimeBuilder'); 
 	api.export('AccountManager');

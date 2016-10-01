@@ -31,6 +31,7 @@ mailRoutes.route '/',
 
 mailRoutes.route '/b/:mailBox/', 
 	action: (params, queryParams)->
+		Session.set("mailLoading", true);
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
@@ -87,7 +88,7 @@ mailRoutes.route '/b/replyAll/:mailBox/:mailMessageId',
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
 
-mailRoutes.route '/b/jumpDraft/:mailBox/:mailMessageId', 
+mailRoutes.route '/b/drafts/:mailBox/:mailMessageId', 
 	action: (params, queryParams)->
 		Session.set("mailJumpDraft", true);
 		Session.set("mailBox", params.mailBox); 

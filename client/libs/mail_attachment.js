@@ -136,7 +136,7 @@ MailAttachment.getAttachmentNode = function(filePath){
 	var name = getAttachmentName(filePath);
 	var node = "";
 	if(name){
-		node = '<div class="col-md-3 col-sm-4 col-xs-6" id="mail_attachment" name="mail_attachment" data-path="'+filePath+'" data-name="'+name+'"><div class="attachment-info-box"><span class="attachment-info-box-icon"><i class="'+MailAttachment.getAttachmentIcon(name)+'"></i></span><div class="attachment-info-box-content"><span class="attachment-info-box-text">' + name + '</span><span class="text_link mailbox-attachment-delete">删除</span></div></div></div>';
+		node = '<div class="col-md-3 col-sm-4 col-xs-6 attachment-item" id="mail_attachment" name="mail_attachment" data-path="'+filePath+'" data-name="'+name+'"><div class="attachment-info-box"><span class="attachment-info-box-icon"><i class="'+MailAttachment.getAttachmentIcon(name)+'"></i></span><div class="attachment-info-box-content"><span class="attachment-info-box-text">' + name + '</span><span class="text_link mailbox-attachment-delete">删除</span></div></div></div>';
 		//var node = '<li><div class="mailbox-attachment-info"><a href="#" id="mail_attachment" name="mail_attachment" class="mailbox-attachment-name" data-path="'+filePath+'" data-name="'+name+'"><i class="fa fa-paperclip"></i> ' + name + '</a><span class="mailbox-attachment-size"></span><span class="text_link mailbox-attachment-delete">删除</span></div></li>'
 	}
 	return node;

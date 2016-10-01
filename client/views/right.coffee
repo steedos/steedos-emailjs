@@ -5,3 +5,6 @@ Template.layout_right.helpers
 		return Session.get("mailMessageId")
 	isLoading: ->
 		return Session.get("mailLoading");
+
+Template.layout_right.onRendered ->
+	$(".right-body").perfectScrollbar();

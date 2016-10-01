@@ -50,8 +50,13 @@ ImapClientManager.mailBox = function(client, callback){
 				if(box.path.toLocaleLowerCase() == 'inbox'){
 					box.path = "Inbox";
 				}
-
-				MailCollection.mail_box.insert(box);
+				var dbBox = MailManager.getBox(box.path);
+				if(dbBox){
+					MailCollection.mail_box.update(dbBox._id, box);
+				}else{
+					MailCollection.mail_box.insert(box);
+				}
+				
 			});
 
 			client.close();

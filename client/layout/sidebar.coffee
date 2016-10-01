@@ -57,3 +57,6 @@ Template.emailjsSidebar.helpers
             return t(key);
 
         return str;
+    
+    box: ->
+        return MailManager.getBox(Session.get("mailBox"));

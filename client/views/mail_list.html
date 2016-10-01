@@ -10,22 +10,21 @@
           <i class="fa fa-bars"></i>
         </button>
 
-        <div class="pull-right">
-          <a href="/emailjs/b/compose" class="btn btn-success btn-block margin-bottom btn-compose">新建</a>
-        </div>
+        <!-- <div class="pull-right">
+          <a href="/emailjs/b/drafts/{{box.path}}/compose" class="btn btn-success btn-block margin-bottom btn-compose">新建</a>
+        </div> -->
+        {{> mail_search}}
   </div>
 
-	<div class="mail_list" data-exists="{{boxExists}}">
-      <div class="box-header with-border">
-        <!-- <h3 class="box-title">{{t this.name}}</h3> -->
+	<div class="box mail_list" data-exists="{{boxExists}}">
+      <!-- <div class="box-header with-border">
 
         <div class="pull-right">
           <div class="has-feedback">
             {{> mail_search}}
           </div>
         </div>
-        <!-- /.box-tools -->
-      </div>
+      </div> -->
       <!-- /.box-header -->
       <div class="box-body no-padding">
         <div class="mailbox-controls">
@@ -50,30 +49,7 @@
           </div>
           <!-- /.pull-right -->
         </div>
- <!--   <div class="table-responsive mailbox-messages">
-         <table class="table table-hover table-striped" style="width:100%">
-            <tbody>
-            {{#each boxMessages}}
-            <tr>
-              <td class="mailbox-checkbox"><input type="checkbox" value="{{uid}}" name="uids"></td>
-             
-              <td class="mailbox-name">
-              {{#if isDraftsBox}}
-                <a href="/emailjs/b/jumpDraft/{{box.path}}/{{uid}}">{{fromName from}}</a>
-              {{else}}
-                <a href="/emailjs/b/{{box.path}}/{{uid}}">{{fromName from}}</a>
-              {{/if}}</td>
-              <td class="mailbox-subject">
-                <div class="subject">{{#if isUnseen this}}<b>{{subject}}</b>{{else}}{{subject}}{{/if}}</div>
-              </td>
-              <td class="mailbox-attachment">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}</td>
-              <td class="mailbox-date" title="{{modifiedString date}}">{{modifiedFromNow date}}</td>
-            </tr>
-            {{/each}}
-            </tbody>
-          </table> 
-        </div>-->
-          <div class="products-list product-list-in-box mailbox-messages" style="height: {{minHeight}}">
+          <div class="products-list product-list-in-box mailbox-messages" >
             {{#each boxMessages}}
               <li class="item {{#if isUnseen this}}unseen{{else}}seen{{/if}} {{getLiClass uid}}">
                   <div>
@@ -85,7 +61,7 @@
                         <img class="img" data-name="{{fromName from}}" alt="Product Image">
                       </div> -->
                       <div class="product-info">
-                        <a href="{{#if isDraftsBox}}/emailjs/b/jumpDraft/{{box.path}}/{{uid}}{{else}}/emailjs/b/{{box.path}}/{{uid}}{{/if}}">
+                        <a href="{{#if isDraftsBox}}/emailjs/b/drafts/{{box.path}}/{{uid}}{{else}}/emailjs/b/{{box.path}}/{{uid}}{{/if}}">
                           <div>
                             {{fromName from}}
                             <span class="pull-right">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}{{modifiedFromNow date}}</span>
@@ -110,29 +86,27 @@
       </div>
 
       <!-- /.box-body -->
-      <div class="box-footer no-padding">
-        <div class="mailbox-controls">
-          <!-- Check all button -->
-          <label class="btn btn-default btn-sm " style="width: 31px;height: 30px; padding-left: 8px;">
-            <input type="checkbox" class="mailbox-messages-checkAll" style="margin: 2px 0 0;">
-          </label>
+      <div class="mailbox-controls">
+        <!-- Check all button -->
+        <label class="btn btn-default btn-sm " style="width: 31px;height: 30px; padding-left: 8px;">
+          <input type="checkbox" class="mailbox-messages-checkAll" style="margin: 2px 0 0;">
+        </label>
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm list-message-delete"><i class="fa fa-trash-o"></i></button>
+          <!-- <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
+          <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button> -->
+        </div>
+        <!-- /.btn-group -->
+        <button type="button" class="btn btn-default btn-sm list-refresh" ><i class="fa fa-refresh"></i></button>
+        <div class="pull-right">
+          <span class="label label-warning">{{pageStart}} - {{pageEnd boxExists}} / {{boxExists}}</span>
           <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm list-message-delete"><i class="fa fa-trash-o"></i></button>
-            <!-- <button type="button" class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
-            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-share"></i></button> -->
+            <button type="button" class="btn btn-default btn-sm" id="page_back"><i class="fa fa-chevron-left"></i></button>
+            <button type="button" class="btn btn-default btn-sm" id="page_forward"><i class="fa fa-chevron-right"></i></button>
           </div>
           <!-- /.btn-group -->
-          <button type="button" class="btn btn-default btn-sm list-refresh" ><i class="fa fa-refresh"></i></button>
-          <div class="pull-right">
-            <span class="label label-warning">{{pageStart}} - {{pageEnd boxExists}} / {{boxExists}}</span>
-            <div class="btn-group">
-              <button type="button" class="btn btn-default btn-sm" id="page_back"><i class="fa fa-chevron-left"></i></button>
-              <button type="button" class="btn btn-default btn-sm" id="page_forward"><i class="fa fa-chevron-right"></i></button>
-            </div>
-            <!-- /.btn-group -->
-          </div>
-          <!-- /.pull-right -->
         </div>
+        <!-- /.pull-right -->
       </div>
     </div>
 </template>

@@ -1,34 +1,7 @@
 <template name="mail_compose">
-<div class="mail-compose">
-  <div class="navigation-bar btn-group">
-    <div class="pull-left">
-      <button type="submit" class="btn btn-primary" id= "compose-send"><i class="fa fa-envelope-o"></i> 发送</button>
-      <button type="button" class="btn btn-default" id="compose-draft"><i class="fa fa-pencil"></i> 存草稿</button>
-    </div>
-    <div class="pull-left cc">
-      <div class="text_link add_cc">
-        添加抄送
-      </div>
-      <div class="text_link remove_cc">
-        删除抄送
-      </div>
-      <div class="text_link add_bcc">
-        添加密送
-      </div>
-      <div class="text_link remove_bcc">
-        删除密送
-      </div>
-    </div>
-    
-    <div class="pull-right">
-      <button type="button" class="btn btn-default" id="instance_back" title="返回"><i class="ion ion-chevron-right"></i></button>
-    </div>
-  </div>
+<div class="box mail-compose">
 
   {{#with message}}
-    <div class="box-header with-border">
-      <h3 class="box-title">新邮件</h3>
-    </div>
 
     <!-- /.box-header -->
     <div class="box-body">
@@ -56,11 +29,11 @@
           <input type="file" id="attachment_file">
         </div>
       </div> 
-      <div class="form-group">
+      <div class="form-group message-attachments">
         <div class="row" id="compose_attachment_list"></div>  
       </div>
 
-      <div class="form-group">
+      <div class="form-group message-body">
         <div id="compose-textarea"></div>
       </div>
     </div>

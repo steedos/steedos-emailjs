@@ -22,14 +22,16 @@ Template.select_mail.rendered = function(){
         valueField: 'email',
         labelField: 'name',
         searchField: ['first_name', 'last_name', 'email'],
+        openOnFocus: false,
         sortField: [
             {field: 'first_name', direction: 'asc'},
             {field: 'last_name', direction: 'asc'}
         ],
-        options: [
-            {email: 'hotoa@petrochina.com.cn', first_name: '测试-', last_name: 'Hotoa'},
-            {email: 'zhangshanshan@hotoa.com', first_name: '测试-', last_name: '张姗姗'}
-        ],
+        // options: [
+        //     {email: 'hotoa@petrochina.com.cn', first_name: '测试-', last_name: 'Hotoa'},
+        //     {email: 'zhangshanshan@hotoa.com', first_name: '测试-', last_name: '张姗姗'},
+        //     {email: 'baozhoutao@hotoa.com', first_name: '华炎-', last_name: '包周涛'}
+        // ],
         render: {
             item: function(item, escape) {
                 var name = formatName(item);
@@ -54,8 +56,10 @@ Template.select_mail.rendered = function(){
             return regexpA.test(input) || regexpB.test(input);
         },
         create: function(input) {
+            console.log("selectize create...");
+
             if ((new RegExp('^' + REGEX_EMAIL + '$', 'i')).test(input)) {
-                return {email: input};
+                return {email: "<" + input + ">"};
             }
             var match = input.match(new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i'));
             if (match) {
@@ -65,7 +69,7 @@ Template.select_mail.rendered = function(){
                 var last_name  = name.substring(pos_space + 1);
 
                 return {
-                    email: match[2],
+                    email: "<" + match[2] + ">",
                     first_name: first_name,
                     last_name: last_name
                 };

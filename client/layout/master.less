@@ -21,6 +21,20 @@
 	}
 }
 
+html, body{
+    height: 100%;
+
+    .emailjs{
+        height: 100%;
+
+        &>div{
+            height: 100%;
+            &>div{
+                height: 100%;
+            }
+        }
+    }
+}
 
 .steedos {
 	.main-sidebar, .left-side {
@@ -45,9 +59,17 @@
             left: 0px;
             right: 0px;
 
+            .mail-compose{
+                &>a:focus{
+                    background-color: transparent;
+                    color: #b8c7ce;
+                }
+            }
+
         }
     }
     .content-wrapper {
+        height: 100%;
         position: relative;
     }
 

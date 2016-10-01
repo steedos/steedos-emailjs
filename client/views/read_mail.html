@@ -1,18 +1,7 @@
 <template name="read_mail">
  {{#if message.uid}}
   {{#with message}}
-  <div class="navigation-bar btn-group mail-button">
-    <div class="pull-left">
-      <a href="/emailjs/b/reply/{{path}}/{{uid}}"><button type="button" class="btn btn-default"><i class="fa fa-reply"></i> 回复 </button></a>
-      <a href="/emailjs/b/replyAll/{{path}}/{{uid}}"><button type="button" class="btn btn-default"><i class="fa fa-reply-all" aria-hidden="true"></i> 全部回复 </button></a>
-      <a href="/emailjs/b/forward/{{path}}/{{uid}}"><button type="button" class="btn btn-default" ><i class="fa fa-share"></i> 转发 </button></a>
-      <button type="button" class="btn btn-default mail-delete"><i class="fa fa-trash-o"></i> 删除</button>
-    </div>
-    
-    <div class="pull-right">
-      <button type="button" class="btn btn-default" id="right_back" title="返回"><i class="ion ion-chevron-right"></i></button>
-    </div>
-  </div>
+
 	<div class="mail-read">
  
       <!-- <div class="box-header with-border">
@@ -28,11 +17,40 @@
       <div class="box-body no-padding">
 
         <!-- /.mailbox-controls -->
-        <div class="mailbox-read-message" style="height: {{minHeight}}">
+        <div class="mailbox-read-message">
             <div class="mailbox-read-info">
-              <h3>{{subject}}</h3>
-              <h5>{{fromName from}}
-                <span class="mailbox-read-time pull-right">{{modifiedString date}}</span></h5>
+              <div class="subject">{{subject}}</div>
+              <div class="from">{{fromName from}}
+                <span class="mailbox-read-time pull-right">{{modifiedString date}}</span></div>
+            </div>
+            {{#if attachments.length}}
+              <div class="box-header">
+                <ul class="mailbox-attachments clearfix">
+                {{#each attachments}} 
+                  <!-- <li>
+                    <div class="mailbox-attachment-info">
+                      <a href="#" class="mailbox-attachment-name" ><i class="fa fa-paperclip"></i> {{name}}</a>
+                          <span class="mailbox-attachment-size">{{fileSize size}}</span>
+                    </div>
+                  </li> -->
+                  <div class="col-md-3 col-sm-4 col-xs-6 attachment-item">
+                    <div class="attachment-info-box">
+                      <span class="attachment-info-box-icon"><i class="{{attachmentIcon name}}"></i></span>
+                      <div class="attachment-info-box-content">
+                          <span class="attachment-info-box-text">
+                            <a href="#" class="mailbox-attachment-name"  data-index='{{@index}}'>{{name}}</a>
+                          </span>
+                          <span class="mailbox-attachment-size">{{fileSize size}}</span>
+                      </div>
+                    </div>
+                  </div>
+                {{/each}}
+                </ul>
+              </div>
+            {{/if}}
+
+            <div class="overlay {{attachmentLoadding}}" id="attachment_donwLoadding">
+              <i class="fa fa-spinner fa-spin"></i>
             </div>
             <!-- /.mailbox-read-info -->
 <!--             <div class="mailbox-controls with-border text-center">
@@ -53,34 +71,6 @@
             {{else}}
               <p>{{{mailBody this}}}</p>
             {{/if}}
-                  <!-- /.box-body -->
-            <div class="box-footer">
-              <ul class="mailbox-attachments clearfix">
-              {{#each attachments}} 
-                <!-- <li>
-                  <div class="mailbox-attachment-info">
-                    <a href="#" class="mailbox-attachment-name" ><i class="fa fa-paperclip"></i> {{name}}</a>
-                        <span class="mailbox-attachment-size">{{fileSize size}}</span>
-                  </div>
-                </li> -->
-                <div class="col-md-3 col-sm-4 col-xs-6">
-                  <div class="attachment-info-box">
-                    <span class="attachment-info-box-icon"><i class="{{attachmentIcon name}}"></i></span>
-                    <div class="attachment-info-box-content">
-                        <span class="attachment-info-box-text">
-                          <a href="#" class="mailbox-attachment-name"  data-index='{{@index}}'>{{name}}</a>
-                        </span>
-                        <span class="mailbox-attachment-size">{{fileSize size}}</span>
-                    </div>
-                  </div>
-                </div>
-              {{/each}}
-              </ul>
-            </div>
-
-            <div class="overlay {{attachmentLoadding}}" id="attachment_donwLoadding">
-              <i class="fa fa-spinner fa-spin"></i>
-            </div>
           </div>
         </div>
         <!-- /.mailbox-read-message -->
