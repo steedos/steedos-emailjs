@@ -56,7 +56,7 @@ ImapClientManager.mailBox = function(client, callback){
 				}else{
 					MailCollection.mail_box.insert(box);
 				}
-				
+
 			});
 
 			client.close();
@@ -213,16 +213,16 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 }
 
 //imap search 说明文档：https://tools.ietf.org/html/rfc3501#section-6.4.4
-ImapClientManager.searchMessages = function(client, path, query, callback){
+ImapClientManager.timeSearch = function(client, path, query, callback){
 
-	console.log(query);
+	console.log("timeSearch query ::"+ query);
 
 	if (!client)
 		client = this.getClient();
 
 	client.connect().then(function(){
 		client.search(path, query, {byUid: true}).then(function(result){
-			console.log("search  result is " + result);
+			console.log("timeSearch is " + result);
 			if(!result || result.length == 0){
 
 				callback(result, []);
@@ -231,16 +231,38 @@ ImapClientManager.searchMessages = function(client, path, query, callback){
 
 			MailCollection.mail_search.update({},{uids:result});
 
-			var box = MailManager.getBox(path);
-			if(box.info){
-				var sequence = box.info.uidNext + ":" + result[result.length-1];
-				var options = {byUid: true};
-				console.log("[ImapClientManager.search] sequence is " + sequence );
-				client.close();
-				ImapClientManager.listMessages(null, path, sequence, options, function(messages){
-					callback(result, messages);
-				});
-      }
+			ImapClientManager.mailBoxNewMessages(path,function(messages){
+				callback(result, messages);
+			});
+
+			// 	var infoExists = box.info.exists;
+			// 	if (infoExists < 1){
+			// 	if(typeof(callback) == "function"){
+			// 		callback();
+			// 	}
+			// 	return ;
+			// 	}
+			//
+			// 	var sequence_s = infoExists <= MailPage.pageSize ? 1 : (infoExists - MailPage.pageSize + 1);
+			//
+			// 	var sequence = infoExists  + ":*";
+			//
+			// 	var options = {};
+			//
+			// var box = MailManager.getBox(path);
+			//
+			// if(box.info){
+			// 	var sequence = box.info.uidNext + ":" + result[result.length-1];
+			// 	var options = {};
+			// 	console.log("timeSearch sequence is " + sequence );
+			//
+			// 	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
+			// 		ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
+			// 			ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
+			// 		callback(result, messages);
+			// 		});
+			// 	});
+      // }
 			client.close();
 		})
 	})
@@ -354,11 +376,11 @@ ImapClientManager.initMailboxInfo = function(callback){
 				ImapClientManager.mailBoxMessages(mailBox.path, callback);
 		});
 	});
-	
+
 }
 
 ImapClientManager.updateUnseenMessages = function(){
-	ImapClientManager.searchMessages(null ,"Inbox", {unseen: true}, function(result){
+	ImapClientManager.timeSearch(null ,"Inbox", {unseen: true}, function(result){
 		console.log(" ImapClientManager.updateUnseenMessages unseen is " + result);
 
 		MailCollection.mail_unseen.update({},{uids:result});
@@ -573,29 +595,32 @@ ImapClientManager.mailBoxNewMessages = function(path,callback){
 		return ;
 
 	var infoExists = box.info.exists;
-
 	if (infoExists < 1){
-		if(typeof(callback) == "function"){
-			callback();
-		}
-		return ;
+	if(typeof(callback) == "function"){
+		callback();
+	}
+	return ;
 	}
 
 	var sequence_s = infoExists <= MailPage.pageSize ? 1 : (infoExists - MailPage.pageSize + 1);
 
-	var sequence = sequence_s + ":" + infoExists;
+	var sequence = infoExists  + ":*";
 
 	var options = {};
 
 	console.info("listMessages[mailBoxNewMessages] path[" + path + '] sequence[' + sequence + ']');
 
 	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
-		ImapClientManager.updateLoadedMxistsIndex(path, sequence_s - 1);
+		ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
+			ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
+		});
+
 		if(typeof(callback) == "function"){
 			callback(messages);
 		}
 	});
 }
+
 
 ImapClientManager.getNewMessage = function(path, callback){
 	var box = MailManager.getBox(path);

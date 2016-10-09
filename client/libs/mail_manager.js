@@ -169,10 +169,10 @@ MailManager.search = function(queryKey, callback){
     }
 
     //query = {header: [queryKey.keyword]};
-    query = {header: ['subject', queryKey.keyword]};
-    //query = {keyword: 'queryKey.keyword'};
-    //console.log("MailManager.search query ：" + query );
-    ImapClientManager.search(null, path, query, callback);
+    query = {header: ['Subject', queryKey]};
+    //query = {keyword: queryKey.keyword};
+    console.log("MailManager.search query ：" + query );
+    ImapClientManager.search(null, path, {header: ['subject', queryKey]}, callback);
     // ImapClientManager.search(null, path, query, function(result){
     //   var sequence = result.toString();
     //   var options = {byUid: true};
@@ -242,14 +242,13 @@ MailManager.getNewInboxMessages = function(){
 
 
 MailManager.getNewBoxMessages = function(path){
+    if(path == "Inbox"){
+      ImapClientManager.updateUnseenMessages();
+    }else {
+      ImapClientManager.mailBoxNewMessages(path);
+    }
 
-    ImapClientManager.mailBoxNewMessages(path, function(messages){
-        messages.forEach(function(message){
-            console.log("MailManager.getNewBoxMessages" + message.uid);
-        });
-        console.log("#mail_list_load hide");
-        $("#mail_list_load").hide();
-    });
+    Session.set("mailLoading",false);
 }
 
 

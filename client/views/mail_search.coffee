@@ -5,22 +5,24 @@ Template.mail_search.subjectSearch = ()->
         return;
 
     Session.set("mailLoading",true);
-    
+
     console.log("keydown search-mail-input searchKey:" + searchKey);
 
     queryKey = {};
 
     queryKey.keyword = searchKey;
 
-    queryKey.subject = true;
+    queryKey.Subject = true;
 
-    MailManager.search queryKey, (result,messages) ->
+    MailManager.search searchKey, (result,messages) ->
         if !result || result.length == 0
             toastr.info("未搜索到数据");
         else
             Session.set("mailBoxFilter", result);
-        
+        $("#mail_list_load").hide();
         Session.set("mailLoading",false);
+
+
 
 Template.mail_search.events
 
@@ -29,7 +31,7 @@ Template.mail_search.events
     #    Template.mail_search.subjectSearch();
 
     'click #mail-search-btn': (event, template) ->
-        Template.mail_search.subjectSearch();        
+        Template.mail_search.subjectSearch();
 
     'click #advanced_search': (event, template) ->
         $("#advanced_search_modal").show();
@@ -59,5 +61,5 @@ Template.mail_search.onRendered ->
     #     },
     #     (start, end) ->
     #         $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        
+
     # );

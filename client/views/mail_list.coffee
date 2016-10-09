@@ -57,7 +57,7 @@ Template.mail_list.helpers
               rev = MailManager.getBoxMessagesByUids(Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize);
             else
               rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
-                        Session.set("mailLoading",false);
+            Session.set("mailLoading",false);
 
         return rev;
 
@@ -100,7 +100,7 @@ Template.mail_list.helpers
 
 Template.mail_list.events
     'click .list-refresh': (event, template) ->
-        $("#mail_list_load").show();
+        Session.set("mailLoading",true);
         MailManager.getNewBoxMessages(Session.get("mailBox"));
 
     'click .list-message-delete': (event, template) ->
@@ -129,5 +129,5 @@ Template.mail_list.events
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     $(".mailbox-messages").perfectScrollbar();
-    $("#mail_list_load").hide();
-
+    #$("#mail_list_load").hide();
+    Session.set("mailLoading",false);
