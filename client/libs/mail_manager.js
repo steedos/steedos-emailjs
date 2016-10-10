@@ -4,7 +4,7 @@ MailManager.initMail = function(){
     $(document.body).addClass('loading');
     Session.set("mailInit", false);
     //MailCollection.init();
-    if(window.require && AccountManager.getAuth()){
+    if(Steedos.isNode() && AccountManager.getAuth()){
         ImapClientManager.mailBox(null, function(){
             ImapClientManager.initMailboxInfo(function(){
                 ImapClientManager.updateUnseenMessages();
