@@ -316,7 +316,7 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 
 ImapClientManager.deleteMessages = function(client, path, uids,callback){
 
-    if (!client)
+  if (!client)
 		client = this.getClient();
 	client.connect().then(function(){
 		client.moveMessages(path, uids, 'Trash', {byUid:true}).then(function(){
@@ -326,7 +326,7 @@ ImapClientManager.deleteMessages = function(client, path, uids,callback){
 				callback();
 			}
 		})
-   	})
+  })
 }
 
 ImapClientManager.completeDeleteMessages = function(client, path, uids, callback){
@@ -347,7 +347,6 @@ ImapClientManager.completeDeleteMessages = function(client, path, uids, callback
 }
 
 ImapClientManager.upload = function(client, path, message, callback){
-	$("#mail_sending").show();
 	if (!client)
 		client = this.getClient();
 
@@ -357,7 +356,6 @@ ImapClientManager.upload = function(client, path, message, callback){
 		client.upload(path, message).then(function(){
 			console.log("ImapClientManager upload close client.")
 			client.close();
-			$("#mail_sending").hide();
 			if(typeof(callback) == 'function'){
 				callback();
 			}
@@ -379,12 +377,15 @@ ImapClientManager.initMailboxInfo = function(callback){
 
 }
 
-ImapClientManager.updateUnseenMessages = function(){
+ImapClientManager.updateUnseenMessages = function(callback){
 	ImapClientManager.timeSearch(null ,"Inbox", {unseen: true}, function(result){
 		console.log(" ImapClientManager.updateUnseenMessages unseen is " + result);
 
 		MailCollection.mail_unseen.update({},{uids:result});
 	});
+	if(typeof(callback) == 'function'){
+		callback();
+	}
 }
 
 ImapClientManager.updateLoadedMxistsIndex = function(path, loadedMxistsIndex){

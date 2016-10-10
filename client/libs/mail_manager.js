@@ -241,64 +241,51 @@ MailManager.getNewInboxMessages = function(){
 }
 
 
-MailManager.getNewBoxMessages = function(path){
-    if(path == "Inbox"){
-      ImapClientManager.updateUnseenMessages();
-    }else {
-      ImapClientManager.mailBoxNewMessages(path);
-    }
-    Session.set("mailLoading",false);
-    $("#mail_list_load").hide();
+MailManager.getNewBoxMessages = function(){
+  var path = Session.get("mailBox");
+  if(path == "Inbox"){
+    ImapClientManager.updateUnseenMessages(function(){
+      $("#mail_list_load").hide();
+    });
+  }else {
+    ImapClientManager.mailBoxNewMessages(path,function(){
+      $("#mail_list_load").hide();
+    })
+  }
 }
 
-
 MailManager.deleteMessages = function(path, uids){
+
+  ImapClientManager.deleteMessages(null, path, uids, function(){
     $("#mail_list_load").show();
-    ImapClientManager.deleteMessages(null, path, uids, function(){
-        toastr.success("邮件已删除");
-        FlowRouter.go('/emailjs/b/' + path);
+    toastr.success("邮件已删除");
+    FlowRouter.go('/emailjs/b/' + path);
 
-        if(Object.prototype.toString.call(uids) === '[object Array]'){
-            uids.forEach(function(uid){
-                MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid,10)});
-            })
-        }
-        else
-        {
-            MailCollection.getMessageCollection(path).remove({'uid':uids});
-        }
-
-        var mailBox = MailManager.getBox(path);
-        ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
-            MailManager.getNewBoxMessages(m.path);
-        })
+    uids.forEach(function(uid){
+      MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)});
     })
+    // var mailBox = MailManager.getBox(path);
+    // ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(){
+    MailManager.getNewBoxMessages();
+    $("#mail_list_load").hide();
+  })
 }
 
 
 MailManager.completeDeleteMessages = function(path, uids){
-    $("#mail_list_load").show();
-    console.log("MailManager.completeDeleteMessages :" );
-    ImapClientManager.completeDeleteMessages(null, path, uids, function(){
-        console.log("ImapClientManager.CompleteDeleteMessages run :");
-        toastr.success("邮件已彻底删除");
-        FlowRouter.go('/emailjs/b/' + MailManager.getBoxBySpecialUse("\\Trash").path);
+  $("#mail_list_load").show();
+  console.log("MailManager.completeDeleteMessages :" );
+  ImapClientManager.completeDeleteMessages(null, path, uids, function(){
+    console.log("ImapClientManager.CompleteDeleteMessages run :");
+    toastr.success("邮件已彻底删除");
+    FlowRouter.go('/emailjs/b/' + MailManager.getBoxBySpecialUse("\\Trash").path);
 
-        if(Object.prototype.toString.call(uids) === '[object Array]'){
-            uids.forEach(function(uid){
-                MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid,10)});
-            })
-        }
-        else
-        {
-            MailCollection.getMessageCollection(path).remove({'uid':uids});
-        }
-
-        var mailBox = MailManager.getBox(path);
-        ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
-            MailManager.getNewBoxMessages(m.path);
-        })
+    uids.forEach(function(uid){
+      MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)});
     })
+    MailManager.getNewBoxMessages();
+      $("#mail_list_load").hide();
+   })
 }
 
 
@@ -325,12 +312,13 @@ MailManager.resetHrefs = function(data){
 
      return html;
 }
-MailManager.isTrashBox = function(path, uid){
-    if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
-        MailManager.completeDeleteMessages(path, uid);
-    }else{
-        MailManager.deleteMessages(path, uid);
-    }
+MailManager.judgeDelete = function(path, uid){
+  $("#mail_list_load").show();
+  if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
+      MailManager.completeDeleteMessages(path, uid);
+  }else{
+      MailManager.deleteMessages(path, uid);
+  }
 }
 
 // Meteor.startup(function(){

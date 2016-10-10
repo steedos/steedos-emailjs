@@ -30,7 +30,7 @@ SmtpClientManager.getClient = function(){
 
 
 SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, callback){
-	$("#mail_sending").show();
+	//$("#mail_sending").show();
 	var client;
 	try{
 		//toastr.info("邮件发送中...");
@@ -41,7 +41,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 
 		client = SmtpClientManager.getClient();
 
-	    var alreadySending  = false;
+	  var alreadySending  = false;
 
 		client.onidle = function(){
 		    console.log("Connection has been established");
@@ -74,28 +74,24 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 		    client.end();
 		}
 
-	    client.ondone = function(success){
-	    	if(success){
-	    		toastr.success("发送成功");
-	    		callback(FlowRouter.go('/emailjs/b/'+ MailManager.getBoxBySpecialUse("\\Sent").path));
-	    		$("#mail_sending").hide();
-   			}else{
-   				toastr.success("发送不成功");
-   				$("#mail_sending").hide();
-   			}
-        }
+    client.ondone = function(success){
+    	if(success){
+    		toastr.success("发送成功");
+    		callback(FlowRouter.go('/emailjs/b/'+ MailManager.getBoxBySpecialUse("\\Sent").path));
+ 			}else{
+ 				toastr.success("发送不成功");
+ 			}
+    }
 
-        client.onerror = function(err){
-        	client.onclose(isError);
-        }
+    client.onerror = function(err){
+    	client.onclose(isError);
+    }
 
-        client.connect();
+    client.connect();
 
 	}catch(e){
 		console.error(e);
 	}finally{
      	client.close();
-
     }
-
 }

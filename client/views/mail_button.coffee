@@ -23,7 +23,7 @@ Template.mailButton.events
         $(".mail_cc").hide();
         $(".add_cc").css("display","inline-block");
         $(".remove_cc").hide();
-    
+
     'click .add_bcc': (event, template) ->
         $(".mail_bcc").show();
         $(".remove_bcc").css("display","inline-block");
@@ -35,9 +35,10 @@ Template.mailButton.events
         $(".remove_bcc").hide();
 
     'click #compose-send': (event)->
+        $("#mail_sending").show();
         if $("#mail_to").val() == null || $("#mail_to").val().length < 1
             toastr.warning("请填写收件人")
-            return 
+            return
 
         attachments = new Array();
 
@@ -45,10 +46,12 @@ Template.mailButton.events
             attachments.push
                 name: @dataset.name
                 path: @dataset.path
-        
-        SmtpClientManager.sendMail($("#mail_to").val(), $("#mail_cc").val(), $("#mail_bcc").val(), $(".form-control.subject").val(), $('#compose-textarea').summernote('code'), attachments);
+
+        SmtpClientManager.sendMail $("#mail_to").val(), $("#mail_cc").val(), $("#mail_bcc").val(), $(".form-control.subject").val(), $('#compose-textarea').summernote('code'), attachments, ()->
+          $("#mail_sending").hide();
 
     'click #compose-draft': (event)->
+        $("#mail_sending").show();
         attachments = new Array();
 
         $('[name="mail_attachment"]').each ->
@@ -60,6 +63,7 @@ Template.mailButton.events
 
         ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
             toastr.success("存草稿成功");
+            $("#mail_sending").hide();
 
     'click .mail-delete': (event, template)->
         console.log("click mail-delete");
@@ -69,8 +73,9 @@ Template.mailButton.events
 
         uid = message.uid;
 
-        MailManager.isTrashBox(path, uid);
+        MailManager.judgeDelete(path, [uid]);
 
     'click #right_back': (event)->
         backURL =  "/emailjs/b/" + Session.get("mailBox")
         FlowRouter.go(backURL)
+        Session.set("mailLoading",false);
