@@ -100,7 +100,8 @@ Template.mail_list.helpers
 
 Template.mail_list.events
     'click .list-refresh': (event, template) ->
-        Session.set("mailLoading",true);
+        $("#mail_list_load").show();
+        #Session.set("mailLoading",true);
         MailManager.getNewBoxMessages(Session.get("mailBox"));
 
     'click .list-message-delete': (event, template) ->

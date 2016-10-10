@@ -235,8 +235,8 @@ MailManager.getNewInboxMessages = function(){
                 ImapClientManager.updateUnseenMessages();
             });
             console.log("MailManager.getNewInboxMessages length" + messages.length);
+            $("#mail_list_load").hide();
         }
-
     });
 }
 
@@ -247,8 +247,8 @@ MailManager.getNewBoxMessages = function(path){
     }else {
       ImapClientManager.mailBoxNewMessages(path);
     }
-
     Session.set("mailLoading",false);
+    $("#mail_list_load").hide();
 }
 
 
