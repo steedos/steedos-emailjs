@@ -1,12 +1,14 @@
 <template name="layout_right">
-    <div class="right">
-        {{> mailButton}}
-        <div class="right-body" >
-            {{#if isComPose}}
-            	{{> mail_compose}}
-            {{else}}
-            	{{> read_mail}}
-            {{/if}}
-        </div>
-    </div>
+    {{#if showRight}}
+      <div class="right">
+          {{> mailButton}}
+          <div class="right-body" >
+              {{#if isComPose}}
+              	{{> mail_compose}}
+              {{else}}
+              	{{> read_mail}}
+              {{/if}}
+          </div>
+      </div>
+    {{/if}}
 </template>
