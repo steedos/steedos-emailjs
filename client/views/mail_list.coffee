@@ -101,15 +101,14 @@ Template.mail_list.helpers
 Template.mail_list.events
     'click .list-refresh': (event, template) ->
         $("#mail_list_load").show();
-        #Session.set("mailLoading",true);
-        MailManager.getNewBoxMessages(Session.get("mailBox"));
+        MailManager.getNewBoxMessages();
 
     'click .list-message-delete': (event, template) ->
         $("#mail_list_load").show();
         path = Session.get("mailBox");
         uids = Template.mail_list.getCheckedUids();
 
-        MailManager.isTrashBox(path, uids);
+        MailManager.judgeDelete(path, uids);
 
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
