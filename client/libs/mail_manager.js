@@ -235,7 +235,7 @@ MailManager.getNewInboxMessages = function(){
                 ImapClientManager.updateUnseenMessages();
             });
             console.log("MailManager.getNewInboxMessages length" + messages.length);
-            $("#mail_list_load").hide();
+            Session.set("mailLoading",false);
         }
     });
 }
@@ -245,11 +245,11 @@ MailManager.getNewBoxMessages = function(){
   var path = Session.get("mailBox");
   if(path == "Inbox"){
     ImapClientManager.updateUnseenMessages(function(){
-      $("#mail_list_load").hide();
+      Session.set("mailLoading",false);
     });
   }else {
     ImapClientManager.mailBoxNewMessages(path,function(){
-      $("#mail_list_load").hide();
+      Session.set("mailLoading",false);
     })
   }
 }
@@ -257,7 +257,7 @@ MailManager.getNewBoxMessages = function(){
 MailManager.deleteMessages = function(path, uids){
 
   ImapClientManager.deleteMessages(null, path, uids, function(){
-    $("#mail_list_load").show();
+    Session.set("mailLoading",true);
     toastr.success("邮件已删除");
     FlowRouter.go('/emailjs/b/' + path);
 
@@ -267,13 +267,13 @@ MailManager.deleteMessages = function(path, uids){
     // var mailBox = MailManager.getBox(path);
     // ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(){
     MailManager.getNewBoxMessages();
-    $("#mail_list_load").hide();
+    Session.set("mailLoading",false);
   })
 }
 
 
 MailManager.completeDeleteMessages = function(path, uids){
-  $("#mail_list_load").show();
+  Session.set("mailLoading",true);
   console.log("MailManager.completeDeleteMessages :" );
   ImapClientManager.completeDeleteMessages(null, path, uids, function(){
     console.log("ImapClientManager.CompleteDeleteMessages run :");
@@ -284,36 +284,36 @@ MailManager.completeDeleteMessages = function(path, uids){
       MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)});
     })
     MailManager.getNewBoxMessages();
-      $("#mail_list_load").hide();
+      Session.set("mailLoading",false);
    })
 }
 
 
 MailManager.resetHrefs = function(data){
-    data = data.replace("<html","<div ").replace("</html>","</div>");
+  data = data.replace("<html","<div ").replace("</html>","</div>");
 
-    data = "<div class='steedos-mail-body-html'>" + data + "</div>"
+  data = "<div class='steedos-mail-body-html'>" + data + "</div>"
 
-    var nodes = $(data);
-    nodes.find("style").remove();
+  var nodes = $(data);
+  nodes.find("style").remove();
 
-    nodes.find("a").attr("target","_blank");
+  nodes.find("a").attr("target","_blank");
 
-    var html = "";
+  var html = "";
 
-    nodes.each(function(){
-        if(this.outerHTML){
-            html += this.outerHTML;
-        }else{
-            html += this.textContent;
-        }
+  nodes.each(function(){
+      if(this.outerHTML){
+          html += this.outerHTML;
+      }else{
+          html += this.textContent;
+      }
 
-    });
+  });
 
-     return html;
+  return html;
 }
 MailManager.judgeDelete = function(path, uid){
-  $("#mail_list_load").show();
+  Session.set("mailLoading",true);
   if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
       MailManager.completeDeleteMessages(path, uid);
   }else{

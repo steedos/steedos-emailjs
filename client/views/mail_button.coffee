@@ -35,9 +35,10 @@ Template.mailButton.events
         $(".remove_bcc").hide();
 
     'click #compose-send': (event)->
-        $("#mail_sending").show();
+        Session.set("mailSending",true);
         if $("#mail_to").val() == null || $("#mail_to").val().length < 1
             toastr.warning("请填写收件人")
+            Session.set("mailSending",false);
             return
 
         attachments = new Array();
@@ -48,10 +49,10 @@ Template.mailButton.events
                 path: @dataset.path
 
         SmtpClientManager.sendMail $("#mail_to").val(), $("#mail_cc").val(), $("#mail_bcc").val(), $(".form-control.subject").val(), $('#compose-textarea').summernote('code'), attachments, ()->
-          $("#mail_sending").hide();
+            Session.set("mailSending",false);
 
     'click #compose-draft': (event)->
-        $("#mail_sending").show();
+        Session.set("mailSending",true);
         attachments = new Array();
 
         $('[name="mail_attachment"]').each ->
@@ -62,8 +63,8 @@ Template.mailButton.events
         message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user ,$("#mail_to").val(),$("#mail_cc").val(), $("#mail_bcc").val(),$(".form-control.subject").val(), $('#compose-textarea').summernote('code') ,attachments);
 
         ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
-            toastr.success("存草稿成功");
-            $("#mail_sending").hide();
+          Session.set("mailSending",false);
+          toastr.success("存草稿成功");
 
     'click .mail-delete': (event, template)->
         console.log("click mail-delete");
@@ -78,4 +79,3 @@ Template.mailButton.events
     'click #right_back': (event)->
         backURL =  "/emailjs/b/" + Session.get("mailBox")
         FlowRouter.go(backURL)
-        Session.set("mailLoading",false);

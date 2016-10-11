@@ -100,11 +100,11 @@ Template.mail_list.helpers
 
 Template.mail_list.events
     'click .list-refresh': (event, template) ->
-        $("#mail_list_load").show();
+        Session.set("mailLoading",true);
         MailManager.getNewBoxMessages();
 
     'click .list-message-delete': (event, template) ->
-        $("#mail_list_load").show();
+        Session.set("mailLoading",true);
         path = Session.get("mailBox");
         uids = Template.mail_list.getCheckedUids();
 
@@ -129,5 +129,4 @@ Template.mail_list.events
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     $(".mailbox-messages").perfectScrollbar();
-    #$("#mail_list_load").hide();
-    Session.set("mailLoading",false);
+    #Session.set("mailLoading",false);

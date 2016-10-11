@@ -30,7 +30,6 @@ SmtpClientManager.getClient = function(){
 
 
 SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, callback){
-	//$("#mail_sending").show();
 	var client;
 	try{
 		//toastr.info("邮件发送中...");
@@ -77,7 +76,8 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
     client.ondone = function(success){
     	if(success){
     		toastr.success("发送成功");
-    		callback(FlowRouter.go('/emailjs/b/'+ MailManager.getBoxBySpecialUse("\\Sent").path));
+				Session.set("mailSending",false);
+    		//callback(FlowRouter.go('/emailjs/b/'+ MailManager.getBoxBySpecialUse("\\Sent").path));
  			}else{
  				toastr.success("发送不成功");
  			}

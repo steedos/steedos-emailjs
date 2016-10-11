@@ -19,7 +19,6 @@ Template.mail_search.subjectSearch = ()->
             toastr.info("未搜索到数据");
         else
             Session.set("mailBoxFilter", result);
-        $("#mail_list_load").hide();
         Session.set("mailLoading",false);
 
 

@@ -595,19 +595,19 @@ ImapClientManager.mailBoxNewMessages = function(path,callback){
 	if(!box)
 		return ;
 
-	var infoExists = box.info.exists;
-	if (infoExists < 1){
+	var infoUidNext = box.info.uidNext;
+	if (infoUidNext < 1){
 	if(typeof(callback) == "function"){
 		callback();
 	}
 	return ;
 	}
 
-	var sequence_s = infoExists <= MailPage.pageSize ? 1 : (infoExists - MailPage.pageSize + 1);
+	var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
 
-	var sequence = infoExists  + ":*";
+	var sequence = infoUidNext  + ":*";
 
-	var options = {};
+	var options = {byUid: true};
 
 	console.info("listMessages[mailBoxNewMessages] path[" + path + '] sequence[' + sequence + ']');
 
