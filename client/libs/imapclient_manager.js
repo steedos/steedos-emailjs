@@ -377,15 +377,10 @@ ImapClientManager.initMailboxInfo = function(callback){
 
 }
 
-ImapClientManager.updateUnseenMessages = function(callback){
-	ImapClientManager.timeSearch(null ,"Inbox", {unseen: true}, function(result){
-		console.log(" ImapClientManager.updateUnseenMessages unseen is " + result);
-
+ImapClientManager.updateUnseenMessages = function(){
+	ImapClientManager.search(null ,"Inbox", {unseen: true}, function(result){
 		MailCollection.mail_unseen.update({},{uids:result});
 	});
-	if(typeof(callback) == 'function'){
-		callback();
-	}
 }
 
 ImapClientManager.updateLoadedMxistsIndex = function(path, loadedMxistsIndex){

@@ -79,3 +79,4 @@ Template.mailButton.events
     'click #right_back': (event)->
         backURL =  "/emailjs/b/" + Session.get("mailBox")
         FlowRouter.go(backURL)
+        Session.set("mailLoading",false)
