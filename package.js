@@ -8,7 +8,8 @@ Package.describe({
 Npm.depends({
 	busboy: "0.2.13",
 	cookies: "0.6.1",
-	mime: "1.3.4"
+	mime: "1.3.4",
+	"emailjs-mime-codec": "1.0.2"
 });
 
 
@@ -28,6 +29,7 @@ Package.onUse(function(api) {
 	api.use('session');
     api.use('blaze');
     api.use('templating');
+    api.use('modules');
     api.use('steedos:lib');
     api.use('steedos:ui');
     api.use('steedos:contacts');
