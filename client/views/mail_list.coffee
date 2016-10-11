@@ -129,4 +129,3 @@ Template.mail_list.events
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     $(".mailbox-messages").perfectScrollbar();
-    #Session.set("mailLoading",false);

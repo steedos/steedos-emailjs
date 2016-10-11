@@ -13,7 +13,7 @@ Template.mail_compose.helpers
                 rev.values = message.from;
             else if Session.get("mailReplyAll")
                 to = message.from.concat(message.to);
-                
+
                 fromUserAddress = to.filterProperty("address", AccountManager.getAuth().user);
 
                 fromUserAddress.forEach (address)->
@@ -28,7 +28,7 @@ Template.mail_compose.helpers
         if Session.get("mailMessageId")
             if Session.get("mailJumpDraft") || Session.get("mailReplyAll")
                 rev.values  = message.cc;
-           
+
         return rev;
 
     mail_bcc:(message)->
@@ -40,8 +40,8 @@ Template.mail_compose.helpers
             return subject;
         else if Session.get("mailForward")
             return "转发: " + subject;
-        else if Session.get("mailReply") || Session.get("mailReplyAll") 
-            return "回复: " + subject;  
+        else if Session.get("mailReply") || Session.get("mailReplyAll")
+            return "回复: " + subject;
 
     showLoadding: ->
         return Session.get("mailMessageLoadding");
@@ -53,8 +53,8 @@ Template.mail_compose.helpers
             $("#mail_sending").hide();
         return Session.get("mailSending");
 
-Template.mail_compose.events
 
+Template.mail_compose.events
     'change #attachment_file': (event, template) ->
         if !$("#attachment_file").val()
             return ;
@@ -64,13 +64,12 @@ Template.mail_compose.events
 
     'click .mailbox-attachment-delete': (event)->
         event.target.parentNode.parentNode.parentNode.remove();
-    
 
 
 Template.mail_compose.onRendered ->
-    if Session.get("mailMessageId") 
+    if Session.get("mailMessageId")
         if Session.get("mailForward") || Session.get("mailJumpDraft")
-            
+
             MailForward.getAttachmentsHtml();
     setTimeout ()->
         $(".form-control.subject").focus();
@@ -97,8 +96,3 @@ Template.mail_compose.onRendered ->
                 dialogsInBody: true
         else
             $("#compose-textarea").html("加载中...");
-    
-
-
-
-

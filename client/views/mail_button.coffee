@@ -49,7 +49,9 @@ Template.mailButton.events
                 path: @dataset.path
 
         SmtpClientManager.sendMail $("#mail_to").val(), $("#mail_cc").val(), $("#mail_bcc").val(), $(".form-control.subject").val(), $('#compose-textarea').summernote('code'), attachments, ()->
-            Session.set("mailSending",false);
+          Session.set("mailSending",false)
+          FlowRouter.go('/emailjs/b/' + Session.get("mailBox"))
+          Session.set("mailLoading",false)
 
     'click #compose-draft': (event)->
         Session.set("mailSending",true);
