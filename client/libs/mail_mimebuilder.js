@@ -3,7 +3,7 @@ MailMimeBuilder = {};
 var MimeBuilder, fs;
 
 if(Steedos.isNode()){
-	MimeBuilder = nw.require('emailjs-mime-builder');
+	MimeBuilder = require('emailjs-mime-builder');
 	fs = nw.require('fs');
 }
 

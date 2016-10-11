@@ -3,9 +3,9 @@ SmtpClientManager = {};
 var MimeBuilder, SmtpClient, MimeCodec, fs;
 
 if(Steedos.isNode()){
-	MimeBuilder = nw.require('emailjs-mime-builder');
-	SmtpClient  = nw.require('emailjs-smtp-client');
-	MimeCodec = nw.require('emailjs-mime-codec');
+	MimeBuilder = require('emailjs-mime-builder');
+	SmtpClient  = require('emailjs-smtp-client');
+	MimeCodec = require('emailjs-mime-codec');
 	fs = nw.require('fs');
 }
 

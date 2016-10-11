@@ -9,7 +9,13 @@ Npm.depends({
 	busboy: "0.2.13",
 	cookies: "0.6.1",
 	mime: "1.3.4",
-	"emailjs-mime-codec": "1.0.2"
+	"emailjs-mime-codec": "1.0.2",
+	"emailjs-stringencoding": "1.0.1",
+	"emailjs-mime-parser": "1.0.0",
+	"emailjs-imap-client": "2.0.2",
+	"emailjs-mime-builder": "1.0.1",
+	"emailjs-mime-codec": "1.0.2",
+	"emailjs-smtp-client": "1.0.0"
 });
 
 
