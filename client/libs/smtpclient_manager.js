@@ -77,7 +77,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
     	if(success){
     		toastr.success("发送成功");
 				Session.set("mailSending",false);
-    		//callback(FlowRouter.go('/emailjs/b/'+ MailManager.getBoxBySpecialUse("\\Sent").path));
+				callback();
  			}else{
  				toastr.success("发送不成功");
  			}
