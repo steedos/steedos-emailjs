@@ -3,10 +3,10 @@ ImapClientManager = {};
 var ImapClient, MimeParser, Encoding, MimeCodec, loadStep = MailPage.pageSize;
 
 if(Steedos.isNode()){
-	ImapClient = nw.require("emailjs-imap-client");
-	MimeParser  = nw.require('emailjs-mime-parser');
-	Encoding = nw.require('emailjs-stringencoding');
-	MimeCodec = nw.require('emailjs-mime-codec')
+	ImapClient = require("emailjs-imap-client");
+	MimeParser  = require('emailjs-mime-parser');
+	Encoding = require('emailjs-stringencoding');
+	MimeCodec = require('emailjs-mime-codec')
 }
 
 ImapClientManager.getClient = function(){
