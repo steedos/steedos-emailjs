@@ -101,7 +101,8 @@ Template.mail_list.helpers
 Template.mail_list.events
     'click .list-refresh': (event, template) ->
         Session.set("mailLoading",true);
-        MailManager.getNewBoxMessages();
+        path = Session.get("mailBox");
+        MailManager.getNewBoxMessages(path);
 
     'click .list-message-delete': (event, template) ->
         Session.set("mailLoading",true);

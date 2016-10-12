@@ -9,5 +9,4 @@ MailQuartz.getNewMessages = function(){
 		clearInterval(MailQuartz.intervalId);
 	}
 
-	//MailQuartz.intervalId = setInterval(function(){MailManager.getNewInboxMessages("Inbox")},1000 * 60);
 }
