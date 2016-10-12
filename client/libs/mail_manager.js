@@ -216,15 +216,35 @@ MailManager.selectMailBox = function(mailBox){
 }
 
 
-MailManager.getNewInboxMessages = function(){
-  var box = MailManager.getBox("Inbox");
+// MailManager.getNewInboxMessages = function(){
+//   var box = MailManager.getBox("Inbox");
+//   if(!box)
+//       return ;
+//
+//   ImapClientManager.getNewMessage(box.path, function(messages){
+//     if(messages.length > 0){
+//       ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
+//           ImapClientManager.updateUnseenMessages();
+//       });
+//       console.log("MailManager.getNewInboxMessages length" + messages.length);
+//       Session.set("mailLoading",false);
+//     }
+//   });
+// }
+
+MailManager.getNewInboxMessages = function(path){
+  var box = MailManager.getBox("path");
   if(!box)
       return ;
+  var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
 
   ImapClientManager.getNewMessage(box.path, function(messages){
     if(messages.length > 0){
       ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
+        if(path == "Inbox"){
           ImapClientManager.updateUnseenMessages();
+        }
+        ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
       });
       console.log("MailManager.getNewInboxMessages length" + messages.length);
       Session.set("mailLoading",false);
@@ -232,20 +252,19 @@ MailManager.getNewInboxMessages = function(){
   });
 }
 
-
-MailManager.getNewBoxMessages = function(){
-  var path = Session.get("mailBox");
-  if(path == "Inbox"){
-  	ImapClientManager.timeSearch(null ,"Inbox", {unseen: true}, function(result){
-  		MailCollection.mail_unseen.update({},{uids:result});
-      Session.set("mailLoading",false);
-  	})
-  }else {
-    ImapClientManager.mailBoxNewMessages(path,function(){
-      Session.set("mailLoading",false);
-    })
-  }
-}
+// MailManager.getNewBoxMessages = function(){
+//   var path = Session.get("mailBox");
+//   if(path == "Inbox"){
+//   	ImapClientManager.timeSearch(null ,"Inbox", {unseen: true}, function(result){
+//   		MailCollection.mail_unseen.update({},{uids:result});
+//       Session.set("mailLoading",false);
+//   	})
+//   }else {
+//     ImapClientManager.mailBoxNewMessages(path,function(){
+//       Session.set("mailLoading",false);
+//     })
+//   }
+// }
 
 
 MailManager.deleteMessages = function(path, uids, callback){
@@ -253,11 +272,11 @@ MailManager.deleteMessages = function(path, uids, callback){
     Session.set("mailLoading",true);
     toastr.success("邮件已删除");
     FlowRouter.go('/emailjs/b/' + path);
-
+    console.log("deleteMessages run ....");
     uids.forEach(function(uid){
       MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)});
     })
-    MailManager.getNewBoxMessages();
+    MailManager.getNewInboxMessages(path);
     callback();
   })
 }
@@ -273,7 +292,7 @@ MailManager.completeDeleteMessages = function(path, uids, callback){
     uids.forEach(function(uid){
       MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)});
     })
-    MailManager.getNewBoxMessages();
+    MailManager.getNewInboxMessages(path);
     callback();
    })
 }

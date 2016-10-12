@@ -213,60 +213,33 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 }
 
 //imap search 说明文档：https://tools.ietf.org/html/rfc3501#section-6.4.4
-ImapClientManager.timeSearch = function(client, path, query, callback){
+// ImapClientManager.timeSearch = function(client, path, query, callback){
+//
+// 	console.log("timeSearch query ::"+ query);
+//
+// 	if (!client)
+// 		client = this.getClient();
+//
+// 	client.connect().then(function(){
+// 		client.search(path, query, {byUid: true}).then(function(result){
+// 			console.log("timeSearch is " + result);
+// 			if(!result || result.length == 0){
+//
+// 				callback(result, []);
+// 				return;
+// 			}
+//
+// 			MailCollection.mail_search.update({},{uids:result});
+//
+// 			ImapClientManager.mailBoxNewMessages(path,function(messages){
+// 				callback(result, messages);
+// 			});
+//
+// 			client.close();
+// 		})
+// 	})
+// }
 
-	console.log("timeSearch query ::"+ query);
-
-	if (!client)
-		client = this.getClient();
-
-	client.connect().then(function(){
-		client.search(path, query, {byUid: true}).then(function(result){
-			console.log("timeSearch is " + result);
-			if(!result || result.length == 0){
-
-				callback(result, []);
-				return;
-			}
-
-			MailCollection.mail_search.update({},{uids:result});
-
-			ImapClientManager.mailBoxNewMessages(path,function(messages){
-				callback(result, messages);
-			});
-
-			// 	var infoExists = box.info.exists;
-			// 	if (infoExists < 1){
-			// 	if(typeof(callback) == "function"){
-			// 		callback();
-			// 	}
-			// 	return ;
-			// 	}
-			//
-			// 	var sequence_s = infoExists <= MailPage.pageSize ? 1 : (infoExists - MailPage.pageSize + 1);
-			//
-			// 	var sequence = infoExists  + ":*";
-			//
-			// 	var options = {};
-			//
-			// var box = MailManager.getBox(path);
-			//
-			// if(box.info){
-			// 	var sequence = box.info.uidNext + ":" + result[result.length-1];
-			// 	var options = {};
-			// 	console.log("timeSearch sequence is " + sequence );
-			//
-			// 	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
-			// 		ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
-			// 			ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
-			// 		callback(result, messages);
-			// 		});
-			// 	});
-      // }
-			client.close();
-		})
-	})
-}
 
 ImapClientManager.search = function(client, path, query, callback){
 
@@ -584,38 +557,38 @@ ImapClientManager.mailBoxMessages = function(path, callback){
 	});
 }
 
-ImapClientManager.mailBoxNewMessages = function(path,callback){
-	var box = MailManager.getBox(path);
-
-	if(!box)
-		return ;
-
-	var infoUidNext = box.info.uidNext;
-	if (infoUidNext < 1){
-	if(typeof(callback) == "function"){
-		callback();
-	}
-	return ;
-	}
-
-	var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
-
-	var sequence = infoUidNext  + ":*";
-
-	var options = {byUid: true};
-
-	console.info("listMessages[mailBoxNewMessages] path[" + path + '] sequence[' + sequence + ']');
-
-	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
-		ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
-			ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
-		});
-
-		if(typeof(callback) == "function"){
-			callback(messages);
-		}
-	});
-}
+// ImapClientManager.mailBoxNewMessages = function(path,callback){
+// 	var box = MailManager.getBox(path);
+//
+// 	if(!box)
+// 		return ;
+//
+// 	var infoUidNext = box.info.uidNext;
+// 	if (infoUidNext < 1){
+// 	if(typeof(callback) == "function"){
+// 		callback();
+// 	}
+// 	return ;
+// 	}
+//
+// 	var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
+//
+// 	var sequence = infoUidNext  + ":*";
+// 	console.info("sequence :" + sequence );
+// 	var options = {byUid: true};
+//
+// 	console.info("listMessages[mailBoxNewMessages] path[" + path + '] sequence[' + sequence + ']');
+//
+// 	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
+// 		ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
+// 			ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
+// 		});
+//
+// 		if(typeof(callback) == "function"){
+// 			callback(messages);
+// 		}
+// 	});
+// }
 
 
 ImapClientManager.getNewMessage = function(path, callback){
