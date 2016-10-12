@@ -54,11 +54,11 @@ Template.mail_list.helpers
         rev ;
         if Session.get("mailInit")
             if Session.get("mailBoxFilter")
-              rev = MailManager.getBoxMessagesByUids(Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize);
+              rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize, ()->
+                Session.set("mailLoading",false);
             else
               rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
-            Session.set("mailLoading",false);
-
+                Session.set("mailLoading",false);
         return rev;
 
     isUnseen: (message)->

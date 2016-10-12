@@ -214,14 +214,12 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 
 ImapClientManager.searchUnseenMessages = function(client, path, query, callback){
 
-	console.log("timeSearch query ::"+ query);
-
 	if (!client)
 		client = this.getClient();
 
 	client.connect().then(function(){
 		client.search(path, query, {byUid: true}).then(function(result){
-			console.log("timeSearch is " + result);
+			console.log("searchUnseenMessages is " + result);
 			if(!result || result.length == 0){
 
 				callback(result, []);

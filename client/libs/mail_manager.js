@@ -59,8 +59,9 @@ function getMessages (collection, page, page_size){
   return collection.find({},{sort: {uid:-1}, skip: page * page_size, limit: page_size}).fetch();
 }
 
-MailManager.getBoxMessagesByUids = function(uids, page, page_size){
+MailManager.getBoxMessagesByUids = function(uids, page, page_size ,callback){
   var path = Session.get("mailBox");
+  callback();
   return MailCollection.getMessageCollection(Session.get("mailBox")).find({uid:{$in: uids}}, {sort: {uid:-1}, skip: page * page_size, limit: page_size}).fetch();
 }
 
