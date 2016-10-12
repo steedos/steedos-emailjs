@@ -227,11 +227,8 @@ ImapClientManager.searchUnseenMessages = function(client, path, query, callback)
 				callback(result, []);
 				return;
 			}
-
-			MailCollection.mail_search.update({},{uids:result});
-
 			client.close();
-			callback();
+			callback(result);
 		})
 	})
 }
@@ -347,7 +344,7 @@ ImapClientManager.initMailboxInfo = function(callback){
 }
 
 ImapClientManager.updateUnseenMessages = function(){
-	ImapClientManager.search(null ,"Inbox", {unseen: true}, function(result){
+	ImapClientManager.searchUnseenMessages(null ,"Inbox", {unseen: true}, function(result){
 		MailCollection.mail_unseen.update({},{uids:result});
 	});
 }

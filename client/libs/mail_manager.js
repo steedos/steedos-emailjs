@@ -243,9 +243,7 @@ MailManager.getDeleteBoxMessages = function(path){
       return ;
   var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
   if(path == "Inbox"){
-  	ImapClientManager.searchUnseenMessages(null ,"Inbox", {unseen: true}, function(result){
-  		MailCollection.mail_unseen.update({},{uids:result});
-  	})
+    ImapClientManager.updateUnseenMessages();
   }
   ImapClientManager.getNewMessage(path, function(){
     ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
