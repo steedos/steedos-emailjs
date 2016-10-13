@@ -17,13 +17,6 @@ Template.read_mail.helpers
     showLoadding: ->
         return Session.get("mailMessageLoadding");
 
-    attachmentLoadding: ->
-        if Session.get("donwLoadding")
-            $("#attachment_donwLoadding").show();
-        else
-            $("#attachment_donwLoadding").hide();
-        return Session.get("donwLoadding");
-
     mailBody: (message)->
         if !message || message.uid == undefined
             return '';
@@ -57,7 +50,7 @@ Template.read_mail.helpers
 Template.read_mail.events
     'click .mailbox-attachment-name': (event, template)->
         console.log("----mailbox-attachment-name------");
-        $("#attachment_donwLoadding").show();
+        Session.set("donwLoadding",true)
         att_index = parseInt(event.target.dataset.index);
 
         path = Session.get("mailBox");
@@ -70,7 +63,7 @@ Template.read_mail.events
 
         MailAttachment.download path, uid, att.bodyPart, (dirname, name, filePath)->
             toastr.success("附件已存储");
-            $("#attachment_donwLoadding").hide();
+            Session.set("donwLoadding",false)
             MailAttachment.openFile(dirname, name);
 
     'click .last_mail': (event, template)->
@@ -80,5 +73,3 @@ Template.read_mail.events
     'click .next_mail': (event, template)->
         console.log("click next_mail");
         MailManager.getNextMessage();
-
-

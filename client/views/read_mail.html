@@ -3,7 +3,7 @@
   {{#with message}}
 
 	<div class="mail-read">
- 
+
       <!-- <div class="box-header with-border">
         <h3 class="box-title">Read Mail</h3>
 
@@ -13,7 +13,7 @@
         </div>
       </div> -->
       <!-- /.box-header -->
-      
+
       <div class="box-body no-padding">
 
         <!-- /.mailbox-controls -->
@@ -26,7 +26,7 @@
             {{#if attachments.length}}
               <div class="box-header">
                 <ul class="mailbox-attachments clearfix">
-                {{#each attachments}} 
+                {{#each attachments}}
                   <!-- <li>
                     <div class="mailbox-attachment-info">
                       <a href="#" class="mailbox-attachment-name" ><i class="fa fa-paperclip"></i> {{name}}</a>
@@ -49,9 +49,6 @@
               </div>
             {{/if}}
 
-            <div class="overlay {{attachmentLoadding}}" id="attachment_donwLoadding">
-              <i class="fa fa-spinner fa-spin"></i>
-            </div>
             <!-- /.mailbox-read-info -->
 <!--             <div class="mailbox-controls with-border text-center">
               <div class="btn-group">
@@ -74,11 +71,11 @@
           </div>
         </div>
         <!-- /.mailbox-read-message -->
-   </div>   
+   </div>
     <!-- /.box-footer -->
   </div>
   {{/with}}
 {{else}}
-     
+
 {{/if}}
 </template>
