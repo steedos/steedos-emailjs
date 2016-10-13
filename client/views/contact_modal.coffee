@@ -1,15 +1,21 @@
+Template.contacts_modal.helpers
+    contactsListData: ()->
+        console.log("contactsListData...")
+        return {defaultValues:MailManager.getContacts(this.targetId)};
+
 Template.contacts_modal.events
-	'click #confirm': (event, template) ->
-		console.log("..confirm");
-		
-		# targetId = template.data.targetId;
+    'click #confirm': (event, template) ->
+        console.log("..confirm");
+        
+        # targetId = template.data.targetId;
 
-		selectize = template.data.target[0].selectize
+        selectize = template.data.target[0].selectize
 
-		$('[name=\'contacts_ids\']').each ->
-		  if @checked
-		    console.log @dataset.name
-		    selectize.createItem(@dataset.name + "<" + @dataset.email + ">")
+        values = ContactsManager.getContactModalValue();
 
-		Modal.hide("contacts_modal");
+        values.forEach (value)->
+           console.log value.name
+           selectize.createItem(value.name + "<" + value.email + ">")
+
+        Modal.hide("contacts_modal");
 

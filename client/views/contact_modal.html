@@ -1,5 +1,5 @@
 <template name="contacts_modal">
-  <div class="modal fade" id="contacts_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal fade steedos-contacts" id="contacts_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content ins-modal">
         <div class="modal-header">
@@ -12,13 +12,19 @@
               {{> contacts_tree}}
             </div>
             <div class="col-md-8">
-              {{> contacts_list}}
+              {{>Template.dynamic  template="contacts_list" data=contactsListData}}
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id='confirm'>Confirm</button>
+          <div class="row">
+            <div class="col-md-10">
+                {{> selectedValue}}
+            </div>
+            <div class="col-md-2 pull-right">
+              <button type="button" class="btn btn-primary" id='confirm' title='{{_ "OK"}}' style="width:100%">{{_ "OK"}}</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

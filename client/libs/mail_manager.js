@@ -363,3 +363,15 @@ MailManager.judgeDelete = function(path, uid){
 //   }
 //   return path;
 // }
+MailManager.getContacts = function(id){
+  var values = $("#"+id).val();
+  var contacts = new Array()
+  if(values){
+    values.forEach(function(v){
+      var c = JSON.parse(v);
+      c.email = c.email.replace("<","").replace(">","")
+      contacts.push(c);
+    })
+  }
+  return contacts;
+}

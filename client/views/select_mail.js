@@ -16,10 +16,11 @@ Template.select_mail.rendered = function(){
         return $.trim((item.first_name || '') + ' ' + (item.last_name || ''));
     };
 
-    this.data.target = $('#' + this.data.atts.id).selectize({
+    var selectizeOpt = {
+        plugins: ['remove_button'],
         persist: false,
         maxItems: null,
-        valueField: 'email',
+        valueField: 'return',
         labelField: 'name',
         searchField: ['first_name', 'last_name', 'email'],
         openOnFocus: false,
@@ -27,11 +28,9 @@ Template.select_mail.rendered = function(){
             {field: 'first_name', direction: 'asc'},
             {field: 'last_name', direction: 'asc'}
         ],
-        // options: [
-        //     {email: 'hotoa@petrochina.com.cn', first_name: '测试-', last_name: 'Hotoa'},
-        //     {email: 'zhangshanshan@hotoa.com', first_name: '测试-', last_name: '张姗姗'},
-        //     {email: 'baozhoutao@hotoa.com', first_name: '华炎-', last_name: '包周涛'}
-        // ],
+        options: [
+            // {email: '<hotoa@petrochina.com.cn>', first_name: '测试-', last_name: 'Hotoa', return: JSON.stringify({name:'测试', email: '<hotoa@petrochina.com.cn>'})}
+        ],
         render: {
             item: function(item, escape) {
                 var name = formatName(item);
@@ -50,6 +49,25 @@ Template.select_mail.rendered = function(){
                 '</div>';
             }
         },
+        load: function(query, callback) {
+            if (!query.length) return callback();
+                
+                var res = [];
+
+                var books = db.address_books.find({email:{$regex: query}},{fields: {_id: 1, email: 1, name: 1},skip:0,limit:10}).fetch();
+
+                books.forEach(function(b){
+                    res.push({email: "<" + b.email + ">", first_name: b.name, last_name: '', return: JSON.stringify({name: b.name, email: "<" + b.email + ">"})});
+                });
+
+                var users = SteedosDataManager.spaceUserRemote.find({email:{$regex: query}},{fields: {_id: 1, email: 1, name: 1},skip:0,limit:10});
+
+                users.forEach(function(u){
+                    res.push({email: "<" + u.email + ">", first_name: u.name, last_name: '', return: JSON.stringify({name: u.name, email: "<" + u.email + ">"})});
+                });
+
+                callback(res);
+        },
         createFilter: function(input) {
             var regexpA = new RegExp('^' + REGEX_EMAIL + '$', 'i');
             var regexpB = new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i');
@@ -59,7 +77,13 @@ Template.select_mail.rendered = function(){
             console.log("selectize create...");
 
             if ((new RegExp('^' + REGEX_EMAIL + '$', 'i')).test(input)) {
-                return {email: "<" + input + ">"};
+                return {
+                    email: "<" + input + ">",
+                    first_name: "",
+                    last_name: "",
+                    return: JSON.stringify({name:"", email:"<" + input + ">"})
+                };
+
             }
             var match = input.match(new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i'));
             if (match) {
@@ -71,14 +95,17 @@ Template.select_mail.rendered = function(){
                 return {
                     email: "<" + match[2] + ">",
                     first_name: first_name,
-                    last_name: last_name
+                    last_name: last_name,
+                    return: JSON.stringify({name:name, email:"<" + match[2] + ">"})
                 };
             }
             alert('Invalid email address.');
             return false;
         }
-    });
+    }
 
+
+    this.data.target = $('#' + this.data.atts.id).selectize(selectizeOpt);
 
     var values = this.data.values;
 
