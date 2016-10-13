@@ -55,7 +55,7 @@ MailManager.getBoxs = function(){
   return MailCollection.mail_box.find().fetch();
 }
 
-function getMessages (collection, page, page_size){
+MailManager.getMessages = function(collection, page, page_size){
   return collection.find({},{sort: {uid:-1}, skip: page * page_size, limit: page_size}).fetch();
 }
 
@@ -66,7 +66,7 @@ MailManager.getBoxMessagesByUids = function(uids, page, page_size ,callback){
 }
 
 MailManager.getboxMessages = function(page, page_size, callback){
-  var messages = getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
+  var messages = MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
   //TODO 待优化
   if(messages.length > 0){
     callback();
@@ -75,7 +75,7 @@ MailManager.getboxMessages = function(page, page_size, callback){
 
   ImapClientManager.mailBoxMessages(Session.get("mailBox"), callback);
 
-  return getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
+  return MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
 }
 
 function getMesssageBodyPart(message){
@@ -105,7 +105,7 @@ MailManager.getMessage = function(uid){
           }
         });
       });
-    }
+    }MailCollection.getMessageCollection
   }
   return message;
 }
@@ -230,6 +230,7 @@ MailManager.getNewBoxMessages = function(path){
           ImapClientManager.updateUnseenMessages();
         }
         ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
+        //MailManager.storeMessages(path, messages);
       });
       console.log("MailManager.getNewBoxMessages length" + messages.length);
     }
@@ -319,6 +320,37 @@ MailManager.judgeDelete = function(path, uid){
     });
   }
 }
+
+// MailManager.storeMessages = function(path, messages){
+//   messages.forEach(function(message){
+//
+//     console.log("listMessages messages 开始解析：" + message.uid);
+//
+//     var local_message = MailManager.getMessageByUid(path, message.uid);
+//     if(local_message){
+//       //
+//       // local_message.flags = messages.flags;
+//       //
+//       // local_message.summary = false;
+//       //
+//       // var bodyMime = message['body[' + bodyPart.part + ']'];
+//       //
+//       // if(bodyMime){
+//       //
+//       //   if(bodyPart.type == 'text/plain' ){
+//       //
+//       //     local_message.bodyText.data = decode(bodyMime, bodyPart);
+//       //
+//       //   }else if(bodyPart.type == 'text/html'){
+//       //
+//       //     local_message.bodyHtml.data = decode(bodyMime, bodyPart);
+//       //
+//       //   }
+//       // }
+//         MailCollection.getMessageCollection(path).update(local_message._id ,local_message);
+//     }
+//   })
+// }
 
 // Meteor.startup(function(){
 //  MailManager.initMail();
