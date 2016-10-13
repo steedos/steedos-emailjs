@@ -23,13 +23,3 @@ Template.layout_left.helpers
             return t(key);
 
         return str;
-
-
-Template.layout_left.onRendered ->
-#Template.layout_left.events
-  # 'click .mailBox-refresh': (event, template) ->
-    debugger
-    console.log("layout_left button mailbox ..... ");
-    Session.set("mailLoading",true);
-    path = Session.get("mailBox");
-    MailManager.getNewBoxMessages(path);

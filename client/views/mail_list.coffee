@@ -57,6 +57,10 @@ Template.mail_list.helpers
               rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize, ()->
                 Session.set("mailLoading",false);
             else
+              if Session.get("mailPage") == 1
+                console.log("layout_left button mailbox ..... ");
+                path = Session.get("mailBox");
+                MailManager.getNewBoxMessages(path)
               rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
                 Session.set("mailLoading",false);
         return rev;
