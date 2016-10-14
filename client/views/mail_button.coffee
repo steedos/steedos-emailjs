@@ -36,7 +36,7 @@ Template.mailButton.events
 
     'click #compose-send': (event)->
         Session.set("mailSending",true);
-        if $("#mail_to").val() == null || $("#mail_to").val().length < 1
+        if MailManager.getContacts("mail_to") == null || MailManager.getContacts("mail_to").length < 1
             toastr.warning("请填写收件人")
             Session.set("mailSending",false);
             return
@@ -48,7 +48,7 @@ Template.mailButton.events
                 name: @dataset.name
                 path: @dataset.path
 
-        SmtpClientManager.sendMail $("#mail_to").val(), $("#mail_cc").val(), $("#mail_bcc").val(), $(".form-control.subject").val(), $('#compose-textarea').summernote('code'), attachments, ()->
+        SmtpClientManager.sendMail MailManager.getContacts("mail_to").getProperty("email"), MailManager.getContacts("mail_cc").getProperty("email"), MailManager.getContacts("mail_bcc").getProperty("email"), $(".form-control.subject").val(), $('#compose-textarea').summernote('code'), attachments, ()->
           Session.set("mailSending",false)
           FlowRouter.go('/emailjs/b/' + Session.get("mailBox"))
           Session.set("mailLoading",false)
@@ -62,7 +62,7 @@ Template.mailButton.events
                 name: @dataset.name
                 path: @dataset.path
 
-        message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user ,$("#mail_to").val(),$("#mail_cc").val(), $("#mail_bcc").val(),$(".form-control.subject").val(), $('#compose-textarea').summernote('code') ,attachments);
+        message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user ,MailManager.getContacts("mail_to").getProperty("email"), MailManager.getContacts("mail_cc").getProperty("email"), MailManager.getContacts("mail_bcc").getProperty("email"),$(".form-control.subject").val(), $('#compose-textarea').summernote('code') ,attachments);
 
         ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
           Session.set("mailSending",false);
