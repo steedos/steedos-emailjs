@@ -51,14 +51,14 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 
 		    alreadySending = true;
 
-		    var evnelope = {from: from, to: to};
+		    var evnelope = {from: from, to: to.getProperty("email")};
 
 		    if(cc && cc.length > 0){
-		    	evnelope.cc = cc;
+		    	evnelope.cc = cc.getProperty("email");
 		    }
 
 		    if(bcc && bcc.length > 0){
-		    	evnelope.bcc = bcc ;
+		    	evnelope.bcc = bcc.getProperty("email") ;
 		    }
 
 		    client.useEnvelope(new MimeBuilder().addHeader(evnelope).getEnvelope());

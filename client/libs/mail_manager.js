@@ -308,6 +308,8 @@ MailManager.resetHrefs = function(data){
   });
   return html;
 }
+
+
 MailManager.judgeDelete = function(path, uid){
   Session.set("mailLoading",true);
   if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
@@ -321,40 +323,23 @@ MailManager.judgeDelete = function(path, uid){
   }
 }
 
-// MailManager.storeMessages = function(path, messages){
-//   messages.forEach(function(message){
-//
-//     console.log("listMessages messages 开始解析：" + message.uid);
-//
-//     var local_message = MailManager.getMessageByUid(path, message.uid);
-//     if(local_message){
-//       //
-//       // local_message.flags = messages.flags;
-//       //
-//       // local_message.summary = false;
-//       //
-//       // var bodyMime = message['body[' + bodyPart.part + ']'];
-//       //
-//       // if(bodyMime){
-//       //
-//       //   if(bodyPart.type == 'text/plain' ){
-//       //
-//       //     local_message.bodyText.data = decode(bodyMime, bodyPart);
-//       //
-//       //   }else if(bodyPart.type == 'text/html'){
-//       //
-//       //     local_message.bodyHtml.data = decode(bodyMime, bodyPart);
-//       //
-//       //   }
-//       // }
-//         MailCollection.getMessageCollection(path).update(local_message._id ,local_message);
-//     }
-//   })
-// }
+MailManager.getAddress = function(address){
+  var arrs  = new Array();
+  address.forEach(function(a){
+    arrs.push(a.name + "<" + a.email + ">");
+  });
+  return arrs;
+}
 
-// Meteor.startup(function(){
-//  MailManager.initMail();
-// })
+
+MailManager.convertHeaderAddress= function(address){
+  var arrs;
+  arrs = new Array;
+  address.forEach(function(a){
+    arrs.push(a.name + "<" + a.address + ">");
+  });
+  return arrs;
+}
 
 // MailManager.uniformPath = function(path){
 //   var str = MailManager.getBoxBySpecialUse(path);

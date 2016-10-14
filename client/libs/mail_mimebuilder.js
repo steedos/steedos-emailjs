@@ -9,14 +9,14 @@ if(Steedos.isNode()){
 
 MailMimeBuilder.getMessageMime = function(from, to, cc, bcc,subject, body, attachments){
 
-	var node = new MimeBuilder("multipart/mixed").addHeader({ Subject: subject}).addHeader({ From:from}).addHeader({ To:to});
+	var node = new MimeBuilder("multipart/mixed").addHeader({ Subject: subject}).addHeader({ From:from}).addHeader({ To:MailManager.getAddress(to)});
 
 	if(cc && cc.length > 0){
-    	node.addHeader({ Cc: cc});
+    	node.addHeader({ Cc: MailManager.getAddress(cc)});
     }
 
     if(bcc && bcc.length > 0){
-    	node.addHeader({ Bcc: bcc});
+    	node.addHeader({ Bcc: MailManager.getAddress(bcc)});
     }
 
 	node.createChild("text/html").setContent(body);

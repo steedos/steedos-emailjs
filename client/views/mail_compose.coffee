@@ -1,57 +1,57 @@
 Template.mail_compose.helpers
-    message: ->
-        return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
+  message: ->
+    return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
 
-    mail_to: (message) ->
+  mail_to: (message) ->
 
-        rev = {name: "mail_to", title: '收件人', atts:{id: "mail_to", name: "mail_to"}};
+    rev = {name: "mail_to", title: '收件人', atts:{id: "mail_to", name: "mail_to"}};
 
-        if Session.get("mailMessageId")
-            if Session.get("mailJumpDraft")
-                rev.values = message.to;
-            else if Session.get("mailReply")
-                rev.values = message.from;
-            else if Session.get("mailReplyAll")
-                to = message.from.concat(message.to);
+    if Session.get("mailMessageId")
+      if Session.get("mailJumpDraft")
+        rev.values = message.to;
+      else if Session.get("mailReply")
+        rev.values = message.to;
+      else if Session.get("mailReplyAll")
+        to = message.from.concat(message.to);
 
-                fromUserAddress = to.filterProperty("address", AccountManager.getAuth().user);
+        fromUserAddress = to.filterProperty("address", AccountManager.getAuth().user);
 
-                fromUserAddress.forEach (address)->
-                    to.remove(to.indexOf(address));
+        fromUserAddress.forEach (address)->
+          to.remove(to.indexOf(address));
 
-                rev.values = to;
+        rev.values = to;
 
-        return rev;
+    return rev;
 
-    mail_cc: (message)->
-        rev = {name: "mail_cc", title: '抄&emsp;送', atts:{id: "mail_cc", name: "mail_cc"}};
-        if Session.get("mailMessageId")
-            if Session.get("mailJumpDraft") || Session.get("mailReplyAll")
-                rev.values  = message.cc;
+  mail_cc: (message)->
+    rev = {name: "mail_cc", title: '抄&emsp;送', atts:{id: "mail_cc", name: "mail_cc"}};
+    if Session.get("mailMessageId")
+      if Session.get("mailJumpDraft") || Session.get("mailReplyAll")
+        rev.values  = message.cc;
 
-        return rev;
+    return rev;
 
-    mail_bcc:(message)->
-        return rev = {name: "mail_bcc", title: '密&emsp;送', atts:{id: "mail_bcc", name: "mail_bcc"}};
+  mail_bcc:(message)->
+    return rev = {name: "mail_bcc", title: '密&emsp;送', atts:{id: "mail_bcc", name: "mail_bcc"}};
 
-    subject: (message) ->
-        subject = message.subject;
-        if Session.get("mailJumpDraft")
-            return subject;
-        else if Session.get("mailForward")
-            return "转发: " + subject;
-        else if Session.get("mailReply") || Session.get("mailReplyAll")
-            return "回复: " + subject;
+  subject: (message) ->
+    subject = message.subject;
+    if Session.get("mailJumpDraft")
+      return subject;
+    else if Session.get("mailForward")
+      return "转发: " + subject;
+    else if Session.get("mailReply") || Session.get("mailReplyAll")
+      return "回复: " + subject;
 
-    showLoadding: ->
-        return Session.get("mailMessageLoadding");
+  showLoadding: ->
+    return Session.get("mailMessageLoadding");
 
-    isSending: ->
-        if Session.get("mailSending")
-            $("#mail_sending").show();
-        else
-            $("#mail_sending").hide();
-        return Session.get("mailSending");
+  isSending: ->
+    if Session.get("mailSending")
+      $("#mail_sending").show();
+    else
+      $("#mail_sending").hide();
+    return Session.get("mailSending");
 
 
 Template.mail_compose.events
