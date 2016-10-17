@@ -131,6 +131,12 @@ Template.mail_list.events
         $('.mailbox-messages-checkAll').each ->
             $(this).prop('checked', event.target.checked);
 
+    'click .steedos-emailjs-item': (event, template)->
+        if event.currentTarget.dataset.drafts == "true"
+          FlowRouter.go("/emailjs/b/" + event.currentTarget.dataset.box);
+
+        FlowRouter.go(event.currentTarget.dataset.href);
+
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     $(".mailbox-messages").perfectScrollbar();

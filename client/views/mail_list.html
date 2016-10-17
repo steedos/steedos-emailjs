@@ -61,7 +61,7 @@
                         <img class="img" data-name="{{fromName from}}" alt="Product Image">
                       </div> -->
                       <div class="product-info">
-                        <a href="{{#if isDraftsBox}}/emailjs/b/drafts/{{box.path}}/{{uid}}{{else}}/emailjs/b/{{box.path}}/{{uid}}{{/if}}">
+                        <div class="steedos-emailjs-item" data-drafts='{{isDraftsBox}}' data-box="{{box.path}}" data-href="{{#if isDraftsBox}}/emailjs/b/drafts/{{box.path}}/{{uid}}{{else}}/emailjs/b/{{box.path}}/{{uid}}{{/if}}">
                           <div>
                             {{fromName from}}
                             <span class="pull-right">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}{{modifiedFromNow date}}</span>
@@ -69,7 +69,7 @@
                               {{subject}}
                             </span>
                           </div>
-                        </a>
+                        </div>
                       </div>
                     </div>
                   </div>

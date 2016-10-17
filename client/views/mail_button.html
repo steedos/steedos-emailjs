@@ -1,47 +1,45 @@
 <template name='mailButton'>
-	
-		
-		{{#if isComPose}}
-		<div class="navigation-bar btn-group mail-button">
-			<div class="pull-left">
-		      <button type="submit" class="btn btn-primary" id= "compose-send"><i class="fa fa-envelope-o"></i> 发送</button>
-		      <button type="button" class="btn btn-default" id="compose-draft"><i class="fa fa-pencil"></i> 存草稿</button>
-		    </div>
-		    <div class="pull-left cc">
-		      <div class="text_link add_cc">
-		        添加抄送
-		      </div>
-		      <div class="text_link remove_cc">
-		        删除抄送
-		      </div>
-		      <div class="text_link add_bcc">
-		        添加密送
-		      </div>
-		      <div class="text_link remove_bcc">
-		        删除密送
-		      </div>
-		    </div>
-			<div class="pull-right">
-	          <button type="button" class="btn btn-default" id="right_back" title="返回"><i class="ion ion-chevron-right"></i></button>
-	        </div>
+
+	{{#if isComPose}}
+	<div class="navigation-bar btn-group mail-button">
+		<div class="pull-left">
+	      <button type="submit" class="btn btn-primary" id= "compose-send"><i class="fa fa-envelope-o"></i> 发送</button>
+	      <button type="button" class="btn btn-default" id="compose-draft"><i class="fa fa-pencil"></i> 存草稿</button>
 	    </div>
-	    {{else}}
-		    {{#with message}}
-		    	{{#if uid}}
-		    	<div class="navigation-bar btn-group mail-button">
-					<div class="pull-left">
-			          	<a href="/emailjs/b/reply/{{path}}/{{uid}}"><button type="button" class="btn btn-default"><i class="fa fa-reply"></i> 回复 </button></a>
-			          	<a href="/emailjs/b/replyAll/{{path}}/{{uid}}"><button type="button" class="btn btn-default"><i class="fa fa-reply-all" aria-hidden="true"></i> 全部回复 </button></a>
-			          	<a href="/emailjs/b/forward/{{path}}/{{uid}}"><button type="button" class="btn btn-default" ><i class="fa fa-share"></i> 转发 </button></a>
-			          	<button type="button" class="btn btn-default mail-delete"><i class="fa fa-trash-o"></i> 删除</button>
-			        </div>
-					<div class="pull-right">
-			    		<button type="button" class="btn btn-default" id="right_back" title="返回"><i class="ion ion-chevron-right"></i></button>
-			        </div>
-			    </div>
-		        {{/if}}
-	        {{/with}}
-		{{/if}}
-		
-        
+	    <div class="pull-left cc">
+	      <div class="text_link add_cc">
+	        添加抄送
+	      </div>
+	      <div class="text_link remove_cc">
+	        删除抄送
+	      </div>
+	      <div class="text_link add_bcc">
+	        添加密送
+	      </div>
+	      <div class="text_link remove_bcc">
+	        删除密送
+	      </div>
+	    </div>
+		<div class="pull-right">
+          <button type="button" class="btn btn-default" id="right_back" title="返回"><i class="ion ion-chevron-right"></i></button>
+        </div>
+    </div>
+    {{else}}
+	    {{#with message}}
+	    	{{#if uid}}
+	    	<div class="navigation-bar btn-group mail-button">
+				<div class="pull-left">
+		          	<a href="/emailjs/b/reply/{{path}}/{{uid}}"><button type="button" class="btn btn-default"><i class="fa fa-reply"></i> 回复 </button></a>
+		          	<a href="/emailjs/b/replyAll/{{path}}/{{uid}}"><button type="button" class="btn btn-default"><i class="fa fa-reply-all" aria-hidden="true"></i> 全部回复 </button></a>
+		          	<a href="/emailjs/b/forward/{{path}}/{{uid}}"><button type="button" class="btn btn-default" ><i class="fa fa-share"></i> 转发 </button></a>
+		          	<button type="button" class="btn btn-default mail-delete"><i class="fa fa-trash-o"></i> 删除</button>
+		        </div>
+				<div class="pull-right">
+		    		<button type="button" class="btn btn-default" id="right_back" title="返回"><i class="ion ion-chevron-right"></i></button>
+		        </div>
+		    </div>
+	        {{/if}}
+        {{/with}}
+	{{/if}}
+
 </template>

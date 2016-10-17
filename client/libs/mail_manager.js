@@ -99,7 +99,7 @@ MailManager.getMessage = function(uid){
 
   if(message.summary == true){
 
-    if(Session.get("mailMessageLoadding") != true){
+    if(Session.get("mailMessageLoadding") == false){
       Session.set("mailMessageLoadding",true);
       console.log("mailMessageLoadding  " + message.uid);
       ImapClientManager.getMessageByUid(path, message.uid, getMesssageBodyPart(message),function(messages){
@@ -114,7 +114,7 @@ MailManager.getMessage = function(uid){
           }
         });
       });
-    }MailCollection.getMessageCollection
+    }
   }
   return message;
 }

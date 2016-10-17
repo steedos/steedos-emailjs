@@ -17,87 +17,81 @@ mailRoutes = FlowRouter.group
 	name: 'mailRoute',
 	triggersEnter: [ checkUserSigned],
 
-mailRoutes.route '/', 
+mailRoutes.route '/',
 	action: (params, queryParams)->
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", "Inbox");
-		Session.set("mailMessageId", null); 
+		Session.set("mailMessageId", null);
 		Session.set("mailPage",1);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
 
-mailRoutes.route '/b/:mailBox/', 
+mailRoutes.route '/b/:mailBox/',
 	action: (params, queryParams)->
 		Session.set("mailLoading", true);
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox); 
-		Session.set("mailMessageId", null); 
+		Session.set("mailBox", params.mailBox);
+		Session.set("mailMessageId", null);
 		Session.set("mailPage",1);
-		Session.set("mailBoxFilter", ""); 
+		Session.set("mailBoxFilter", "");
 		Session.set("mailMessageLoadding",false);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
 
-mailRoutes.route '/b/:mailBox/:mailMessageId', 
+mailRoutes.route '/b/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox); 
+		Session.set("mailBox", params.mailBox);
 		if !Session.get("mailPage")
 			Session.set("mailPage",1)
-		
-		Session.set("mailMessageId", params.mailMessageId); 
+
+		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
 
-mailRoutes.route '/b/forward/:mailBox/:mailMessageId', 
+mailRoutes.route '/b/forward/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
 		Session.set("mailForward", true);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox); 
-		Session.set("mailMessageId", params.mailMessageId); 
+		Session.set("mailBox", params.mailBox);
+		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
 
-mailRoutes.route '/b/reply/:mailBox/:mailMessageId', 
+mailRoutes.route '/b/reply/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
 		Session.set("mailReply", true);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox); 
-		Session.set("mailMessageId", params.mailMessageId); 
+		Session.set("mailBox", params.mailBox);
+		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
 
-mailRoutes.route '/b/replyAll/:mailBox/:mailMessageId', 
+mailRoutes.route '/b/replyAll/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
 		Session.set("mailReplyAll", true);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox); 
-		Session.set("mailMessageId", params.mailMessageId); 
+		Session.set("mailBox", params.mailBox);
+		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
 
-mailRoutes.route '/b/drafts/:mailBox/:mailMessageId', 
+mailRoutes.route '/b/drafts/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
 		Session.set("mailJumpDraft", true);
-		Session.set("mailBox", params.mailBox); 
-		Session.set("mailMessageId", params.mailMessageId); 
+		Session.set("mailBox", params.mailBox);
+		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
-
-
-
-
-
-

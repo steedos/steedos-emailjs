@@ -2,40 +2,40 @@ Template.mail_compose.helpers
   message: ->
     return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
 
-  mail_to: (message) ->
+  mail_to: (to,from) ->
 
+    console.log("mail_compose：mail_to run... ");
     rev = {name: "mail_to", title: '收件人', atts:{id: "mail_to", name: "mail_to"}};
 
-    if Session.get("mailMessageId")
-      if Session.get("mailJumpDraft")
-        rev.values = message.to;
-      else if Session.get("mailReply")
-        rev.values = message.to;
-      else if Session.get("mailReplyAll")
-        to = message.from.concat(message.to);
+    if Session.get("mailJumpDraft") || Session.get("mailReply")
+      rev.values =  to;
+    else if Session.get("mailReplyAll")
+      toAll = from.concat(to);
 
-        fromUserAddress = to.filterProperty("address", AccountManager.getAuth().user);
+      fromUserAddress = toAll.filterProperty("address", AccountManager.getAuth().user);
 
-        fromUserAddress.forEach (address)->
-          to.remove(to.indexOf(address));
+      fromUserAddress.forEach (address)->
+        toAll.remove(toAll.indexOf(address));
 
-        rev.values = to;
+      rev.values = toAll;
 
     return rev;
 
-  mail_cc: (message)->
+  mail_cc: (cc)->
+
+    Session.get("mailMessageId")
+
+
     rev = {name: "mail_cc", title: '抄&emsp;送', atts:{id: "mail_cc", name: "mail_cc"}};
-    if Session.get("mailMessageId")
-      if Session.get("mailJumpDraft") || Session.get("mailReplyAll")
-        rev.values  = message.cc;
+    if Session.get("mailJumpDraft") || Session.get("mailReplyAll")
+      rev.values  = cc;
 
     return rev;
 
-  mail_bcc:(message)->
+  mail_bcc:(bcc)->
     return rev = {name: "mail_bcc", title: '密&emsp;送', atts:{id: "mail_bcc", name: "mail_bcc"}};
 
-  subject: (message) ->
-    subject = message.subject;
+  mail_subject: (subject) ->
     if Session.get("mailJumpDraft")
       return subject;
     else if Session.get("mailForward")
@@ -55,44 +55,43 @@ Template.mail_compose.helpers
 
 
 Template.mail_compose.events
-    'change #attachment_file': (event, template) ->
-        if !$("#attachment_file").val()
-            return ;
-        node = MailAttachment.getAttachmentNode($("#attachment_file").val());
-        $("#compose_attachment_list").append(node);
-        $("#attachment_file").val('')
+  'change #attachment_file': (event, template) ->
+    if !$("#attachment_file").val()
+      return ;
+    node = MailAttachment.getAttachmentNode($("#attachment_file").val());
+    $("#compose_attachment_list").append(node);
+    $("#attachment_file").val('')
 
-    'click .mailbox-attachment-delete': (event)->
-        event.target.parentNode.parentNode.parentNode.remove();
+  'click .mailbox-attachment-delete': (event)->
+    event.target.parentNode.parentNode.parentNode.remove();
 
 
 Template.mail_compose.onRendered ->
-    if Session.get("mailMessageId")
-        if Session.get("mailForward") || Session.get("mailJumpDraft")
+  console.log("mail_compose.onRendered run... ");
+  if Session.get("mailForward") || Session.get("mailJumpDraft")
+    MailForward.getAttachmentsHtml();
 
-            MailForward.getAttachmentsHtml();
-    setTimeout ()->
-        $(".form-control.subject").focus();
-    ,100;
+  setTimeout ()->
+    $(".form-control.subject").focus();
 
-    if $("#mail_cc").val()?.length > 0
-        $(".add_cc").click()
+  if $("#mail_cc").val()?.length > 0
+    $(".add_cc").click()
 
-    this.autorun ()->
-        if !Session.get("mailMessageLoadding")
+  this.autorun ()->
+    if !Session.get("mailMessageLoadding")
 
-            message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
-            body = "";
-            if message.uid
-                if Session.get("mailJumpDraft")
-                    body =  message.bodyHtml.data;
-                else
-                    body =  MailForward.getBody(message);
-
-            $("#compose-textarea").html(MailManager.resetHrefs(body));
-
-            $("#compose-textarea").summernote
-                lang: "zh-CN"
-                dialogsInBody: true
+      message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
+      body = "";
+      if message.uid
+        if Session.get("mailJumpDraft")
+          body =  message.bodyHtml.data;
         else
-            $("#compose-textarea").html("加载中...");
+          body =  MailForward.getBody(message);
+
+      $("#compose-textarea").html(MailManager.resetHrefs(body));
+
+      $("#compose-textarea").summernote
+        lang: "zh-CN"
+        dialogsInBody: true
+    else
+      $("#compose-textarea").html("加载中...");
