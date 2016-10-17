@@ -1,14 +1,23 @@
 MailManager = {};
 
-MailManager.initMail = function(){
+MailManager.initMail = function(callback){
   $(document.body).addClass('loading');
   Session.set("mailInit", false);
   //MailCollection.init();
   if(Steedos.isNode() && AccountManager.getAuth()){
     ImapClientManager.mailBox(null, function(){
       ImapClientManager.initMailboxInfo(function(){
-        ImapClientManager.updateUnseenMessages();
+        ImapClientManager.updateUnseenMessages(callback);
         Session.set("mailInit", true);
+        try{
+          if(callback){
+            if(typeof(callback) == 'function'){
+              callback();
+            }
+          }
+        }catch(e){
+          console.error("MailManager.initMail callback function error:" + e);
+        }
         $(document.body).removeClass('loading');
       })
     });

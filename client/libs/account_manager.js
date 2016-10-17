@@ -18,7 +18,7 @@ AccountManager.getMailDomain = function(user){
 
 Session.set("mail_auth_success", false);
 
-AccountManager.checkAccount = function(){
+AccountManager.checkAccount = function(callback){
 	if(Session.get("mail_auth_success")){
 		return true;
 	}
@@ -42,7 +42,7 @@ AccountManager.checkAccount = function(){
 			imapClient.close();
 			console.log("账户验证完成");
 			if(!Session.get("mail_auth_success")){
-				MailManager.initMail();	
+				MailManager.initMail(callback);
 			}
 
 			Session.set("mail_auth_success", true);
