@@ -15,7 +15,8 @@ Npm.depends({
 	"emailjs-imap-client": "2.0.2",
 	"emailjs-mime-builder": "1.0.1",
 	"emailjs-mime-codec": "1.0.2",
-	"emailjs-smtp-client": "1.0.0"
+	"emailjs-smtp-client": "1.0.0",
+	"regenerator-runtime": "0.9.5"
 });
 
 
