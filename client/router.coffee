@@ -51,6 +51,7 @@ mailRoutes.route '/b/:mailBox/:mailMessageId',
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", params.mailBox);
+		Session.set("mailMessageLoadding",false);
 		if !Session.get("mailPage")
 			Session.set("mailPage",1)
 
