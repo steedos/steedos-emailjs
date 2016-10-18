@@ -117,7 +117,7 @@ MailManager.getMessage = function(uid){
   var path = Session.get("mailBox");
   var message = MailCollection.getMessageCollection(path).findOne({uid: uid});
   if (!message)
-  return {};
+    return {};
 
   if(message.summary == true){
 

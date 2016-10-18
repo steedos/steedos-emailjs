@@ -1,8 +1,9 @@
 Template.read_mail.helpers
   message: ->
-    uid = Session.get("mailMessageId");
+    if Session.get("mailInit")
+      uid = Session.get("mailMessageId");
 
-    return MailManager.getMessage(parseInt(uid)) ;
+      return MailManager.getMessage(parseInt(uid)) ;
 
   path: ->
     return Session.get("mailBox");
