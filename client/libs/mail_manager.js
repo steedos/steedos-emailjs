@@ -27,7 +27,7 @@ MailManager.initMail = function(callback){
 }
 
 MailManager.getBoxInfo = function(path){
-  
+
   if(!MailCollection.mail_box_info)
     return ;
 
@@ -142,7 +142,7 @@ MailManager.getMessage = function(uid){
 }
 
 MailManager.getMessageByUid = function(path, uid){
-  
+
   if(!MailCollection.getMessageCollection(path))
     return ;
 
@@ -153,7 +153,7 @@ MailManager.getMessageByUid = function(path, uid){
 
 MailManager.getUnseenUid = function(){
   if(!MailCollection.mail_unseen)
-    return 
+    return
   return MailCollection.mail_unseen.findOne();
 }
 
@@ -258,7 +258,7 @@ MailManager.getNewBoxMessages = function(path){
   var box = MailManager.getBox(path);
   if(!box)
       return ;
-  var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
+  //var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
 
   ImapClientManager.getNewMessage(path, function(messages){
     if(messages.length > 0){
@@ -266,7 +266,7 @@ MailManager.getNewBoxMessages = function(path){
         if(path == "Inbox"){
           ImapClientManager.updateUnseenMessages();
         }
-        ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
+        //ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
         //MailManager.storeMessages(path, messages);
       });
       console.log("MailManager.getNewBoxMessages length" + messages.length);
