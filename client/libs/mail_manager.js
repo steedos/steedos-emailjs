@@ -27,10 +27,17 @@ MailManager.initMail = function(callback){
 }
 
 MailManager.getBoxInfo = function(path){
+  
+  if(!MailCollection.mail_box_info)
+    return ;
+
   return MailCollection.mail_box_info.findOne({path: path})
 }
 
 MailManager.getBox = function(path){
+  if (!MailCollection.mail_box)
+    return ;
+
   var box = MailCollection.mail_box.findOne({path: path})
   if(!box)
     return ;
@@ -40,6 +47,11 @@ MailManager.getBox = function(path){
 }
 
 MailManager.getBoxBySpecialUse = function(specialUse){
+
+  if(!MailCollection.mail_box){
+    return ;
+  }
+
   var box = MailCollection.mail_box.findOne({specialUse: specialUse})
   if(!box){
     var path = specialUse.replace("\\","");
@@ -53,6 +65,10 @@ MailManager.getBoxBySpecialUse = function(specialUse){
 }
 
 MailManager.getOtherBoxs = function(){
+
+  if(!MailCollection.mail_box)
+    return ;
+
   var unPath = ["Inbox", "Sent", "Drafts", "Junk", "Trash", "Archive"]
 
   var unSpecialUse = ["\\Inbox", "\\Sent", "\\Drafts", "\\Junk", "\\Trash", "\\Archive"]
@@ -61,10 +77,16 @@ MailManager.getOtherBoxs = function(){
 }
 
 MailManager.getBoxs = function(){
+  if(!MailCollection.mail_box)
+    return ;
+
   return MailCollection.mail_box.find().fetch();
 }
 
 MailManager.getMessages = function(collection, page, page_size){
+  if(!collection)
+    return ;
+
   return collection.find({},{sort: {uid:-1}, skip: page * page_size, limit: page_size}).fetch();
 }
 
@@ -120,13 +142,19 @@ MailManager.getMessage = function(uid){
 }
 
 MailManager.getMessageByUid = function(path, uid){
+  
+  if(!MailCollection.getMessageCollection(path))
+    return ;
+
   return MailCollection.getMessageCollection(path).findOne({uid: uid});
 }
 
 
 
 MailManager.getUnseenUid = function(){
-return MailCollection.mail_unseen.findOne();
+  if(!MailCollection.mail_unseen)
+    return 
+  return MailCollection.mail_unseen.findOne();
 }
 
 

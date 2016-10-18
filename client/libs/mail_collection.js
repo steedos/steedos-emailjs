@@ -1,13 +1,43 @@
 MailCollection = {};
 
+MailCollection.before = {};
+
+MailCollection.keys = new Array();
+
+MailCollection.before.insert = function(userId, doc){
+	doc.account = Session.get("email_account")
+}
+
+MailCollection.before.update = function(userId, doc){
+	doc.account = Session.get("email_account")
+}
+
+MailCollection.create = function(key){
+	console.log("create key");
+	if(!MailCollection.keys.includes(key)){
+		
+		MailCollection[key] = new Mongo.Collection();
+
+		MailCollection[key].before.insert(MailCollection.before.insert);
+
+		MailCollection[key].before.update(MailCollection.before.update);
+		
+		MailCollection.keys.push(key);
+	}
+
+	return MailCollection[key];
+}
+
+
 MailCollection.init = function(){
-	MailCollection.mail_box = new Mongo.Collection();
 
-	MailCollection.mail_box_info = new Mongo.Collection();
+	MailCollection.create("mail_box");
 
-	MailCollection.mail_unseen = new Mongo.Collection();
+	MailCollection.create("mail_box_info");
 
-	MailCollection.mail_search = new Mongo.Collection();
+	MailCollection.create("mail_unseen");
+
+	MailCollection.create("mail_search");
 
 	MailCollection.mail_unseen.insert({uids:[]});
 
@@ -15,11 +45,10 @@ MailCollection.init = function(){
 }
 
 MailCollection.getMessageCollection = function(path){
-	if(typeof(MailCollection["mail_" + path + "_messages"]) != 'object'){
-		console.log("new [mail_" + path + "_messages] collection");
-		MailCollection["mail_" + path + "_messages"] = new Mongo.Collection();
-	}
-	return MailCollection["mail_" + path + "_messages"];
+	
+	var key = "mail_" + path + "_messages";
+	
+	return MailCollection.create(key);
 }
 
 //selector: {"flags":{$ne:"\\Seen"}}
@@ -34,6 +63,19 @@ MailCollection.getInboxMessage = function(selector, options){
     messages.forEach()
 }
 
+
+MailCollection.destroy = function(){
+	
+	console.log("MailCollection.destroy...");
+
+	MailCollection.keys.forEach(function(key){
+		MailCollection[key] = null;
+	})
+
+	MailCollection.keys = new Array();
+
+	MailCollection.init();
+}
 
 Meteor.startup(function(){
 	MailCollection.init();

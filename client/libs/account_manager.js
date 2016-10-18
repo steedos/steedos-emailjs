@@ -16,12 +16,7 @@ AccountManager.getMailDomain = function(user){
 	//return {domain:"@petrochina.com.cn",imap:"msg.petrochina.com.cn",imap_port:993,smtp:"msg.petrochina.com.cn",smtp_port:465}
 }
 
-Session.set("mail_auth_success", false);
-
 AccountManager.checkAccount = function(callback){
-	if(Session.get("mail_auth_success")){
-		return true;
-	}
 
 	$(document.body).addClass('loading');
 
@@ -39,20 +34,36 @@ AccountManager.checkAccount = function(callback){
 		var pro = imapClient.connect();
 
 		pro.then(function(){
+			
 			imapClient.close();
-			console.log("账户验证完成");
-			if(!Session.get("mail_auth_success")){
-				MailManager.initMail(callback);
-			}
 
-			Session.set("mail_auth_success", true);
+			console.log("账户验证完成");
+
+			var email_accounts = null;
+			if(MailCollection.email_accounts)
+				email_accounts = MailCollection.email_accounts.findOne({account:userAuth.user});
+
+			if(!email_accounts){
+				
+				Session.set("email_account", userAuth.user);
+
+				MailCollection.destroy();
+
+				MailCollection.create("email_accounts");
+
+				MailCollection.email_accounts.insert({});
+
+				MailManager.initMail(callback);
+			}else{
+				$(document.body).removeClass('loading');
+			}
 		});
 
 		pro.catch(function(err){
 			imapClient.close();
 			FlowRouter.go('/admin/view/mail_accounts');
 			$(document.body).removeClass('loading');
-			toastr.error("账户验证失败，错误信息：" + pro._v.message);
+			toastr.error("账户验证失败，错误信息：" + err.message);
 		});
 	}catch(e){
 		toastr.error("账户验证失败，错误信息：" + e.message);
