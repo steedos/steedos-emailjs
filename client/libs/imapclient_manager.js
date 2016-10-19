@@ -555,10 +555,12 @@ ImapClientManager.updateSeenMessage = function(path, uid, callback){
 
 	console.log("[ImapClientManager.updateSeenMessage] path is " + path + "; uid is " + uid);
 	var message = MailManager.getMessageByUid(path, uid);
-
+	// console.log(message._id);
 	ImapClientManager.setFlags(null, path, uid, {set: ['\\Seen']}, {byUid:true}, function(messages){
 		messages.forEach(function(m){
-			console.log(m);
+		// 	console.log(m);
+		// 	console.log(path);
+		// 	console.log(message._id);
 			MailCollection.getMessageCollection(path).update(message._id, {$set:{flags: m.flags}});
 		})
 		callback();

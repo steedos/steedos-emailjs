@@ -51,7 +51,7 @@ Template.mail_list.helpers
         return Session.get("mailLoading");
 
     boxMessages: ->
-        console.log("mailLoading ...");
+        console.log("[boxMessages]");
         Session.set("mailLoading",true);
         path = Session.get("mailBox");
 
@@ -65,15 +65,9 @@ Template.mail_list.helpers
             if Session.get("mailBoxInit")
                 if Session.get("mailBoxFilter")
                   rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize, ()->
-                    console.log("mailLoading is false");
                     Session.set("mailLoading",false);
                 else
-                  if Session.get("mailPage") == 1
-                    MailManager.getNewBoxMessages path, () ->
-                        console.log("mailLoading is false");
-                        Session.set("mailLoading",false);
                   rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
-                    console.log("mailLoading is false");
                     Session.set("mailLoading",false);
         return rev;
 

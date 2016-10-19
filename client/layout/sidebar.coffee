@@ -68,3 +68,12 @@ Template.emailjsSidebar.helpers
     box: ->
         if Session.get("mailInit")
             return MailManager.getBox(Session.get("mailBox"));
+
+
+Template.emailjsSidebar.events
+    "click .box-item-info": (e, t) ->
+        FlowRouter.go(e.currentTarget.dataset.href);
+
+        Session.set("mailLoading",true);
+        MailManager.getNewBoxMessages Session.get("mailBox"), () ->
+            Session.set("mailLoading",false);

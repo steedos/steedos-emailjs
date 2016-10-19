@@ -103,8 +103,6 @@ MailManager.getBoxMessagesByUids = function(uids, page, page_size ,callback){
 
 MailManager.getboxMessages = function(page, page_size, callback){
 
-  Session.set("mailLoading",true);
-
   var messages = MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
 
   if(messages.length >= page_size){
@@ -282,6 +280,10 @@ MailManager.getNewBoxMessages = function(path, callback){
         //ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
       });
       console.log("MailManager.getNewBoxMessages length " + messages.length);
+      if(typeof(callback) == 'function'){
+        callback();
+      }
+    }else{
       if(typeof(callback) == 'function'){
         callback();
       }
