@@ -43,10 +43,8 @@ Template.mail_list.helpers
 
     isLoading: ->
         if Session.get("mailLoading")
-            console.info("mail_list_load show");
             $("#mail_list_load").show();
         else
-            console.info("mail_list_load hide");
             $("#mail_list_load").hide();
         return Session.get("mailLoading");
 
