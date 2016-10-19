@@ -24,7 +24,9 @@
             <li class="header"> {{ _  " 邮  箱 "}}</li>
 
 
-            <li class="mail-compose"><a href="/emailjs/b/drafts/{{box.path}}/compose"><i class="ion ion-plus"></i> <span>新邮件</span></a></li>
+            {{#with box}}
+              <li class="mail-compose"><a href="/emailjs/b/drafts/{{path}}/compose"><i class="ion ion-plus"></i> <span>新邮件</span></a></li>
+            {{/with}}
 
             {{#with getBox 'Inbox'}}
               <li class="{{getLiClass path}}"><a href="/emailjs/b/{{path}}"><i class="fa fa-inbox"></i> <span>{{t name}}</span>
