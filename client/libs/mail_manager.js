@@ -7,7 +7,7 @@ MailManager.initMail = function(callback){
   if(Steedos.isNode() && AccountManager.getAuth()){
     ImapClientManager.mailBox(null, function(){
       ImapClientManager.initMailboxInfo(function(){
-        ImapClientManager.updateUnseenMessages(callback);
+        ImapClientManager.updateUnseenMessages();
         Session.set("mailInit", true);
         try{
           if(callback){
@@ -267,7 +267,6 @@ MailManager.getNewBoxMessages = function(path){
           ImapClientManager.updateUnseenMessages();
         }
         //ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
-        //MailManager.storeMessages(path, messages);
       });
       console.log("MailManager.getNewBoxMessages length" + messages.length);
     }
