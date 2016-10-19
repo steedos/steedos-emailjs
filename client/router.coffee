@@ -35,7 +35,7 @@ mailRoutes.route '/b/:mailBox/',
 		if Session.get("mailBox") != params.mailBox
 			Session.set("mailPage",1)
 
-		Session.set("mailLoading", true);
+		# Session.set("mailLoading", true);
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
