@@ -1,6 +1,6 @@
 <template name="mail_list">
 
-  <div class="navigation-bar">
+  <div class="navigation-bar" data-exists="{{boxExists}}">
 
         <!-- <a href="/workflow/space/{{spaceId}}" class="btn btn-default" title='{{_ "Workflow"}}'>
           <i class="ion ion-chevron-left"></i><span></span>
@@ -16,7 +16,7 @@
         {{> mail_search}}
   </div>
 
-	<div class="box mail_list" data-exists="{{boxExists}}">
+	<div class="box mail_list">
       <!-- <div class="box-header with-border">
 
         <div class="pull-right">

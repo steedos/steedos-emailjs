@@ -2,7 +2,6 @@ Template.emailjsLayout.helpers
 	
 	subsReady: ->
 		if Steedos.subsMail.ready()
-			$(document.body).addClass('loading');
 			if !AccountManager.checkAccount()
 				FlowRouter.go '/admin/view/mail_accounts';
 			return true;

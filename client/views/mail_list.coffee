@@ -27,10 +27,11 @@ Template.mail_list.helpers
         return false
 
     boxExists: ->
-        if Session.get("mailBoxFilter")
-            return Session.get("mailBoxFilter").length;
-        box = MailManager.getBox(Session.get("mailBox"));
-        return box?.info?.exists;
+        if Session.get("mailInit") && Session.get("mailBoxInit")
+            if Session.get("mailBoxFilter")
+                return Session.get("mailBoxFilter").length;
+            box = MailManager.getBox(Session.get("mailBox"));
+            return box?.info?.exists;
 
     boxName: ->
         if Session.get("mailBox")
@@ -42,27 +43,38 @@ Template.mail_list.helpers
 
     isLoading: ->
         if Session.get("mailLoading")
+            console.info("mail_list_load show");
             $("#mail_list_load").show();
         else
+            console.info("mail_list_load hide");
             $("#mail_list_load").hide();
         return Session.get("mailLoading");
 
     boxMessages: ->
         console.log("mailLoading ...");
         Session.set("mailLoading",true);
+        path = Session.get("mailBox");
 
         rev ;
         if Session.get("mailInit")
-            if Session.get("mailBoxFilter")
-              rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize, ()->
-                Session.set("mailLoading",false);
-            else
-              if Session.get("mailPage") == 1
-                console.log("layout_left button mailbox ..... ");
-                path = Session.get("mailBox");
-                MailManager.getNewBoxMessages(path)
-              rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
-                Session.set("mailLoading",false);
+            inbox = MailManager.getBox(path);
+            ImapClientManager.initMailboxInfo inbox, ()->
+                Session.set("mailBoxInit", true);
+                console.log("ImapClientManager.initMailboxInfo ok...");
+
+            if Session.get("mailBoxInit")
+                if Session.get("mailBoxFilter")
+                  rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize, ()->
+                    console.log("mailLoading is false");
+                    Session.set("mailLoading",false);
+                else
+                  if Session.get("mailPage") == 1
+                    MailManager.getNewBoxMessages path, () ->
+                        console.log("mailLoading is false");
+                        Session.set("mailLoading",false);
+                  rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
+                    console.log("mailLoading is false");
+                    Session.set("mailLoading",false);
         return rev;
 
     isUnseen: (message)->
@@ -106,7 +118,8 @@ Template.mail_list.events
     'click .list-refresh': (event, template) ->
         Session.set("mailLoading",true);
         path = Session.get("mailBox");
-        MailManager.getNewBoxMessages(path);
+        MailManager.getNewBoxMessages path, () ->
+            Session.set("mailLoading",false);
 
     'click .list-message-delete': (event, template) ->
         Session.set("mailLoading",true);
@@ -116,6 +129,7 @@ Template.mail_list.events
         MailManager.judgeDelete(path, uids);
 
     'click #page_forward': (event, template) ->
+        debugger;
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
 
     'click #page_back': (event, template) ->
@@ -139,4 +153,5 @@ Template.mail_list.events
 
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
+    $("#mail_list_load").show();
     $(".mailbox-messages").perfectScrollbar();

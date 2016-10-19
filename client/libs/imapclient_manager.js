@@ -107,7 +107,7 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 			try{
 				messages.forEach(function(message){
 
-					console.log("listMessages messages 开始解析：" + message.uid);
+					// console.log("listMessages messages 开始解析：" + message.uid);
 
 					var local_message = MailManager.getMessageByUid(path, message.uid);
 					if(local_message){
@@ -165,8 +165,8 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 			try{
 				messages.forEach(function(message){
 
-					console.log("listMessages messages 开始解析：" + message.uid);
-					console.log("[getAttachmentByPart] part.type is " + bodyPart.type);
+					// console.log("listMessages messages 开始解析：" + message.uid);
+					// console.log("[getAttachmentByPart] part.type is " + bodyPart.type);
 					var bodyMime = message['body[' + bodyPart.part + ']'];
 					var data = ImapClientManager.base64DecodeToUint8Array(bodyMime);
 
@@ -192,20 +192,21 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 		client.listMessages(path, sequence, query, options).then(function(messages){
 
 			messages.forEach(function(message){
+				if(message && message.uid){
+					// console.log("listMessages messages 开始解析：" + message.uid);
 
-				console.log("listMessages messages 开始解析：" + message.uid);
-
-				var hMessage = handerMessage(message);
-				console.log("listMessages messages 解析完成：" + message.uid);
-				hMessage.summary = true;
-				var local_message = MailManager.getMessageByUid(path, message.uid);
-				if(local_message){
-					// MailCollection.getMessageCollection(path).update(local_message._id ,hMessage);
-				}else
-					MailCollection.getMessageCollection(path).insert(hMessage);
+					var hMessage = handerMessage(message);
+					// console.log("listMessages messages 解析完成：" + message.uid);
+					hMessage.summary = true;
+					var local_message = MailManager.getMessageByUid(path, message.uid);
+					if(local_message){
+						// MailCollection.getMessageCollection(path).update(local_message._id ,hMessage);
+					}else
+						MailCollection.getMessageCollection(path).insert(hMessage);
+				}
 			});
 
-			console.log("ImapClientManager.listMessages messages ok");
+			console.log("ImapClientManager.listMessages getMessages ok; messages length is " + messages.length);
 
 			client.close();
 			callback(messages);
@@ -220,7 +221,7 @@ ImapClientManager.searchUnseenMessages = function(client, path, query, callback)
 
 	client.connect().then(function(){
 		client.search(path, query, {byUid: true}).then(function(result){
-			console.log("searchUnseenMessages is " + result);
+			console.log("[searchUnseenMessages] result.length is " + result.length);
 			if(!result || result.length == 0){
 
 				callback(result, []);
@@ -242,7 +243,7 @@ ImapClientManager.search = function(client, path, query, callback){
 
 	client.connect().then(function(){
 		client.search(path, query, {byUid: true}).then(function(result){
-			console.log("searchMessages  result is " + result);
+			console.log("[search] result.length is " + result.length);
 			if(!result || result.length == 0){
 
 				callback(result, []);
@@ -328,16 +329,35 @@ ImapClientManager.upload = function(client, path, message, callback){
 	});
 }
 
-ImapClientManager.initMailboxInfo = function(callback){
-	console.log("--ImapClientManager.initMailboxInfo");
-	var mail_boxs = MailCollection.mail_box.find();
-	console.log("mail_box count " + mail_boxs.count());
-	mail_boxs.forEach(function(mailBox){
-		ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
-			ImapClientManager.updateLoadedMxistsIndex(mailBox.path, m.exists);
-			if(mailBox.path.toLocaleLowerCase() === 'inbox')
-				ImapClientManager.mailBoxMessages(mailBox.path, callback);
-		});
+
+/*
+* 如果当前box的info 数据不存在；
+* 则收取info信息并获取box下的最新数据，条数根据分页数据计算;
+*/
+ImapClientManager.initMailboxInfo = function(mailBox, callback){
+
+	if(!mailBox)
+		return;
+
+	var box_info = MailManager.getBoxInfo(mailBox.path);
+
+	if(box_info){
+
+		if(typeof(callback) == "function"){
+			callback();
+		}
+
+		return ;
+	}
+	
+	console.log("ImapClientManager.initMailboxInfo");
+
+	Session.set("mailBoxInit", false)
+
+	ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
+		ImapClientManager.updateLoadedMxistsIndex(mailBox.path, m.exists);
+		if(mailBox.path.toLocaleLowerCase() === 'inbox')
+			ImapClientManager.mailBoxMessages(mailBox.path, callback);
 	});
 
 }
@@ -397,14 +417,14 @@ function handerBodyPart(bodyPart){
 
 
 ImapClientManager.handerBodystructure = function(messages, bodystructure){
-	console.log("邮件标题：" + messages.subject  + " 附件：" + JSON.stringify(messages.attachments));
+	// console.log("邮件标题：" + messages.subject  + " 附件：" + JSON.stringify(messages.attachments));
 	if(!messages.attachments){
-		console.log("new attachments");
+		// console.log("new attachments");
 		messages.attachments = new Array();
 	}
 
 	if(bodystructure){
-		console.log("bodystructure.type " + bodystructure.type);
+		// console.log("bodystructure.type " + bodystructure.type);
 		if (bodystructure.type == 'multipart/alternative' || bodystructure.type == 'multipart/mixed' || bodystructure.type == 'multipart/related'){
 			bodystructure.childNodes.forEach(function(bs, index){
 				if(bs.type == 'application/octet-stream'){
@@ -414,7 +434,7 @@ ImapClientManager.handerBodystructure = function(messages, bodystructure){
 				}else if(bs.type == 'text/html'){
 					messages.bodyHtml = handerBodyPart(bs);
 				}else{
-					console.log("[handerBodystructure] bs.type is " + bs.type);
+					// console.log("[handerBodystructure] bs.type is " + bs.type);
 					ImapClientManager.handerBodystructure(messages, bs);
 				}
 			});
@@ -429,6 +449,9 @@ ImapClientManager.handerBodystructure = function(messages, bodystructure){
 }
 
 function handerMessage(message){
+
+	// console.log("handerMessage: " + JSON.stringify(handerMessage));
+
 	var rev = {};
 
 	var envelope = message["envelope"];
@@ -453,67 +476,7 @@ function handerMessage(message){
 	}catch(err){
 		console.error(err);
 	}
-	console.log("handerBodystructure ok");
-
-	// if(rev.bodystructure){
-	// 	var node
-	// 	if(rev.bodystructure.type == 'multipart/alternative' || rev.bodystructure.type == 'multipart/mixed'){
-	// 		rev.bodystructure.childNodes.forEach(function(bs, index){
-	// 			if(parser){
-	// 				node = parser.nodes["node"+(index+1)];
-	// 			}
-
-	// 			if(bs.disposition == 'attachment'){
-	// 				var attachment = new Object();
-	// 				attachment.name = bs.dispositionParameters.filename;
-	// 				if(node){
-	// 					// attachment.data_buffer = new Buffer(node.content);
-	// 					// attachment.data_array = Array.from(node.content);
-	// 					//console.log(attachment.data_buffer);
-	// 					attachment.data = Array.from(node.content) //uint8ArrayToString(node.charset,node.content);
-	// 				}
-	// 				attachments.push(attachment);
-	// 			}else{
-	// 	    		if(bs.type == 'multipart/alternative'){
-	// 	    			if(node){
-	// 		    			bodyText = uint8ArrayToString(node._childNodes[0].charset,node._childNodes[0].content);
-	// 		    			bodyHtml = uint8ArrayToString(node._childNodes[1].charset,node._childNodes[1].content);
-	// 		    		}
-
-	// 	    		}else if(bs.type == 'text/plain'){
-	// 	    			if(node){
-	// 	    				bodyText = uint8ArrayToString(node.charset,node.content);
-	// 	    			}
-
-	// 	    		}else if(bs.type == 'text/html'){
-	// 	    			if(node){
-	// 		    			bodyHtml = uint8ArrayToString(node.charset,node.content);
-	// 		    		}
-
-	// 	    		}
-	// 			}
-	// 		});
-	// 	}else{
-	// 		if(parser){
-	//     		node = parser.node;
-	//     	}
- //    		if(node){
-	//     		if(rev.bodystructure.type == 'text/plain'){
-
-	//     			bodyText = uint8ArrayToString(node.charset,node.content);
-	//     		}else if(rev.bodystructure.type == 'text/html'){
-
-	//     			bodyHtml = uint8ArrayToString(node.charset,node.content);
-	//     		}
- //    		}
- //    	}
-
-	// }
-
-	// rev.bodyText = bodyText;
-	// rev.bodyHtml = bodyHtml;
-	// rev.attachments = attachments;
-
+	// console.log("handerBodystructure ok");
 	return rev;
 }
 
@@ -557,9 +520,9 @@ ImapClientManager.getNewMessage = function(path, callback){
 		return ;
 
 	if(box.info){
-		var sequence = box.info.uidNext + ":*";
+		var sequence = box.info.uidNext + ":" + (box.info.uidNext + MailPage.pageSize - 1);
 		var options = {byUid: true};
-		console.log("[ImapClientManager.getNewMessage] path is " + path );
+		console.log("[ImapClientManager.getNewMessage] path is " + path + "; sequence: " + sequence);
 		ImapClientManager.listMessages(null, path, sequence, options, function(messages){
 			callback(messages);
 		});

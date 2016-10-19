@@ -6,9 +6,13 @@ MailManager.initMail = function(callback){
   //MailCollection.init();
   if(Steedos.isNode() && AccountManager.getAuth()){
     ImapClientManager.mailBox(null, function(){
-      ImapClientManager.initMailboxInfo(function(){
+      
+      var inbox = MailManager.getBox("Inbox");
+
+      ImapClientManager.initMailboxInfo(inbox, function(){
         ImapClientManager.updateUnseenMessages();
         Session.set("mailInit", true);
+        Session.set("mailBoxInit", true);
         try{
           if(callback){
             if(typeof(callback) == 'function'){
@@ -96,11 +100,17 @@ MailManager.getBoxMessagesByUids = function(uids, page, page_size ,callback){
   return MailCollection.getMessageCollection(Session.get("mailBox")).find({uid:{$in: uids}}, {sort: {uid:-1}, skip: page * page_size, limit: page_size}).fetch();
 }
 
+
 MailManager.getboxMessages = function(page, page_size, callback){
+
+  Session.set("mailLoading",true);
+
   var messages = MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
-  //TODO 待优化
-  if(messages.length > 0){
-    callback();
+
+  if(messages.length >= page_size){
+    if(typeof(callback) == 'function'){
+      callback();
+    }
     return messages;
   }
 
@@ -123,12 +133,15 @@ MailManager.getMessage = function(uid){
 
     if(Session.get("mailMessageLoadding") == false){
       Session.set("mailMessageLoadding",true);
-      console.log("mailMessageLoadding  " + message.uid);
+      // console.log("mailMessageLoadding  " + message.uid);
+      // console.log(getMesssageBodyPart(message));
       ImapClientManager.getMessageByUid(path, message.uid, getMesssageBodyPart(message),function(messages){
         Session.set("mailMessageLoadding",false);
-        console.log("set mailMessageLoadding is false");
+        // console.log("set mailMessageLoadding is false");
         messages.forEach(function(m){
-          console.log("[updateSeenMessage] uid " + m.uid +" flags: " + m.flags)
+          // console.log("[updateSeenMessage] message is ");
+          // console.log(m);
+          // console.log("[updateSeenMessage] uid " + m.uid +" flags: " + m.flags)
           if(m.flags.indexOf("\\Seen") == -1){
             ImapClientManager.updateSeenMessage(path, message.uid, function(){
                 ImapClientManager.updateUnseenMessages();
@@ -254,7 +267,7 @@ MailManager.selectMailBox = function(mailBox){
 }
 
 
-MailManager.getNewBoxMessages = function(path){
+MailManager.getNewBoxMessages = function(path, callback){
   var box = MailManager.getBox(path);
   if(!box)
       return ;
@@ -268,9 +281,11 @@ MailManager.getNewBoxMessages = function(path){
         }
         //ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
       });
-      console.log("MailManager.getNewBoxMessages length" + messages.length);
+      console.log("MailManager.getNewBoxMessages length " + messages.length);
+      if(typeof(callback) == 'function'){
+        callback();
+      }
     }
-    Session.set("mailLoading",false);
   });
 }
 
