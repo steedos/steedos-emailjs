@@ -2,13 +2,13 @@ ImapClientManager = {};
 
 var ImapClient, MimeParser, Encoding, MimeCodec, loadStep = MailPage.pageSize;
 
-if(Steedos.isNode()){
+// if(Steedos.isNode()){
 	regeneratorRuntime = require('regenerator-runtime');
 	ImapClient = require("emailjs-imap-client");
 	MimeParser  = require('emailjs-mime-parser');
 	Encoding = require('emailjs-stringencoding');
 	MimeCodec = require('emailjs-mime-codec')
-}
+// }
 
 ImapClientManager.getClient = function(){
 	var auth = AccountManager.getAuth();
@@ -17,6 +17,18 @@ ImapClientManager.getClient = function(){
 	var domain = AccountManager.getMailDomain(auth.user);
 
 	var options = {auth:auth};
+	
+	if (Meteor.settings.public && Meteor.settings.public.webservices && Meteor.settings.public.webservices.wsproxy)
+	{
+		options.ws = {
+			url: Meteor.settings.public.webservices.wsproxy.url,
+            options: {
+                upgrade: false // disable ws protocol
+            }
+		}
+		options.tlsWorkerPath = "/packages/steedos_emailjs/client/assets/emailjs-tcp-socket-tls-worker.js"
+	}
+
 
 	if (!domain.imap_ssl){
 		options.useSecureTransport = false;

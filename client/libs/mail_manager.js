@@ -4,7 +4,7 @@ MailManager.initMail = function(callback){
   $(document.body).addClass('loading');
   Session.set("mailInit", false);
   //MailCollection.init();
-  if(Steedos.isNode() && AccountManager.getAuth()){
+  if(AccountManager.getAuth()){
     ImapClientManager.mailBox(null, function(){
       
       var inbox = MailManager.getBox("Inbox");
