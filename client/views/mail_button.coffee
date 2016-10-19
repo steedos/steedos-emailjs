@@ -5,8 +5,9 @@ Template.mailButton.helpers
     return Session.get("mailBox") == "compose" || Session.get("mailForward") || Session.get("mailReply") || Session.get("mailReplyAll") || Session.get("mailJumpDraft")
 
   message: ->
-    uid = Session.get("mailMessageId");
-    return MailManager.getMessage(parseInt(uid)) ;
+    if Session.get("mailInit")
+      uid = Session.get("mailMessageId");
+      return MailManager.getMessage(parseInt(uid)) ;
 
   path: ->
     return Session.get("mailBox");

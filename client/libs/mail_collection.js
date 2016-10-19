@@ -13,7 +13,6 @@ MailCollection.before.update = function(userId, doc){
 }
 
 MailCollection.create = function(key){
-	console.log("create key");
 	if(!MailCollection.keys.includes(key)){
 		
 		MailCollection[key] = new Mongo.Collection();

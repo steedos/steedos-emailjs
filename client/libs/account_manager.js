@@ -18,8 +18,6 @@ AccountManager.getMailDomain = function(user){
 
 AccountManager.checkAccount = function(callback){
 
-	$(document.body).addClass('loading');
-
 	try{
 		console.log("AccountManager.checkAccount...");
 		var userAuth = AccountManager.getAuth();
@@ -55,6 +53,15 @@ AccountManager.checkAccount = function(callback){
 
 				MailManager.initMail(callback);
 			}else{
+				try{
+		          if(callback){
+		            if(typeof(callback) == 'function'){
+		              callback();
+		            }
+		          }
+		        }catch(e){
+		          console.error("AccountManager.checkAccount callback function error:" + e);
+		        }
 				$(document.body).removeClass('loading');
 			}
 		});

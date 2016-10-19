@@ -31,14 +31,17 @@ mailRoutes.route '/',
 
 mailRoutes.route '/b/:mailBox/',
 	action: (params, queryParams)->
-		Session.set("mailLoading", true);
+
+		if Session.get("mailBox") != params.mailBox
+			Session.set("mailPage",1)
+
+		# Session.set("mailLoading", true);
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", params.mailBox);
 		Session.set("mailMessageId", null);
-		Session.set("mailPage",1);
 		Session.set("mailBoxFilter", "");
 		Session.set("mailMessageLoadding",false);
 		BlazeLayout.render 'emailjsLayout',
@@ -46,13 +49,16 @@ mailRoutes.route '/b/:mailBox/',
 
 mailRoutes.route '/b/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
+
+		if Session.get("mailBox") != params.mailBox
+			Session.set("mailPage",1)
+
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
 		Session.set("mailBox", params.mailBox);
-		if !Session.get("mailPage")
-			Session.set("mailPage",1)
+		Session.set("mailMessageLoadding",false);
 
 		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
