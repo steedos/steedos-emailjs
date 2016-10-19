@@ -129,7 +129,6 @@ Template.mail_list.events
         MailManager.judgeDelete(path, uids);
 
     'click #page_forward': (event, template) ->
-        debugger;
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
 
     'click #page_back': (event, template) ->
