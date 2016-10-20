@@ -1,47 +1,38 @@
 <template name="mail_compose">
-<div class="box mail-compose">
-
-  
-
-    <!-- /.box-header -->
-    <div class="box-body">
-      {{#with message}}
-        <div class="form-group">
-          {{>Template.dynamic  template="select_mail" data=(mail_to to from)}}
-        </div>
-
-        <div class="form-group">
-          {{>Template.dynamic  template="select_mail" data=(mail_cc cc)}}
-        </div>
-
-        <div class="form-group">
-          {{>Template.dynamic  template="select_mail" data= (mail_bcc bcc)}}
-        </div>
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-addon">主&emsp;题</span>
-            <input class="form-control subject" type="text" placeholder="" value="{{mail_subject subject}}">
+  <div class="mail-compose">
+      <div class="box-body">
+        {{#with message}}
+          <div class="form-group">
+            {{>Template.dynamic  template="select_mail" data=(mail_to to from)}}
           </div>
-        </div>
 
-        <div class="form-group">
-          <div class="btn btn-default btn-file">
-            <i class="fa fa-paperclip"></i> 添加附件
-            <input type="file" id="attachment_file">
+          <div class="form-group">
+            {{>Template.dynamic  template="select_mail" data=(mail_cc cc)}}
           </div>
+
+          <div class="form-group">
+            {{>Template.dynamic  template="select_mail" data= (mail_bcc bcc)}}
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">主&emsp;题</span>
+              <input class="subject" type="text" placeholder="" value="{{mail_subject subject}}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="btn btn-default btn-file">
+              <i class="fa fa-paperclip"></i> 添加附件
+              <input type="file" id="attachment_file">
+            </div>
+          </div>
+          <div class="form-group message-attachments">
+            <div class="row" id="compose_attachment_list"></div>
+          </div>
+        {{/with}}
+        <div class="form-group message-body">
+          <div id="compose-textarea" class="{{messageBody}}"></div>
         </div>
-        <div class="form-group message-attachments">
-          <div class="row" id="compose_attachment_list"></div>
-        </div>
-      {{/with}}
-      <div class="form-group message-body">
-        <div id="compose-textarea" class="{{messageBody}}"></div>
       </div>
-    </div>
-    <!-- /.box-body -->
-
-    <!-- /.box-footer -->
-  
-  <!-- /. box -->
-</div>
+  </div>
 </template>

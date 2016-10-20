@@ -99,3 +99,21 @@ Template.mail_compose.onRendered ->
   if $("#mail_cc").val()?.length > 0
     $(".add_cc").click()
 
+  this.autorun ()->
+    if !Session.get("mailMessageLoadding") && Session.get("mailInit") && Session.get("mailBoxInit")
+
+      message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
+      body = "";
+      if message.uid
+        if Session.get("mailJumpDraft")
+          body =  message.bodyHtml.data;
+        else
+          body =  MailForward.getBody(message);
+
+      $("#compose-textarea").html(MailManager.resetHrefs(body));
+
+      $("#compose-textarea").summernote
+        lang: "zh-CN"
+        dialogsInBody: true
+    else
+      $("#compose-textarea").html("加载中...");
