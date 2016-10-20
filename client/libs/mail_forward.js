@@ -46,7 +46,7 @@ MailForward.getAttachmentsHtml = function(){
 
 				var node = MailAttachment.getAttachmentNode(filePath);
 				console.log("name : "+ name + " ; dirname : " + dirname +" ; filePath : " + filePath);
-				console.log(node)
+				// console.log(node)
 	    		$("#compose_attachment_list").append(node);
 	    		//$("#mail_attachment").hide();
 			});
