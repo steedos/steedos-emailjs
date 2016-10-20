@@ -37,17 +37,18 @@ MailForward.getBody = function(message){
 }
 
 MailForward.getAttachmentsHtml = function(){
-
+	console.log("[MailForward.getAttachmentsHtml]");
 	var message = MailManager.getMessage(parseInt(Session.get("mailMessageId")));
 	if(message.uid){
 		message.attachments.forEach(function(item){
-			$("#mail_attachment").show();
+			//$("#mail_attachment").show();
 			MailAttachment.download(Session.get("mailBox"), message.uid, item.bodyPart, function(dirname, name, filePath){
 
 				var node = MailAttachment.getAttachmentNode(filePath);
 				console.log("name : "+ name + " ; dirname : " + dirname +" ; filePath : " + filePath);
+				console.log(node)
 	    		$("#compose_attachment_list").append(node);
-	    		$("#mail_attachment").hide();
+	    		//$("#mail_attachment").hide();
 			});
 		});
 	}
