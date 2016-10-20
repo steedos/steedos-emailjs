@@ -89,8 +89,15 @@ Template.mail_compose.helpers
 
 Template.mail_compose.events
   'change #attachment_file': (event, template) ->
+    console.log('add attachment_file');
     if !$("#attachment_file").val()
       return ;
+
+    if !MailAttachment.check($("#attachment_file").val())
+      toastr.error("附件: " + $("#attachment_file").val() + ", 上传失败！不允许上传此类型附件");
+      $("#attachment_file").val('')
+      return ;
+
     node = MailAttachment.getAttachmentNode($("#attachment_file").val());
     $("#compose_attachment_list").append(node);
     $("#attachment_file").val('')

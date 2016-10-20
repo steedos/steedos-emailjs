@@ -54,6 +54,24 @@ MailAttachment.download = function(path, uid, bodyPart, callback){
 }
 
 
+MailAttachment.check = function(fileName){
+	if(!fileName){
+		return;
+	}
+
+	var f = fileName.split(".");
+	var badFile = ['exe','bat','msi','vbs','js','cmd','scr','reg'];
+	if(f.length > 1){
+		var ftype = f[f.length-1].toLowerCase();
+
+		if(badFile.indexOf(ftype) > -1){
+			return false
+		}
+	}
+
+	return true;
+}
+
 MailAttachment.getAttachmentIcon = function(fileName){
 	if(!fileName){
 		return;
