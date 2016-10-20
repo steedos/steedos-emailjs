@@ -307,7 +307,7 @@
             }
 
             netApi = (self.ssl) ? tls : net;
-            self._socket = netApi.connect(self.port, self.host, self._emit.bind(self, 'open'));
+            self._socket = netApi.connect(self.port, self.host, {rejectUnauthorized: false}, self._emit.bind(self, 'open'));
 
             // add all event listeners to the new socket
             self._attachListeners();
