@@ -69,6 +69,10 @@ Template.emailjsSidebar.helpers
         if Session.get("mailInit")
             return MailManager.getBox(Session.get("mailBox"));
 
+    firstOutBox: (index) ->
+        if index == 0
+            return "first-other-box"
+        return "";
 
 Template.emailjsSidebar.events
     "click .box-item-info": (e, t) ->

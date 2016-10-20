@@ -46,14 +46,14 @@
               <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="fa fa-trash-o"></i> <span>{{t name}}</span></a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Archive'}}
-              <li class="{{getLiClass path}}" style="border-bottom: 1px solid #ddd"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="fa fa-archive"></i> <span>{{t name}}</span></a></li>
+              <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="fa fa-archive"></i> <span>{{t name}}</span></a></li>
             {{/with}}
 
 
             <!-- <li class="header">{{_ "其他文件夹"}}</li> -->
 
             {{#each getOtherBoxs}}
-              <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="fa fa-folder-o" aria-hidden="true"></i> <span>{{t name}}</span></a></li>
+              <li class="{{getLiClass path}} {{firstOutBox @index}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="fa fa-folder-o" aria-hidden="true"></i> <span>{{t name}}</span></a></li>
             {{/each}}
 
             <!-- <li class="header">{{_ "邮件设置"}}</li> -->
