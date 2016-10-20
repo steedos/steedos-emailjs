@@ -1,6 +1,7 @@
 Template.mail_compose.helpers
   message: ->
-    return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
+    if Session.get("mailInit") && Session.get("mailBoxInit")
+      return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
 
   mail_to: (to,from) ->
 
@@ -16,6 +17,9 @@ Template.mail_compose.helpers
 
       fromUserAddress.forEach (address)->
         toAll.remove(toAll.indexOf(address));
+
+      if fromUserAddress.length > 0
+        toAll = toAll.concat(to);
 
       rev.values = toAll;
 
@@ -53,6 +57,24 @@ Template.mail_compose.helpers
       $("#mail_sending").hide();
     return Session.get("mailSending");
 
+  messageBody: ->
+    if !Session.get("mailMessageLoadding") && Session.get("mailInit") && Session.get("mailBoxInit")
+
+      message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
+      body = "";
+      if message.uid
+        if Session.get("mailJumpDraft")
+          body =  message.bodyHtml.data;
+        else
+          body =  MailForward.getBody(message);
+
+      $("#compose-textarea").html(MailManager.resetHrefs(body));
+
+      $("#compose-textarea").summernote
+        lang: "zh-CN"
+        dialogsInBody: true
+    else
+      $("#compose-textarea").html("加载中...");
 
 Template.mail_compose.events
   'change #attachment_file': (event, template) ->
@@ -77,21 +99,3 @@ Template.mail_compose.onRendered ->
   if $("#mail_cc").val()?.length > 0
     $(".add_cc").click()
 
-  this.autorun ()->
-    if !Session.get("mailMessageLoadding")
-
-      message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
-      body = "";
-      if message.uid
-        if Session.get("mailJumpDraft")
-          body =  message.bodyHtml.data;
-        else
-          body =  MailForward.getBody(message);
-
-      $("#compose-textarea").html(MailManager.resetHrefs(body));
-
-      $("#compose-textarea").summernote
-        lang: "zh-CN"
-        dialogsInBody: true
-    else
-      $("#compose-textarea").html("加载中...");
