@@ -138,13 +138,15 @@ Template.mail_list.events
 
     'click .steedos-emailjs-item': (event, template)->
         if event.currentTarget.dataset.drafts == "true"
-          FlowRouter.go("/emailjs/b/" + event.currentTarget.dataset.box);
-
-        FlowRouter.go(event.currentTarget.dataset.href);
+            FlowRouter.go("/emailjs/b/" + event.currentTarget.dataset.box);
+        if event.currentTarget.dataset.uid == Session.get("mailMessageId")
+            FlowRouter.go(event.currentTarget.dataset.href);
+        else
+            FlowRouter.go(event.currentTarget.dataset.href + event.currentTarget.dataset.uid);
 
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     if Session.get("mailLoading") || Session.get("mailLoading") == undefined
         $("#mail_list_load").show();
-    
+
     $(".mailbox-messages").perfectScrollbar();
