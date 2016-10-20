@@ -144,5 +144,7 @@ Template.mail_list.events
 
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
-    $("#mail_list_load").show();
+    if Session.get("mailLoading") || Session.get("mailLoading") == undefined
+        $("#mail_list_load").show();
+    
     $(".mailbox-messages").perfectScrollbar();
