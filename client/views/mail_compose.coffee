@@ -1,11 +1,11 @@
 Template.mail_compose.helpers
   
   isReady: (uid)->
-    if Session.get("mailJumpDraft")
+    if Session.get("mailMessageId") == "compose"
       return true;
     else
       if uid >= 0
-        return treu;
+        return true;
     return false;
 
   message: ->

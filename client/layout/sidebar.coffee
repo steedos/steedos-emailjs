@@ -77,3 +77,8 @@ Template.emailjsSidebar.events
         Session.set("mailLoading",true);
         MailManager.getNewBoxMessages Session.get("mailBox"), () ->
             Session.set("mailLoading",false);
+
+    "click .mail-add-btn": (e, t) ->
+        FlowRouter.go(e.currentTarget.dataset.href);
+
+        FlowRouter.go(e.currentTarget.dataset.href + "/compose");

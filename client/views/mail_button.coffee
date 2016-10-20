@@ -1,6 +1,6 @@
 Template.mailButton.helpers
   isComPose: ->
-    return Session.get("mailBox") == "compose" || Session.get("mailForward") || Session.get("mailReply") || Session.get("mailReplyAll") || Session.get("mailJumpDraft")
+    return Session.get("mailMessageId") == "compose" || Session.get("mailForward") || Session.get("mailReply") || Session.get("mailReplyAll") || Session.get("mailJumpDraft")
 
   message: ->
     if Session.get("mailInit")
