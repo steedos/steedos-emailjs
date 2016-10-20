@@ -6,7 +6,7 @@ MailManager.initMail = function(callback){
   //MailCollection.init();
   if(AccountManager.getAuth()){
     ImapClientManager.mailBox(null, function(){
-      
+
       var inbox = MailManager.getBox("Inbox");
 
       ImapClientManager.initMailboxInfo(inbox, function(){
@@ -183,50 +183,27 @@ queryKey : {
         }
     }
 */
-MailManager.search = function(queryKey, callback){
+MailManager.search = function(searchKey, callback){
 
-  if(!queryKey)
-      return;
-
-  var query = {};
+  if(!searchKey)
+    return;
 
   var path = Session.get("mailBox");
+  var queryKey = {};
 
-  if(queryKey.keyword){
-    if(queryKey.attachment)
-        query.TEXT = queryKey.keyword;
-    else{
-
-      if(queryKey.body){
-          query.BODY = queryKey.keyword;
-      }
-
-      if(queryKey.subject){
-          query.SUBJECT = queryKey.keyword;
-      }
-    }
+  if(/.*[\u4e00-\u9fa5]+.*$/.test(searchKey)){
+    queryKey = {subject: searchKey};
+  }else if((path == 'Inbox') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Inbox')){
+    queryKey = {or: {from: searchKey, subject: searchKey}};
+  }else if((path == 'Sent') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Sent') || (path == 'Drafts') ||  (MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts')){
+    queryKey = {or: {to: searchKey, subject: searchKey}};
+  }else{
+    queryKey = {or:{or: {to: searchKey, from: searchKey}},subject: searchKey};
   }
 
-  if(queryKey.from){
-      query.FROM = queryKey.from;
-  }
-
-  if(queryKey.to){
-      query.TO = queryKey.to;
-  }
-
-  //query = {header: [queryKey.keyword]};
-  query = {header: ['Subject', queryKey]};
-  //query = {keyword: queryKey.keyword};
-  console.log("MailManager.search query ：" + query );
-  ImapClientManager.search(null, path, {header: ['subject', queryKey]}, callback);
-  // ImapClientManager.search(null, path, query, function(result){
-  //   var sequence = result.toString();
-  //   var options = {byUid: true};
-  //   ImapClientManager.listMessages(null, path, sequence, options, function(messages){
-  //     callback(result, messages);
-  //   });
-  // });
+  ImapClientManager.search(null, path, queryKey,function(result){
+    callback(result);
+  })
 }
 
 MailManager.getLastMessage = function(){
