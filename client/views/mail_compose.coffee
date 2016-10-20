@@ -1,51 +1,62 @@
 Template.mail_compose.helpers
+  
+  isReady: (uid)->
+    if Session.get("mailJumpDraft")
+      return true;
+    else
+      if uid >= 0
+        return treu;
+    return false;
+
   message: ->
     if Session.get("mailInit") && Session.get("mailBoxInit")
       return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
 
   mail_to: (to,from) ->
+    if Session.get("mailInit") && Session.get("mailBoxInit")
+      console.log("mail_compose：mail_to run... ");
+      rev = {name: "mail_to", title: '收件人', atts:{id: "mail_to", name: "mail_to"}};
 
-    console.log("mail_compose：mail_to run... ");
-    rev = {name: "mail_to", title: '收件人', atts:{id: "mail_to", name: "mail_to"}};
+      if Session.get("mailJumpDraft") || Session.get("mailReply")
+        rev.values =  to;
+      else if Session.get("mailReplyAll")
+        toAll = from.concat(to);
 
-    if Session.get("mailJumpDraft") || Session.get("mailReply")
-      rev.values =  to;
-    else if Session.get("mailReplyAll")
-      toAll = from.concat(to);
+        fromUserAddress = toAll.filterProperty("address", AccountManager.getAuth().user);
 
-      fromUserAddress = toAll.filterProperty("address", AccountManager.getAuth().user);
+        fromUserAddress.forEach (address)->
+          toAll.remove(toAll.indexOf(address));
 
-      fromUserAddress.forEach (address)->
-        toAll.remove(toAll.indexOf(address));
+        if fromUserAddress.length > 0
+          toAll = toAll.concat(to);
 
-      if fromUserAddress.length > 0
-        toAll = toAll.concat(to);
+        rev.values = toAll;
 
-      rev.values = toAll;
-
-    return rev;
+      return rev;
 
   mail_cc: (cc)->
+    if Session.get("mailInit") && Session.get("mailBoxInit")
+      Session.get("mailMessageId")
 
-    Session.get("mailMessageId")
 
+      rev = {name: "mail_cc", title: '抄&emsp;送', atts:{id: "mail_cc", name: "mail_cc"}};
+      if Session.get("mailJumpDraft") || Session.get("mailReplyAll")
+        rev.values  = cc;
 
-    rev = {name: "mail_cc", title: '抄&emsp;送', atts:{id: "mail_cc", name: "mail_cc"}};
-    if Session.get("mailJumpDraft") || Session.get("mailReplyAll")
-      rev.values  = cc;
-
-    return rev;
+      return rev;
 
   mail_bcc:(bcc)->
-    return rev = {name: "mail_bcc", title: '密&emsp;送', atts:{id: "mail_bcc", name: "mail_bcc"}};
+    if Session.get("mailInit") && Session.get("mailBoxInit")
+      return rev = {name: "mail_bcc", title: '密&emsp;送', atts:{id: "mail_bcc", name: "mail_bcc"}};
 
   mail_subject: (subject) ->
-    if Session.get("mailJumpDraft")
-      return subject;
-    else if Session.get("mailForward")
-      return "转发: " + subject;
-    else if Session.get("mailReply") || Session.get("mailReplyAll")
-      return "回复: " + subject;
+    if Session.get("mailInit") && Session.get("mailBoxInit")
+      if Session.get("mailJumpDraft")
+        return subject;
+      else if Session.get("mailForward")
+        return "转发: " + subject;
+      else if Session.get("mailReply") || Session.get("mailReplyAll")
+        return "回复: " + subject;
 
   showLoadding: ->
     return Session.get("mailMessageLoadding");
@@ -93,8 +104,8 @@ Template.mail_compose.onRendered ->
   if Session.get("mailForward") || Session.get("mailJumpDraft")
     MailForward.getAttachmentsHtml();
 
-  setTimeout ()->
-    $(".form-control.subject").focus();
+  # setTimeout ()->
+  #   # $(".subject", $(".mail-compose")).focus();
 
   if $("#mail_cc").val()?.length > 0
     $(".add_cc").click()

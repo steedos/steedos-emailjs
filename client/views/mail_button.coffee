@@ -46,7 +46,7 @@ Template.mailButton.events
         name: @dataset.name
         path: @dataset.path
 
-    SmtpClientManager.sendMail MailManager.getContacts("mail_to"), MailManager.getContacts("mail_cc"), MailManager.getContacts("mail_bcc"), $(".form-control.subject").val(), $('#compose-textarea').summernote('code'), attachments, ()->
+    SmtpClientManager.sendMail MailManager.getContacts("mail_to"), MailManager.getContacts("mail_cc"), MailManager.getContacts("mail_bcc"), $(".subject", $(".mail-compose")).val(), $('#compose-textarea').summernote('code'), attachments, ()->
       Session.set("mailSending",false)
       FlowRouter.go('/emailjs/b/' + Session.get("mailBox"))
       Session.set("mailLoading",false)
@@ -60,7 +60,7 @@ Template.mailButton.events
           name: @dataset.name
           path: @dataset.path
 
-      message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user ,MailManager.getContacts("mail_to"), MailManager.getContacts("mail_cc"), MailManager.getContacts("mail_bcc"), $(".form-control.subject").val(), $('#compose-textarea').summernote('code') ,attachments);
+      message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user ,MailManager.getContacts("mail_to"), MailManager.getContacts("mail_cc"), MailManager.getContacts("mail_bcc"), $(".subject", $(".mail-compose")).val(), $('#compose-textarea').summernote('code') ,attachments);
 
       ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
         Session.set("mailSending",false);
