@@ -20,7 +20,8 @@
         <div class="mailbox-read-message">
             <div class="mailbox-read-info">
               <div class="subject">{{subject}}</div>
-              <div class="from">{{addressName from to cc}}
+              <div class= "from"> <a href="#" class="mail-address">
+                {{addressName from to cc}}</a>
                 <span class="mailbox-read-time pull-right">{{modifiedString date}}</span></div>
             </div>
             {{#if attachments.length}}

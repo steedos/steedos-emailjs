@@ -31,7 +31,7 @@ Template.read_mail.helpers
 
   addressName: (from, to, cc)->
     path = Session.get("mailBox");
-    if path == MailManager.getBoxBySpecialUse("\\Inbox").path
+    if path == 'Inbox' || MailManager.getBoxBySpecialUse(path)?.specialUse == '\\Inbox'
       address = "<" + from[0].address + ">"
       return if from[0].name then from[0].name + address else address
     else
@@ -72,9 +72,28 @@ Template.read_mail.events
       Session.set("donwLoadding",false)
       MailAttachment.openFile(dirname, name);
 
-  'click .last_mail': (event, template)->
-    console.log("click last_mail")
-    MailManager.getLastMessage();
+
+  'click .mail-address': (event, template)->
+    console.log("click .mail-address");
+    Session.set("mailLoading",true);
+
+    #att_index = parseInt(event.target.dataset);
+    path = Session.get("mailBox");
+
+    message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
+
+    if path == 'Inbox' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Inbox'
+      queryKey = {from: message.from[0].address};
+    else if path == 'Sent' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Sent'
+      queryKey = {to: message.to[att_index].address};
+
+    ImapClientManager.search null, path, queryKey, (result)->
+      if !result || result.length == 0
+          toastr.info("未搜索到数据");
+      else
+          Session.set("mailBoxFilter", result);
+      Session.set("mailLoading",false);
+
 
   'click .next_mail': (event, template)->
     console.log("click next_mail");

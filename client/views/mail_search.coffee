@@ -8,13 +8,7 @@ Template.mail_search.subjectSearch = ()->
 
     console.log("keydown search-mail-input searchKey:" + searchKey);
 
-    queryKey = {};
-
-    queryKey.keyword = searchKey;
-
-    queryKey.Subject = true;
-
-    MailManager.search searchKey, (result,messages) ->
+    MailManager.search searchKey, (result) ->
         if !result || result.length == 0
             toastr.info("未搜索到数据");
         else

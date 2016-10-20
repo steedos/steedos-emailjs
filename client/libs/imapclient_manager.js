@@ -17,7 +17,7 @@ ImapClientManager.getClient = function(){
 	var domain = AccountManager.getMailDomain(auth.user);
 
 	var options = {auth:auth};
-	
+
 	if (Meteor.settings.public && Meteor.settings.public.webservices && Meteor.settings.public.webservices.wsproxy)
 	{
 		options.ws = {
@@ -264,15 +264,12 @@ ImapClientManager.search = function(client, path, query, callback){
 
 			MailCollection.mail_search.update({},{uids:result});
 
-		  var sequence = result.toString();
-			// if(result.length > 10 ){
-			// 	sequence = result.splice(result.length-10, result.length-1);
-			// 	}
-			var options = {byUid: true};
+			var sequence = result.toString();
 
 			client.close();
-			ImapClientManager.listMessages(null, path, sequence, options, function(messages){
-				callback(result, messages);
+
+			ImapClientManager.listMessages(null, path, sequence, {byUid: true}, function(){
+				callback(result);
 			})
 		})
 	})
@@ -361,7 +358,7 @@ ImapClientManager.initMailboxInfo = function(mailBox, callback){
 
 		return ;
 	}
-	
+
 	console.log("ImapClientManager.initMailboxInfo");
 
 	Session.set("mailBoxInit", false)
