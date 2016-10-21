@@ -180,9 +180,20 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 					// console.log("listMessages messages 开始解析：" + message.uid);
 					// console.log("[getAttachmentByPart] part.type is " + bodyPart.type);
 					var bodyMime = message['body[' + bodyPart.part + ']'];
-					var data = ImapClientManager.base64DecodeToUint8Array(bodyMime);
+					var data = "";
+					var filename = "";
+					if(bodyPart.type == 'message/delivery-status'){
+						filename = 'message' + bodyPart.part + ".delivery-status";
+						data = bodyMime;
+					}else if(bodyPart.type == 'message/rfc822'){
+						filename = 'message' + bodyPart.part + ".eml";
+						data = bodyMime;
+					}else{
+						filename = bodyPart.dispositionParameters.filename;
+						data = ImapClientManager.base64DecodeToUint8Array(bodyMime);
+					}
 
-					callback(bodyPart.dispositionParameters.filename, data);
+					callback(filename, data);
 				});
 			}catch(err){
 				console.error(err)
@@ -415,10 +426,16 @@ function handerBodyPart(bodyPart){
 	object.part = bodyPart.part;
 	object.size = bodyPart.size;
 	object.bodyPart = bodyPart;
-	if(bodyPart.type == 'application/octet-stream'){
-		object.name = bodyPart.dispositionParameters.filename;
-	}else if(bodyPart.type == 'text/plain' || bodyPart.type == 'text/html') {
+	if(bodyPart.type == 'text/plain' || bodyPart.type == 'text/html') {
 		object.parameters = bodyPart.parameters;
+	}else{
+		if(bodyPart.type == 'application/octet-stream'){
+			object.name = bodyPart.dispositionParameters.filename;
+		}else if(bodyPart.type == 'message/delivery-status'){
+			object.name = 'message' + bodyPart.part + ".delivery-status";
+		}else if(bodyPart.type == 'message/rfc822'){
+			object.name = 'message' + bodyPart.part + ".eml";
+		}
 	}
 
 	return object;
@@ -434,26 +451,31 @@ ImapClientManager.handerBodystructure = function(messages, bodystructure){
 
 	if(bodystructure){
 		// console.log("bodystructure.type " + bodystructure.type);
-		if (bodystructure.type == 'multipart/alternative' || bodystructure.type == 'multipart/mixed' || bodystructure.type == 'multipart/related'){
-			bodystructure.childNodes.forEach(function(bs, index){
-				if(bs.type == 'application/octet-stream'){
-					messages.attachments.push(handerBodyPart(bs));
-				}else if(bs.type == 'text/plain'){
-					messages.bodyText = handerBodyPart(bs);
-				}else if(bs.type == 'text/html'){
-					messages.bodyHtml = handerBodyPart(bs);
-				}else{
-					// console.log("[handerBodystructure] bs.type is " + bs.type);
-					ImapClientManager.handerBodystructure(messages, bs);
-				}
-			});
+
+		if(bodystructure.type == 'text/plain'){
+			messages.bodyText = handerBodyPart(bodystructure);
+		}else if(bodystructure.type == 'text/html'){
+			messages.bodyHtml = handerBodyPart(bodystructure);
 		}else{
-			if(bodystructure.type == 'text/plain'){
-				messages.bodyText = handerBodyPart(bodystructure);
-			}else if(bodystructure.type == 'text/html'){
-				messages.bodyHtml = handerBodyPart(bodystructure);
-			}
+			// if (bodystructure.type == 'multipart/alternative' || bodystructure.type == 'multipart/mixed' || bodystructure.type == 'multipart/related' || bodystructure.type == 'multipart/report'){
+				bodystructure.childNodes.forEach(function(bs, index){
+					if(bs.type == 'text/plain'){
+						messages.bodyText = handerBodyPart(bs);
+					}else if(bs.type == 'text/html'){
+						messages.bodyHtml = handerBodyPart(bs);
+					}else if(bs.childNodes && bs.childNodes.length > 0){
+						// console.log("[handerBodystructure] bs.type is " + bs.type);
+						ImapClientManager.handerBodystructure(messages, bs);
+					}else{
+						// if(bs.type == 'application/octet-stream'){
+							messages.attachments.push(handerBodyPart(bs));
+						// }
+					}
+				});
+			// }
 		}
+
+		
 	}
 }
 
