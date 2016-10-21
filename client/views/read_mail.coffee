@@ -59,15 +59,11 @@ Template.read_mail.events
     console.log("click .mail-address");
     Session.set("mailLoading",true);
 
-    #att_index = parseInt(event.target.dataset);
+    str = event.currentTarget.outerText;
+    currentAddress = str.substring(str.indexOf("<") + 1, str.indexOf(">"))
+
+    queryKey = {or: {to: currentAddress, from: currentAddress}}
     path = Session.get("mailBox");
-
-    message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
-
-    if path == 'Inbox' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Inbox'
-      queryKey = {from: message.from[0].address};
-    else if path == 'Sent' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Sent'
-      queryKey = {to: message.to[att_index].address};
 
     ImapClientManager.search null, path, queryKey, (result)->
       if !result || result.length == 0
