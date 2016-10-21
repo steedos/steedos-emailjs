@@ -360,7 +360,7 @@ MailManager.judgeDelete = function(path, uid){
 MailManager.getAddress = function(address){
   var arrs  = new Array();
   address.forEach(function(a){
-    arrs.push(a.name + "<" + a.email + ">");
+    arrs.push(a.name + " <" + a.email + ">");
   });
   return arrs;
 }

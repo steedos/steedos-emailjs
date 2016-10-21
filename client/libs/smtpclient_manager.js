@@ -66,7 +66,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 
 		client.onready = function(){
 
-			var message = MailMimeBuilder.getMessageMime(from, to, cc, bcc, subject, body, attachments);
+			var message = MailMimeBuilder.getMessageMime(Meteor.user().username + " <" + from + ">", to, cc, bcc, subject, body, attachments);
 
 			client.send(message);
 

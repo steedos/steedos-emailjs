@@ -29,14 +29,16 @@
                   </a>
                 {{/each}}
               </div>
-              <div class="to">
-                收件人: 
-                {{#each to}}
-                  <a href="#" class="mail-address">
-                    {{name}}&lt;{{address}}&gt;;
-                  </a>
-                {{/each}}
-              </div>
+              {{#if to}}
+                <div class="to">
+                  收件人: 
+                  {{#each to}}
+                    <a href="#" class="mail-address">
+                      {{name}}&lt;{{address}}&gt;;
+                    </a>
+                  {{/each}}
+                </div>
+              {{/if}}
               {{#if cc}}
               <div class="cc">
                 抄送人: 
