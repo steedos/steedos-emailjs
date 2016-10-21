@@ -37,6 +37,10 @@
         padding-right: 0px;
         border-right: 1px solid #d2d6de;
         height: 100%;
+        // min-width: 430px;
+        width: 430px;
+        padding-left: 15px;
+        float: left;
         .mail_list{
             height: calc(~"100% - @{barHeight}");
             width:100%;
@@ -154,6 +158,9 @@
     }
 
     .mail-wrapper{
+        width: calc(~"100% - 430px");
+        float: right;
+        padding-right: 15px;
         a{
             color: #3c8dbc;
         }
@@ -166,6 +173,7 @@
     }
 
     .right{
+        min-width: 420px;
         height: 100%;
         background-color: #fff;
         #attachment_donwLoadding{
