@@ -22,6 +22,11 @@ AccountManager.checkAccount = function(callback){
 		console.log("AccountManager.checkAccount...");
 		var userAuth = AccountManager.getAuth();
 
+		if(!userAuth){
+			toastr.error("请配置邮件账户");
+			return false;
+		}
+
 		if(!AccountManager.getMailDomain(userAuth.user)){
 			toastr.error("账户验证失败, 无效的邮件域名");
 			$(document.body).removeClass('loading');

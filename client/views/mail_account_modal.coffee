@@ -3,9 +3,13 @@ Template.mailAccount.helpers
     schema: ->
         return db.mail_accounts._simpleSchema;
 
-    space: ->
+    doc: ->
         return db.mail_accounts.findOne({owner: Meteor.userId()})
 
+    type: ->
+        if db.mail_accounts.findOne({owner: Meteor.userId()})
+            return "update";
+        return "insert";
 
 
 Meteor.startup ->

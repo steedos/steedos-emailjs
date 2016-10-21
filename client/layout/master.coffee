@@ -3,7 +3,7 @@ Template.emailjsLayout.helpers
 	subsReady: ->
 		if Steedos.subsMail.ready()
 			if !AccountManager.checkAccount()
-				FlowRouter.go '/admin/view/mail_accounts';
+				Modal.show("mailAccount");
 			return true;
 		return false;
 

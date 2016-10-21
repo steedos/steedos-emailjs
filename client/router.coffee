@@ -9,8 +9,8 @@ checkMailAccountIsNull = (context, redirect) ->
 		$(document.body).removeClass('loading');
 
 checkAccountLogin = (context, redirect) ->
-	if !AccountManager.checkAccount()
-		FlowRouter.go '/admin/view/mail_accounts';
+	AccountManager.checkAccount()
+	# FlowRouter.go '/admin/view/mail_accounts';
 # [ checkUserSigned, checkMailAccountIsNull, checkAccountLogin],
 mailRoutes = FlowRouter.group
 	prefix: '/emailjs',

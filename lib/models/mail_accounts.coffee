@@ -4,6 +4,9 @@ db.mail_accounts.allow
 	update: (userId, doc, fields, modifier) ->
 		return doc.owner == userId;
 
+	insert: (userId, doc, fields, modifier) ->
+		return doc.owner == userId;
+
 db.mail_accounts._simpleSchema = new SimpleSchema
 	space: 
 		type: String,

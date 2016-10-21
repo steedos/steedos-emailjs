@@ -7,7 +7,7 @@
 	          <h4 class="modal-title" id="myModalLabel">邮件账户</h4>
 	        </div>
 	        <div class="modal-body contacts-modal-body" style='overflow-y:auto'>
-	          {{> quickForm collection="db.mail_accounts" doc=space id="updateMailAccount" schema=schema type="update" fields="email,password"}}
+	          {{> quickForm collection="db.mail_accounts" doc=doc id="updateMailAccount" schema=schema type=type fields="email,password,space,owner"}}
 	        </div>
 	      </div>
 	    </div>
