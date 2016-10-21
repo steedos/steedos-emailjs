@@ -21,8 +21,12 @@ Meteor.startup ->
             onSuccess: (formType, result) ->
                 toastr.success t('saved_successfully');
                 
-                AccountManager.checkAccount ()->
-                    Modal.hide("mailAccount");
+                AccountManager.checkAccount (message)->
+                    if !message
+                        Modal.hide("mailAccount");
+                    else
+                        toastr.error(message);
+                        Modal.show("mailAccount");
 
 
             onError: (formType, error) ->

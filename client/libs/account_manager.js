@@ -23,13 +23,36 @@ AccountManager.checkAccount = function(callback){
 		var userAuth = AccountManager.getAuth();
 
 		if(!userAuth){
-			toastr.error("请配置邮件账户");
+			// toastr.error("请配置邮件账户");
+			try{
+	          if(callback){
+	            if(typeof(callback) == 'function'){
+	              callback("未配置邮件账户");
+	            }
+	          }
+	        }catch(e){
+	          console.error("AccountManager.checkAccount callback function error:" + e);
+	        }
+
+			$(document.body).removeClass('loading');
 			return false;
 		}
 
 		if(!AccountManager.getMailDomain(userAuth.user)){
-			toastr.error("账户验证失败, 无效的邮件域名");
+
+			// toastr.error("账户验证失败, 无效的邮件域名");
+			try{
+	          if(callback){
+	            if(typeof(callback) == 'function'){
+	              callback("账户验证失败, 无效的邮件域名");
+	            }
+	          }
+	        }catch(e){
+	          console.error("AccountManager.checkAccount callback function error:" + e);
+	        }
+
 			$(document.body).removeClass('loading');
+
 			return false;
 		}
 
@@ -61,7 +84,7 @@ AccountManager.checkAccount = function(callback){
 				try{
 		          if(callback){
 		            if(typeof(callback) == 'function'){
-		              callback();
+		              callback("");
 		            }
 		          }
 		        }catch(e){
@@ -74,9 +97,17 @@ AccountManager.checkAccount = function(callback){
 		pro.catch(function(err){
 			imapClient.close();
 			// FlowRouter.go('/admin/view/mail_accounts');
+			try{
+	          if(callback){
+	            if(typeof(callback) == 'function'){
+	              callback("账户验证失败");
+	            }
+	          }
+	        }catch(e){
+	          console.error("AccountManager.checkAccount callback function error:" + e);
+	        }
 			$(document.body).removeClass('loading');
-			toastr.error("账户验证失败，错误信息：" + err.message);
-			Modal.show("mailAccount");
+			
 		});
 	}catch(e){
 		toastr.error("账户验证失败，错误信息：" + e.message);
