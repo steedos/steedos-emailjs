@@ -40,18 +40,7 @@ Template.read_mail.helpers
 
 
   fileSize: (size)->
-    rev = size / 1024.00;
-    unit = 'KB';
-
-    if rev > 1024.00
-      rev = rev / 1024.00;
-      unit = 'MB';
-
-    if rev > 1024.00
-      rev = rev / 1024.00;
-      unit = 'GB';
-
-    return rev.toFixed(2) + unit;
+    return MailAttachment.formatFileSize size;
 
 Template.read_mail.events
   'click .mailbox-attachment-name': (event, template)->

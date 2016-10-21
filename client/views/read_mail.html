@@ -20,9 +20,33 @@
         <div class="mailbox-read-message">
             <div class="mailbox-read-info">
               <div class="subject">{{subject}}</div>
-              <div class= "from"> <a href="#" class="mail-address">
-                {{addressName from to cc}}</a>
-                <span class="mailbox-read-time pull-right">{{modifiedString date}}</span></div>
+              <div class="mailbox-read-time">{{modifiedString date}}</div>
+              <div class= "from">
+                发件人: 
+                {{#each from}}
+                  <a href="#" class="mail-address">
+                    {{name}}&lt;{{address}}&gt;;
+                  </a>
+                {{/each}}
+              </div>
+              <div class="to">
+                收件人: 
+                {{#each to}}
+                  <a href="#" class="mail-address">
+                    {{name}}&lt;{{address}}&gt;;
+                  </a>
+                {{/each}}
+              </div>
+              {{#if cc}}
+              <div class="cc">
+                抄送人: 
+                {{#each cc}}
+                  <a href="#" class="mail-address">
+                    {{name}}&lt;{{address}}&gt;;
+                  </a>
+                {{/each}}
+              </div>
+              {{/if}}
             </div>
             {{#if attachments.length}}
               <div class="box-header">
@@ -34,7 +58,7 @@
                           <span class="mailbox-attachment-size">{{fileSize size}}</span>
                     </div>
                   </li> -->
-                  <div class="col-md-3 col-sm-4 col-xs-6 attachment-item">
+                  <div class="col-md-12 col-sm-12 col-xs-12 attachment-item">
                     <div class="attachment-info-box">
                       <span class="attachment-info-box-icon"><i class="{{attachmentIcon name}}"></i></span>
                       <div class="attachment-info-box-content">
