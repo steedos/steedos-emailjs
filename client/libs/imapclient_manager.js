@@ -429,12 +429,14 @@ function handerBodyPart(bodyPart){
 	if(bodyPart.type == 'text/plain' || bodyPart.type == 'text/html') {
 		object.parameters = bodyPart.parameters;
 	}else{
-		if(bodyPart.type == 'application/octet-stream'){
-			object.name = bodyPart.dispositionParameters.filename;
-		}else if(bodyPart.type == 'message/delivery-status'){
+		if(bodyPart.type == 'message/delivery-status'){
 			object.name = 'message' + bodyPart.part + ".delivery-status";
 		}else if(bodyPart.type == 'message/rfc822'){
 			object.name = 'message' + bodyPart.part + ".eml";
+		}else{
+			// if(bodyPart.type == 'application/octet-stream'){
+				object.name = bodyPart.dispositionParameters.filename;
+			// }
 		}
 	}
 
