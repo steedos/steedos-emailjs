@@ -98,7 +98,7 @@ Template.mail_compose.events
       $("#attachment_file").val('')
       return ;
 
-    node = MailAttachment.getAttachmentNode($("#attachment_file").val());
+    node = MailAttachment.getAttachmentNode($("#attachment_file").val(), event.target.files[0].size);
     $("#compose_attachment_list").append(node);
     $("#attachment_file").val('')
 
