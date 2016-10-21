@@ -12,7 +12,7 @@ Template.read_mail.helpers
     return MailAttachment.getAttachmentIcon(name);
 
   modifiedString: (date)->
-    modifiedString = moment(date).format('YYYY-MM-DD HH:mm');
+    modifiedString = moment(date).format('YYYY年MM月DD日 HH:mm');
     return modifiedString;
 
   showLoadding: ->
@@ -41,6 +41,9 @@ Template.read_mail.helpers
 
   fileSize: (size)->
     return MailAttachment.formatFileSize size;
+
+  equals: (a,b) ->
+    return (a == b)
 
 Template.read_mail.events
   'click .mailbox-attachment-name': (event, template)->
