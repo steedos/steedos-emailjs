@@ -29,16 +29,6 @@ Template.read_mail.helpers
     else
       return message.bodyText.data;
 
-  addressName: (from, to, cc)->
-    path = Session.get("mailBox");
-    if path == 'Inbox' || MailManager.getBoxBySpecialUse(path)?.specialUse == '\\Inbox'
-      address = "<" + from[0].address + ">"
-      return if from[0].name then from[0].name + address else address
-    else
-      if cc then MailManager.convertHeaderAddress(to.concat(cc)).toString() else MailManager.convertHeaderAddress(to).toString()
-
-
-
   fileSize: (size)->
     return MailAttachment.formatFileSize size;
 

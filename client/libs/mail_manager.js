@@ -366,22 +366,6 @@ MailManager.getAddress = function(address){
 }
 
 
-MailManager.convertHeaderAddress= function(address){
-  var arrs;
-  arrs = new Array;
-  address.forEach(function(a){
-    arrs.push(a.name + "<" + a.address + ">");
-  });
-  return arrs;
-}
-
-// MailManager.uniformPath = function(path){
-//   var str = MailManager.getBoxBySpecialUse(path);
-//   if(str.specialUse){
-//     path = str.specialUse.replace("\\", "");
-//   }
-//   return path;
-// }
 MailManager.getContacts = function(id){
   var values = $("#"+id).val();
   var contacts = new Array()
