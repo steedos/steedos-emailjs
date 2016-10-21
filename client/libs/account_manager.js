@@ -68,9 +68,10 @@ AccountManager.checkAccount = function(callback){
 
 		pro.catch(function(err){
 			imapClient.close();
-			FlowRouter.go('/admin/view/mail_accounts');
+			// FlowRouter.go('/admin/view/mail_accounts');
 			$(document.body).removeClass('loading');
 			toastr.error("账户验证失败，错误信息：" + err.message);
+			Modal.show("mailAccount");
 		});
 	}catch(e){
 		toastr.error("账户验证失败，错误信息：" + e.message);

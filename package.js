@@ -106,6 +106,9 @@ Package.onUse(function(api) {
 
 	api.addFiles('client/views/mail.less', 'client');
 
+	api.addFiles('client/views/mail_account_modal.html', 'client');
+	api.addFiles('client/views/mail_account_modal.coffee', 'client');
+
 	api.addFiles('client/views/contact_modal.html', 'client');
 	api.addFiles('client/views/contact_modal.coffee', 'client');
 	

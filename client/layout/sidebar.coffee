@@ -86,3 +86,6 @@ Template.emailjsSidebar.events
         FlowRouter.go(e.currentTarget.dataset.href);
 
         FlowRouter.go(e.currentTarget.dataset.href + "/compose");
+
+    "click .settings-mail-account": (e, t)->
+        Modal.show("mailAccount");
