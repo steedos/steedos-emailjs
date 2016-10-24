@@ -66,7 +66,13 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 
 		client.onready = function(){
 
-			var message = MailMimeBuilder.getMessageMime(Meteor.user().username + " <" + from + ">", to, cc, bcc, subject, body, attachments);
+			var fromStr = " <" + from + ">";
+
+			if(Meteor.user().name){
+				fromStr = Meteor.user().name + fromStr;
+			}
+
+			var message = MailMimeBuilder.getMessageMime(fromStr, to, cc, bcc, subject, body, attachments);
 
 			client.send(message);
 
