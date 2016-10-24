@@ -18,7 +18,7 @@ Template.mail_compose.helpers
       rev = {name: "mail_to", title: '收件人', atts:{id: "mail_to", name: "mail_to"}};
 
       if Session.get("mailJumpDraft") || Session.get("mailReply")
-        rev.values =  to;
+        rev.values =  from;
       else if Session.get("mailReplyAll")
         toAll = from.concat(to);
 
@@ -27,8 +27,8 @@ Template.mail_compose.helpers
         fromUserAddress.forEach (address)->
           toAll.remove(toAll.indexOf(address));
 
-        if fromUserAddress.length > 0
-          toAll = toAll.concat(to);
+        # if fromUserAddress.length > 0
+        #   toAll = toAll.concat(to);
 
         rev.values = toAll;
 
