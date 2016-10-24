@@ -292,6 +292,7 @@ ImapClientManager.search = function(client, path, query, callback){
 			})
 		}, function(reject){
 			callback([]);
+			toastr.error("您的邮箱不支持搜索功能");
 			console.error("[ImapClientManager.search] Error: " +  reject);
 		})
 	})
