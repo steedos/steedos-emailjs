@@ -290,6 +290,9 @@ ImapClientManager.search = function(client, path, query, callback){
 			ImapClientManager.listMessages(null, path, sequence, {byUid: true}, function(){
 				callback(result);
 			})
+		}, function(reject){
+			callback([]);
+			console.error("[ImapClientManager.search] Error: " +  reject);
 		})
 	})
 }
