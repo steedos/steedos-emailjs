@@ -22,7 +22,9 @@ MailAttachment.openFile = function(dirname, name){
 
 	var cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
 
-	cmd += path.join(path.normalize(dirname), '\"' + name + '\"');
+	var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"')
+
+	cmd += path.join(openFilePath, '\"' + name + '\"');
 
     exec(cmd, function(error,stdout,stderr){
     	console.log("文件已关闭：" + dirname);
@@ -34,7 +36,10 @@ MailAttachment.save = function(name, data, callback){
 
 	var filePath = path.join(path.normalize(dirname), name);
 
-	fs.writeFile(filePath, new Buffer(data), function (err) {
+	var file = fs.createWriteStream(filePath);
+
+	file.write(new Buffer(data), function (err) {
+		file.end();
         if (err) throw err;
         console.log("Export Account Success!");
         callback(dirname, name, filePath);
@@ -46,9 +51,24 @@ MailAttachment.download = function(path, uid, bodyPart, callback){
 
 	ImapClientManager.getAttachmentByPart(path, uid, bodyPart, function(filename, data){
 		console.log("MailAttachment.download! filename: "+ filename);
-		MailAttachment.save(filename, data, function(dirname, name, filePath){
-			callback(dirname, name, filePath);
+		fs.exists(dirname, function(exists){
+			if(!exists){
+				fs.mkdir(dirname, function(err) {
+	                if (err) {
+	                    toastr.error(err);
+	                }else{
+	                	MailAttachment.save(filename, data, function(dirname, name, filePath){
+							callback(dirname, name, filePath);
+						})
+	                }
+	            })
+			}else{
+				MailAttachment.save(filename, data, function(dirname, name, filePath){
+					callback(dirname, name, filePath);
+				})
+			}
 		})
+		
 	});
 
 }
