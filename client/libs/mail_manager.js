@@ -118,6 +118,9 @@ MailManager.getboxMessages = function(page, page_size, callback){
 }
 
 function getMesssageBodyPart(message){
+  if(!message.bodyHtml && !message.bodyText)
+    return;
+
   return  message.bodyHtml? message.bodyHtml.bodyPart: message.bodyText.bodyPart
 }
 
@@ -132,7 +135,6 @@ MailManager.getMessage = function(uid){
     if(Session.get("mailMessageLoadding") == false){
       Session.set("mailMessageLoadding",true);
       // console.log("mailMessageLoadding  " + message.uid);
-      // console.log(getMesssageBodyPart(message));
       ImapClientManager.getMessageByUid(path, message.uid, getMesssageBodyPart(message),function(messages){
         Session.set("mailMessageLoadding",false);
         // console.log("set mailMessageLoadding is false");

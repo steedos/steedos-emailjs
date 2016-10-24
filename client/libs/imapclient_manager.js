@@ -220,7 +220,15 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 
 					var hMessage = handerMessage(message);
 					// console.log("listMessages messages 解析完成：" + message.uid);
-					hMessage.summary = true;
+					if(!hMessage.bodyHtml && !hMessage.bodyText){
+					
+						hMessage.summary = false;
+						hMessage.bodyText = {};
+						hMessage.bodyText.data="";
+					
+					}else{
+						hMessage.summary = true;
+					}
 					var local_message = MailManager.getMessageByUid(path, message.uid);
 					if(local_message){
 						// MailCollection.getMessageCollection(path).update(local_message._id ,hMessage);
