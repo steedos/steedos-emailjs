@@ -62,9 +62,24 @@ Template.mailButton.events
 
       message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user ,MailManager.getContacts("mail_to"), MailManager.getContacts("mail_cc"), MailManager.getContacts("mail_bcc"), $(".subject", $(".mail-compose")).val(), $('#compose-textarea').summernote('code') ,attachments);
 
-      ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
-        Session.set("mailSending",false);
-        toastr.success("存草稿成功");
+      console.log("click #compose-draft ....")
+
+      path = Session.get("mailBox")
+
+      if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
+        uid = Session.get("mailMessageId")
+
+        ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
+          uids = Session.get("mailMessageId")
+          MailManager.deleteDraftMessages path, [uid],()->
+            FlowRouter.go('/emailjs/b/' + MailManager.getBoxBySpecialUse("\\Drafts").path)
+            Session.set("mailSending",false);
+            toastr.success("存草稿成功");
+      else
+        ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
+           Session.set("mailSending",false);
+           toastr.success("存草稿成功");
+
 
   'click .mail-delete': (event, template)->
     console.log("click mail-delete");
