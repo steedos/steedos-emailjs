@@ -114,11 +114,15 @@ Template.mail_list.events
             Session.set("mailLoading",false);
 
     'click .list-message-delete': (event, template) ->
-        Session.set("mailLoading",true);
+       
         path = Session.get("mailBox");
         uids = Template.mail_list.getCheckedUids();
 
-        MailManager.judgeDelete(path, uids);
+        if uids && uids.length > 0
+            Session.set("mailLoading",true);
+            MailManager.judgeDelete(path, uids);
+        else
+            toastr.warning("请先选择需要删除的邮件");
 
     'click #page_forward': (event, template) ->
         MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
