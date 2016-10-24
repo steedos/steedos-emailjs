@@ -2,6 +2,8 @@ Template.contacts_modal.helpers
     contactsListData: ()->
         console.log("contactsListData...")
         return {defaultValues:MailManager.getContacts(this.targetId)};
+    subsReady: ->
+        return Steedos.subsAddressBook.ready() and Steedos.subsSpace.ready();
 
 Template.contacts_modal.events
     'click #confirm': (event, template) ->
