@@ -29,7 +29,12 @@ MailForward.getBody = function(message){
 
 	html += "<br>"
 
-	html += message.bodyHtml.data
+	if(message.bodyHtml){
+		html += message.bodyHtml.data
+	}else if(message.bodyText){
+		html += message.bodyText.data
+	}
+	
 
 	html += "</div><br>"
 
