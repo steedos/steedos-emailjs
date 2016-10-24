@@ -24,6 +24,10 @@ Template.emailjsSidebar.helpers
         if path?.startsWith "/" + app_id or path?.startsWith "/app/" + app_id
             return "active";
 
+    accountName: ->
+        account = db.mail_accounts.findOne()
+        if account
+            return account.email
 
     boxName: ->
         Session.get("mailInit");
@@ -75,6 +79,9 @@ Template.emailjsSidebar.helpers
         return "";
 
 Template.emailjsSidebar.events
+    'click .main-header .logo': (event) ->
+        Modal.show "app_list_box_modal"
+
     "click .box-item-info": (e, t) ->
         FlowRouter.go(e.currentTarget.dataset.href);
 
