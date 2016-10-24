@@ -460,23 +460,24 @@ ImapClientManager.handerBodystructure = function(messages, bodystructure){
 			messages.bodyHtml = handerBodyPart(bodystructure);
 		}else{
 			// if (bodystructure.type == 'multipart/alternative' || bodystructure.type == 'multipart/mixed' || bodystructure.type == 'multipart/related' || bodystructure.type == 'multipart/report'){
-				bodystructure.childNodes.forEach(function(bs, index){
-					if(bs.type == 'text/plain'){
-						messages.bodyText = handerBodyPart(bs);
-					}else if(bs.type == 'text/html'){
-						messages.bodyHtml = handerBodyPart(bs);
-					}else if(bs.childNodes && bs.childNodes.length > 0){
-						// console.log("[handerBodystructure] bs.type is " + bs.type);
-						ImapClientManager.handerBodystructure(messages, bs);
-					}else{
-						// if(bs.type == 'application/octet-stream'){
-							messages.attachments.push(handerBodyPart(bs));
-						// }
-					}
-				});
+				if(bodystructure.childNodes){
+					bodystructure.childNodes.forEach(function(bs, index){
+						if(bs.type == 'text/plain'){
+							messages.bodyText = handerBodyPart(bs);
+						}else if(bs.type == 'text/html'){
+							messages.bodyHtml = handerBodyPart(bs);
+						}else if(bs.childNodes && bs.childNodes.length > 0){
+							// console.log("[handerBodystructure] bs.type is " + bs.type);
+							ImapClientManager.handerBodystructure(messages, bs);
+						}else{
+							// if(bs.type == 'application/octet-stream'){
+								messages.attachments.push(handerBodyPart(bs));
+							// }
+						}
+					});
+				}
 			// }
 		}
-
 		
 	}
 }
