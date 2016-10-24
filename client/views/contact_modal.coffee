@@ -9,7 +9,7 @@ Template.contacts_modal.events
         
         # targetId = template.data.targetId;
 
-        selectize = template.data.target[0].selectize
+        selectize = $("#"+template.data.targetId)[0].selectize
 
         values = ContactsManager.getContactModalValue();
 
