@@ -1,7 +1,8 @@
 Template.contacts_modal.helpers
     contactsListData: ()->
         console.log("contactsListData...")
-        return {defaultValues:MailManager.getContacts(this.targetId)};
+        # return {defaultValues:MailManager.getContacts(this.targetId)}; 
+        return {}
     subsReady: ->
         return Steedos.subsAddressBook.ready() and Steedos.subsSpace.ready();
 
