@@ -312,19 +312,24 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 
 }
 
-ImapClientManager.deleteMessages = function(client, path, uids, destination, callback){
+ImapClientManager.moveMessages = function(client, fromPath, toPath, uids, callback){
+    if (!client)
+        client = this.getClient();
+    client.connect().then(function(){
+        client.moveMessages(fromPath, uids, toPath, {byUid:true}).then(function(){
+            client.close();
 
-  if (!client)
-		client = this.getClient();
-	client.connect().then(function(){
-		client.moveMessages(path, uids, destination, {byUid:true}).then(function(){
-			console.log("[deleteMessages]path is " + path);
-			client.close();
-			if(typeof(callback) == 'function'){
-				callback();
-			}
-		})
-  })
+            MailCollection.getMessageCollection(fromPath).remove({uid:{$in: uids}})
+
+            if(typeof(callback) == 'function'){
+                callback();
+            }
+        })
+    })
+}
+
+ImapClientManager.deleteMessages = function(client, path, uids,callback){
+    ImapClientManager.moveMessages(client, path, "Trash", uids, callback);
 }
 
 ImapClientManager.completeDeleteMessages = function(client, path, uids, callback){
