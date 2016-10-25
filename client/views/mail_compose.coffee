@@ -1,5 +1,5 @@
 Template.mail_compose.helpers
-  
+
   isReady: (uid)->
     if Session.get("mailMessageId") == "compose"
       return true;
@@ -17,7 +17,9 @@ Template.mail_compose.helpers
       console.log("mail_compose：mail_to run... ");
       rev = {name: "mail_to", title: '收件人', atts:{id: "mail_to", name: "mail_to"}};
 
-      if Session.get("mailJumpDraft") || Session.get("mailReply")
+      if Session.get("mailJumpDraft")
+        rev.values =  to;
+      else if Session.get("mailReply")
         rev.values =  from;
       else if Session.get("mailReplyAll")
         toAll = from.concat(to);

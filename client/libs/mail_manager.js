@@ -291,7 +291,6 @@ MailManager.deleteMessages = function(path, uids, callback){
 
   ImapClientManager.deleteMessages(null, path, uids, function(){
 
-
     FlowRouter.go('/emailjs/b/' + path);
     console.log("deleteMessages run ....");
 
@@ -339,15 +338,6 @@ MailManager.deleteDraftMessages = function(path, uid ,callback){
    })
 }
 
-
-MailManager.moveSentMessages = function(path, uid, callback){
-  var sent = MailManager.getBoxBySpecialUse("\\Sent").path;
-  ImapClientManager.deleteMessages(null, path, uid, sent, function(){
-    FlowRouter.go('/emailjs/b/' + path);
-    console.log("moveSentMessages run ....");
-    callback();
-  })
-}
 
 MailManager.resetHrefs = function(data){
 
@@ -399,6 +389,6 @@ MailManager.getContacts = function(id){
 }
 
 
-MailManager.moveMessages = function(uids, fromPath, toPath, callback){
-  ImapClientManager.moveMessages(null, fromPath, toPath, uids, callback);
-}
+// MailManager.moveMessages = function(uids, fromPath, toPath, callback){
+//   ImapClientManager.moveMessages(null, fromPath, toPath, uids, callback);
+// }

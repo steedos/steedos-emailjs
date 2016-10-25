@@ -51,15 +51,13 @@ Template.mailButton.events
 
       if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
         uid = Session.get("mailMessageId")
-        MailManager.moveSentMessages path, uid, ()->
-          MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)})
-          console.log("click #compose-send ....")
-          MailManager.getDeleteBoxMessages(path)
+        MailCollection.getMessageCollection(path).remove({uid:parseInt(uid)});
+
+        FlowRouter.go('/emailjs/b/' + path);
+        MailManager.getDeleteBoxMessages(path);
       else
         FlowRouter.go('/emailjs/b/' + path);
-
       Session.set("mailSending",false)
-      #Session.set("mailLoading",false)
 
   'click #compose-draft': (event)->
       Session.set("mailSending",true);
