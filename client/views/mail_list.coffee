@@ -120,7 +120,8 @@ Template.mail_list.events
 
         if uids && uids.length > 0
             Session.set("mailLoading",true);
-            MailManager.judgeDelete(path, uids);
+            MailManager.judgeDelete path, uids,()->
+              Session.set("mailLoading",false);
         else
             toastr.warning("请先选择需要删除的邮件");
 

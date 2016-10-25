@@ -291,7 +291,7 @@ MailManager.deleteMessages = function(path, uids, callback){
 
   ImapClientManager.deleteMessages(null, path, uids, function(){
 
-    toastr.success("邮件已删除");
+
     FlowRouter.go('/emailjs/b/' + path);
     console.log("deleteMessages run ....");
 
@@ -306,7 +306,7 @@ MailManager.completeDeleteMessages = function(path, uids, callback){
 
   ImapClientManager.completeDeleteMessages(null, path, uids, function(){
     console.log("ImapClientManager.CompleteDeleteMessages run :");
-    toastr.success("邮件已彻底删除");
+
     FlowRouter.go('/emailjs/b/' + path);
 
     MailManager.getDeleteBoxMessages(path);
@@ -314,16 +314,18 @@ MailManager.completeDeleteMessages = function(path, uids, callback){
    })
 }
 
-MailManager.judgeDelete = function(path, uid){
-  Session.set("mailLoading",true);
+MailManager.judgeDelete = function(path, uid, callback){
   if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
     MailManager.completeDeleteMessages(path, uid, function(){
-      Session.set("mailLoading",false);
+      toastr.success("邮件已彻底删除");
     });
   }else{
     MailManager.deleteMessages(path, uid, function(){
-      Session.set("mailLoading",false);
+      toastr.success("邮件已删除");
     });
+  }
+  if(typeof(callback) == 'function'){
+    callback();
   }
 }
 
