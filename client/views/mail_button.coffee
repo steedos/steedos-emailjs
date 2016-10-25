@@ -47,9 +47,19 @@ Template.mailButton.events
         path: @dataset.path
 
     SmtpClientManager.sendMail MailManager.getContacts("mail_to"), MailManager.getContacts("mail_cc"), MailManager.getContacts("mail_bcc"), $(".subject", $(".mail-compose")).val(), $('#compose-textarea').summernote('code'), attachments, ()->
+      path = Session.get("mailBox")
+
+      if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
+        uid = Session.get("mailMessageId")
+        MailManager.moveSentMessages path, uid, ()->
+          MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)})
+          console.log("click #compose-send ....")
+          MailManager.getDeleteBoxMessages(path)
+      else
+        FlowRouter.go('/emailjs/b/' + path);
+
       Session.set("mailSending",false)
-      FlowRouter.go('/emailjs/b/' + Session.get("mailBox"))
-      Session.set("mailLoading",false)
+      #Session.set("mailLoading",false)
 
   'click #compose-draft': (event)->
       Session.set("mailSending",true);
@@ -68,11 +78,10 @@ Template.mailButton.events
 
       if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
         uid = Session.get("mailMessageId")
-
-        ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
-          uids = Session.get("mailMessageId")
-          MailManager.deleteDraftMessages path, [uid],()->
-            FlowRouter.go('/emailjs/b/' + MailManager.getBoxBySpecialUse("\\Drafts").path)
+        destinationPath = MailManager.getBoxBySpecialUse("\\Drafts").path
+        ImapClientManager.upload null, destinationPath, message, ()->
+          MailManager.deleteDraftMessages path, uid, ()->
+            FlowRouter.go('/emailjs/b/' + path)
             Session.set("mailSending",false);
             toastr.success("存草稿成功");
       else

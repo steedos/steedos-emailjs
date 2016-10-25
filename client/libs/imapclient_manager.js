@@ -221,11 +221,11 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 					var hMessage = handerMessage(message);
 					// console.log("listMessages messages 解析完成：" + message.uid);
 					if(!hMessage.bodyHtml && !hMessage.bodyText){
-					
+
 						hMessage.summary = false;
 						hMessage.bodyText = {};
 						hMessage.bodyText.data="";
-					
+
 					}else{
 						hMessage.summary = true;
 					}
@@ -312,12 +312,12 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 
 }
 
-ImapClientManager.deleteMessages = function(client, path, uids,callback){
+ImapClientManager.deleteMessages = function(client, path, uids, destination, callback){
 
   if (!client)
 		client = this.getClient();
 	client.connect().then(function(){
-		client.moveMessages(path, uids, 'Trash', {byUid:true}).then(function(){
+		client.moveMessages(path, uids, destination, {byUid:true}).then(function(){
 			console.log("[deleteMessages]path is " + path);
 			client.close();
 			if(typeof(callback) == 'function'){
@@ -490,7 +490,7 @@ ImapClientManager.handerBodystructure = function(messages, bodystructure){
 				}
 			// }
 		}
-		
+
 	}
 }
 

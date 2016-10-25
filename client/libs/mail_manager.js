@@ -248,7 +248,7 @@ MailManager.getNewBoxMessages = function(path, callback){
   var box = MailManager.getBox(path);
   if(!box)
       return ;
-  //var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
+  var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
 
   ImapClientManager.getNewMessage(path, function(messages){
     if(messages.length > 0){
@@ -256,7 +256,7 @@ MailManager.getNewBoxMessages = function(path, callback){
         if(path == "Inbox"){
           ImapClientManager.updateUnseenMessages();
         }
-        //ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
+        ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
       });
       console.log("MailManager.getNewBoxMessages length " + messages.length);
       if(typeof(callback) == 'function'){
@@ -282,14 +282,16 @@ MailManager.getDeleteBoxMessages = function(path){
   ImapClientManager.getNewMessage(path, function(){
     ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
       ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
+      console.log("MailManager.getDeleteBoxMessages run ...." );
     });
-    console.log("MailManager.getDeleteBoxMessages run ...." );
+
     Session.set("mailLoading",false);
   });
 }
 
 MailManager.deleteMessages = function(path, uids, callback){
-  ImapClientManager.deleteMessages(null, path, uids, function(){
+  var trash = MailManager.getBoxBySpecialUse("\\Trash").path;
+  ImapClientManager.deleteMessages(null, path, uids, trash, function(){
     Session.set("mailLoading",true);
     toastr.success("邮件已删除");
     FlowRouter.go('/emailjs/b/' + path);
@@ -305,10 +307,11 @@ MailManager.deleteMessages = function(path, uids, callback){
 
 MailManager.completeDeleteMessages = function(path, uids, callback){
   console.log("MailManager.completeDeleteMessages :" );
+  var trash = MailManager.getBoxBySpecialUse("\\Trash").path
   ImapClientManager.completeDeleteMessages(null, path, uids, function(){
     console.log("ImapClientManager.CompleteDeleteMessages run :");
     toastr.success("邮件已彻底删除");
-    FlowRouter.go('/emailjs/b/' + MailManager.getBoxBySpecialUse("\\Trash").path);
+    FlowRouter.go('/emailjs/b/' + path);
 
     uids.forEach(function(uid){
       MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)});
@@ -317,6 +320,7 @@ MailManager.completeDeleteMessages = function(path, uids, callback){
     callback();
    })
 }
+
 
 MailManager.deleteDraftMessages = function(path, uid ,callback){
   console.log("MailManager.deleteDraftMessagess :" );
@@ -329,6 +333,14 @@ MailManager.deleteDraftMessages = function(path, uid ,callback){
 }
 
 
+MailManager.moveSentMessages = function(path, uid, callback){
+  var sent = MailManager.getBoxBySpecialUse("\\Sent").path;
+  ImapClientManager.deleteMessages(null, path, uid, sent, function(){
+    FlowRouter.go('/emailjs/b/' + path);
+    console.log("moveSentMessages run ....");
+    callback();
+  })
+}
 
 MailManager.resetHrefs = function(data){
 
