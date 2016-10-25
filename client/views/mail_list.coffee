@@ -2,7 +2,7 @@ Template.mail_list.getCheckedUids = ()->
     uids = new Array();
     $('input[name="uids"]', $(".mailbox-messages")).each ->
         if $(this).prop('checked')
-            uids.push($(this).val());
+            uids.push(parseInt($(this).val()));
 
     return uids;
 
@@ -114,7 +114,7 @@ Template.mail_list.events
             Session.set("mailLoading",false);
 
     'click .list-message-delete': (event, template) ->
-       
+
         path = Session.get("mailBox");
         uids = Template.mail_list.getCheckedUids();
 

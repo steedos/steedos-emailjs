@@ -319,7 +319,7 @@ ImapClientManager.moveMessages = function(client, fromPath, toPath, uids, callba
         client.moveMessages(fromPath, uids, toPath, {byUid:true}).then(function(){
             client.close();
 
-            MailCollection.getMessageCollection(fromPath).remove({uid:{$in: uids}})
+            MailCollection.getMessageCollection(fromPath).remove({uid:{$in: uids}});
 
             if(typeof(callback) == 'function'){
                 callback();
@@ -329,12 +329,12 @@ ImapClientManager.moveMessages = function(client, fromPath, toPath, uids, callba
 }
 
 ImapClientManager.deleteMessages = function(client, path, uids,callback){
-    ImapClientManager.moveMessages(client, path, "Trash", uids, callback);
+		var trash = MailManager.getBoxBySpecialUse("\\Trash").path;
+    ImapClientManager.moveMessages(client, path, trash, uids, callback);
 }
 
 ImapClientManager.completeDeleteMessages = function(client, path, uids, callback){
 
-	console.log("[ImapClientManager.completeDeleteMessages] path is " + path + "; uids is " + uids);
 	if (!client)
 		client = this.getClient();
 
@@ -342,6 +342,8 @@ ImapClientManager.completeDeleteMessages = function(client, path, uids, callback
 		client.deleteMessages(path, uids, {byUid:true}).then(function(){
 			console.log("[completeDeleteMessages]uid values is " + uids);
 			client.close();
+
+     	MailCollection.getMessageCollection(path).remove({uid:{$in: uids}});
 			if(typeof(callback) == 'function'){
 				callback();
 			}

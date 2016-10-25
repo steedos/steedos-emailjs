@@ -284,21 +284,17 @@ MailManager.getDeleteBoxMessages = function(path){
       ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
       console.log("MailManager.getDeleteBoxMessages run ...." );
     });
-
-    Session.set("mailLoading",false);
   });
 }
 
 MailManager.deleteMessages = function(path, uids, callback){
-  var trash = MailManager.getBoxBySpecialUse("\\Trash").path;
-  ImapClientManager.deleteMessages(null, path, uids, trash, function(){
-    Session.set("mailLoading",true);
+
+  ImapClientManager.deleteMessages(null, path, uids, function(){
+
     toastr.success("邮件已删除");
     FlowRouter.go('/emailjs/b/' + path);
     console.log("deleteMessages run ....");
-    uids.forEach(function(uid){
-      MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)});
-    })
+
     MailManager.getDeleteBoxMessages(path);
     callback();
   })
@@ -307,20 +303,29 @@ MailManager.deleteMessages = function(path, uids, callback){
 
 MailManager.completeDeleteMessages = function(path, uids, callback){
   console.log("MailManager.completeDeleteMessages :" );
-  var trash = MailManager.getBoxBySpecialUse("\\Trash").path
+
   ImapClientManager.completeDeleteMessages(null, path, uids, function(){
     console.log("ImapClientManager.CompleteDeleteMessages run :");
     toastr.success("邮件已彻底删除");
     FlowRouter.go('/emailjs/b/' + path);
 
-    uids.forEach(function(uid){
-      MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)});
-    })
     MailManager.getDeleteBoxMessages(path);
     callback();
    })
 }
 
+MailManager.judgeDelete = function(path, uid){
+  Session.set("mailLoading",true);
+  if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
+    MailManager.completeDeleteMessages(path, uid, function(){
+      Session.set("mailLoading",false);
+    });
+  }else{
+    MailManager.deleteMessages(path, uid, function(){
+      Session.set("mailLoading",false);
+    });
+  }
+}
 
 MailManager.deleteDraftMessages = function(path, uid ,callback){
   console.log("MailManager.deleteDraftMessagess :" );
@@ -368,19 +373,6 @@ MailManager.resetHrefs = function(data){
   return html;
 }
 
-
-MailManager.judgeDelete = function(path, uid){
-  Session.set("mailLoading",true);
-  if((path == 'Trash') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Trash')){
-    MailManager.completeDeleteMessages(path, uid, function(){
-      Session.set("mailLoading",false);
-    });
-  }else{
-    MailManager.deleteMessages(path, uid, function(){
-      Session.set("mailLoading",false);
-    });
-  }
-}
 
 MailManager.getAddress = function(address){
   var arrs  = new Array();
