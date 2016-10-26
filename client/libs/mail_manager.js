@@ -246,7 +246,7 @@ MailManager.selectMailBox = function(mailBox){
 
 MailManager.getNewBoxMessages = function(path, callback){
   var box = MailManager.getBox(path);
-  if(!box)
+  if(!box || !box.info)
       return ;
   var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
 
