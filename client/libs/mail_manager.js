@@ -385,7 +385,15 @@ MailManager.getContacts = function(id){
   return contacts;
 }
 
-
-// MailManager.moveMessages = function(uids, fromPath, toPath, callback){
-//   ImapClientManager.moveMessages(null, fromPath, toPath, uids, callback);
+//
+// MailManager.judgeClickEvent = function(){
+//   if(event.target.id == "compose-draft"){
+//     return true;
+//   }
+//   return false;
 // }
+
+
+MailManager.moveMessages = function(uids, fromPath, toPath, callback){
+  ImapClientManager.moveMessages(null, fromPath, toPath, uids, callback);
+}
