@@ -397,3 +397,14 @@ MailManager.getContacts = function(id){
 MailManager.moveMessages = function(uids, fromPath, toPath, callback){
   ImapClientManager.moveMessages(null, fromPath, toPath, uids, callback);
 }
+
+
+MailManager.i18n = function(key){
+  var key2 = "mail_" + key.toLowerCase();
+  var str = t(key2);
+
+  if(str == key2)
+    return t(key);
+
+  return str;
+}

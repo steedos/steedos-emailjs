@@ -60,14 +60,7 @@ Template.emailjsSidebar.helpers
         return if path == Session.get("mailBox") then "active" else ""
 
     t:(key)->
-        key2 = "mail_" + key.toLowerCase();
-        str = t(key2);
-
-        if str == key2
-            
-            return t(key);
-
-        return str;
+        return MailManager.i18n(key);
     
     box: ->
         if Session.get("mailInit")
@@ -96,3 +89,23 @@ Template.emailjsSidebar.events
 
     "click .settings-mail-account": (e, t)->
         Modal.show("mailAccount");
+
+    "dragenter .sidebar-menu .drag-target": (e, t) ->
+        console.log "drag-target dragenter"
+
+    "dragover .sidebar-menu .drag-target": (e, t) ->
+        console.log "drag-target dragover"
+        e.preventDefault()
+
+    "drop .sidebar-menu .drag-target": (e, template) ->
+        console.log "drag-target drop"
+        uids = Template.mail_list.getCheckedUids()
+        fromPath = Session.get("mailBox")
+        toPath = $(e.currentTarget).find(".box-item-info")[0]?.dataset?.path
+        toBox = MailManager.getBox(toPath)
+        if toBox && uids.length
+            MailManager.moveMessages uids,fromPath,toPath,->
+                console.log "MailManager.moveMessages execute successfully"
+                toastr.success(t("mail_removeto_success", MailManager.i18n(toBox.name)))
+
+        return false

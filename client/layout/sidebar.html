@@ -35,34 +35,34 @@
             </li>
 
             {{#with box}}
-              <li class="mail-compose"><a class='mail-add-btn' data-href="/emailjs/b/drafts/{{path}}"><i class="ion ion-plus"></i> <span>新邮件</span></a></li>
+              <li class="mail-compose"><a class='mail-add-btn' data-path="{{path}}" data-href="/emailjs/b/drafts/{{path}}"><i class="ion ion-plus"></i> <span>新邮件</span></a></li>
             {{/with}}
 
             {{#with getBox 'Inbox'}}
-              <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="ion ion-android-mail"></i> <span>{{t name}}</span>
+              <li class="{{getLiClass path}} drag-target"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-android-mail"></i> <span>{{t name}}</span>
               <span class="label bg-red pull-right">{{getUnseenCount}}</span></a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Sent'}}
-              <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="ion ion-paper-airplane"></i> <span>{{t name}}</span></a></li>
+              <li class="{{getLiClass path}} drag-target"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-paper-airplane"></i> <span>{{t name}}</span></a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Drafts'}}
-              <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-compose-outline"></i> <span>{{t name}}</span></a></li>
+              <li class="{{getLiClass path}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-compose-outline"></i> <span>{{t name}}</span></a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Junk'}}
-              <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="ion ion-funnel"></i> <span>{{t name}}</span>
+              <li class="{{getLiClass path}} drag-target"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-funnel"></i> <span>{{t name}}</span>
               <span class="label label-warning pull-right">{{info.exists}}</span></a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Trash'}}
-              <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-trash-outline"></i> <span>{{t name}}</span></a></li>
+              <li class="{{getLiClass path}} drag-target"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-trash-outline"></i> <span>{{t name}}</span></a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Archive'}}
-              <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="ion ion-archive"></i> <span>{{t name}}</span></a></li>
+              <li class="{{getLiClass path}} drag-target"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-archive"></i> <span>{{t name}}</span></a></li>
             {{/with}}
 
 
             <!-- <li class="header"> {{ _  "mail_folders"}}</li> -->
             {{#each getOtherBoxs}}
-              <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-folder-outline" aria-hidden="true"></i> <span>{{t name}}</span></a></li>
+              <li class="{{getLiClass path}} drag-target"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-folder-outline" aria-hidden="true"></i> <span>{{t name}}</span></a></li>
             {{/each}}
 
 

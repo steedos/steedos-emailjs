@@ -149,6 +149,19 @@ Template.mail_list.events
         else
             FlowRouter.go(event.currentTarget.dataset.href + event.currentTarget.dataset.uid);
 
+    'selectstart .products-list .drag-source': (event, template)->
+        console.log "drag-source selectstart"
+        return false
+
+    'dragstart .products-list .drag-source': (event, template)->
+        console.log "drag-source dragstart"
+        event.originalEvent.dataTransfer.effectAllowed = "move";
+
+    'ondragend .products-list .drag-source': (event, template)->
+        console.log "drag-source ondragend"
+        return false
+
+
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     if Session.get("mailLoading") || Session.get("mailLoading") == undefined

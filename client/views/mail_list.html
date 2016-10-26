@@ -51,7 +51,7 @@
         </div>
           <div class="products-list product-list-in-box mailbox-messages" >
             {{#each boxMessages}}
-              <li class="item {{#if isUnseen this}}unseen{{else}}seen{{/if}} {{getLiClass uid}}">
+              <li class="item drag-source {{#if isUnseen this}}unseen{{else}}seen{{/if}} {{getLiClass uid}}" draggable="true">
                   <div>
                     <div class="message">
                       <div class="product-checkbox">
