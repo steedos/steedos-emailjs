@@ -355,11 +355,9 @@ ImapClientManager.upload = function(client, path, message, callback){
 	if (!client)
 		client = this.getClient();
 
-	console.log("ImapClientManager upload run....");
 	client.connect().then(function(){
 		console.log("client.upload run: path is " + path );
 		client.upload(path, message).then(function(){
-			console.log("ImapClientManager upload close client.")
 			client.close();
 			if(typeof(callback) == 'function'){
 				callback();
