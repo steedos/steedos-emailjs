@@ -331,8 +331,6 @@ MailManager.judgeDelete = function(path, uid, callback){
 MailManager.deleteDraftMessages = function(path, uid ,callback){
   console.log("MailManager.deleteDraftMessagess :" );
   ImapClientManager.completeDeleteMessages(null, path, uid, function(){
-
-    MailCollection.getMessageCollection(path).remove({'uid':parseInt(uid)});
     MailManager.getDeleteBoxMessages(path);
     callback();
    })

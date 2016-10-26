@@ -4,8 +4,7 @@ Template.mailButton.helpers
 
   message: ->
     if Session.get("mailInit")
-      uid = Session.get("mailMessageId");
-      return MailManager.getMessage(parseInt(uid)) ;
+      return MailManager.getMessage(parseInt(Session.get("mailMessageId"))) ;
 
   path: ->
     return Session.get("mailBox");
@@ -73,19 +72,19 @@ Template.mailButton.events
       console.log("click #compose-draft ....")
 
       path = Session.get("mailBox")
+      uid = parseInt(Session.get("mailMessageId"))
+      toPath = MailManager.getBoxBySpecialUse("\\Drafts").path
 
-      if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
-        uid = Session.get("mailMessageId")
-        destinationPath = MailManager.getBoxBySpecialUse("\\Drafts").path
-        ImapClientManager.upload null, destinationPath, message, ()->
-          MailManager.deleteDraftMessages path, uid, ()->
-            FlowRouter.go('/emailjs/b/' + path)
+      ImapClientManager.upload null, toPath, message,()->
+        if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
+          box = MailManager.getBox(Session.get("mailBox"))
+          newUid = box.info.uidNext;
+          FlowRouter.go '/emailjs/b/drafts/'+box.path+'/'+newUid
+          MailManager.deleteDraftMessages path, [uid], ()->
             Session.set("mailSending",false);
-            toastr.success("存草稿成功");
-      else
-        ImapClientManager.upload null, MailManager.getBoxBySpecialUse("\\Drafts").path, message, ()->
-           Session.set("mailSending",false);
-           toastr.success("存草稿成功");
+        else
+          Session.set("mailSending",false);
+        toastr.success("存草稿成功");
 
 
   'click .mail-delete': (event, template)->
