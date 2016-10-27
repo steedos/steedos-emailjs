@@ -75,33 +75,33 @@ Template.emailjsSidebar.events
     'click .main-header .logo': (event) ->
         Modal.show "app_list_box_modal"
 
-    "click .box-item-info": (e, t) ->
-        FlowRouter.go(e.currentTarget.dataset.href);
+    "click .box-item-info": (event, template) ->
+        FlowRouter.go(event.currentTarget.dataset.href);
 
         Session.set("mailLoading",true);
         MailManager.getNewBoxMessages Session.get("mailBox"), () ->
             Session.set("mailLoading",false);
 
-    "click .mail-add-btn": (e, t) ->
-        FlowRouter.go(e.currentTarget.dataset.href);
+    "click .mail-add-btn": (event, template) ->
+        FlowRouter.go(event.currentTarget.dataset.href);
 
-        FlowRouter.go(e.currentTarget.dataset.href + "/compose");
+        FlowRouter.go(event.currentTarget.dataset.href + "/compose");
 
-    "click .settings-mail-account": (e, t)->
+    "click .settings-mail-account": (event, template)->
         Modal.show("mailAccount");
 
-    "dragenter .sidebar-menu .drag-target": (e, t) ->
+    "dragenter .sidebar-menu .drag-target": (event, template) ->
         console.log "drag-target dragenter"
 
-    "dragover .sidebar-menu .drag-target": (e, t) ->
+    "dragover .sidebar-menu .drag-target": (event, template) ->
         console.log "drag-target dragover"
-        e.preventDefault()
+        event.preventDefault()
 
-    "drop .sidebar-menu .drag-target": (e, template) ->
+    "drop .sidebar-menu .drag-target": (event, template) ->
         console.log "drag-target drop"
         uids = Template.mail_list.getCheckedUids()
         fromPath = Session.get("mailBox")
-        toPath = $(e.currentTarget).find(".box-item-info")[0]?.dataset?.path
+        toPath = $(event.currentTarget).find(".box-item-info")[0]?.dataset?.path
         toBox = MailManager.getBox(toPath)
         if toBox && uids.length
             MailManager.moveMessages uids,fromPath,toPath,->
