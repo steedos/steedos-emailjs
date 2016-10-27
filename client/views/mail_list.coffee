@@ -155,6 +155,9 @@ Template.mail_list.events
 
     'dragstart .products-list .drag-source': (event, template)->
         console.log "drag-source dragstart"
+        checkbox = $(event.currentTarget).find(".product-checkbox input[type=checkbox]")
+        unless checkbox.is(':checked')
+            checkbox.attr("checked","checked")
         event.originalEvent.dataTransfer.effectAllowed = "move";
 
     'ondragend .products-list .drag-source': (event, template)->
