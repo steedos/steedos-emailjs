@@ -55,9 +55,12 @@ Template.emailjsSidebar.helpers
         Session.get("mailInit");
         return MailManager.getUnseenUid().uids.length;
 
-    getLiClass: (path)->
+    getLiClass: (path,isDroppable)->
         Session.get("mailInit");
-        return if path == Session.get("mailBox") then "active" else ""
+        if isDroppable
+            return if path == Session.get("mailBox") then "active" else "drag-target"
+        else
+            return if path == Session.get("mailBox") then "active" else ""
 
     t:(key)->
         return MailManager.i18n(key);
