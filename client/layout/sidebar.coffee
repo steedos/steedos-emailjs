@@ -126,7 +126,8 @@ Template.emailjsSidebar.events
         toBox = MailManager.getBox(toPath)
         if toBox && uids.length
             MailManager.moveMessages uids,fromPath,toPath,->
-                console.log "MailManager.moveMessages execute successfully"
-                toastr.success(t("mail_removeto_success", MailManager.i18n(toBox.name)))
+                MailManager.getNewBoxMessages fromPath, ->
+                    console.log "MailManager.moveMessages execute successfully"
+                    toastr.success(t("mail_removeto_success", MailManager.i18n(toBox.name)))
 
         return false

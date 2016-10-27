@@ -251,7 +251,7 @@ MailManager.getNewBoxMessages = function(path, callback){
   var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
 
   ImapClientManager.getNewMessage(path, function(messages){
-    if(messages.length > 0){
+    // if(messages.length > 0){
       ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
         if(path == "Inbox"){
           ImapClientManager.updateUnseenMessages();
@@ -262,11 +262,11 @@ MailManager.getNewBoxMessages = function(path, callback){
       if(typeof(callback) == 'function'){
         callback();
       }
-    }else{
-      if(typeof(callback) == 'function'){
-        callback();
-      }
-    }
+    // }else{
+    //   if(typeof(callback) == 'function'){
+    //     callback();
+    //   }
+    // }
   });
 }
 
