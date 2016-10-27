@@ -158,7 +158,10 @@ Template.mail_list.events
         checkbox = $(event.currentTarget).find(".product-checkbox input[type=checkbox]")
         unless checkbox.is(':checked')
             checkbox.click()
-        event.originalEvent.dataTransfer.effectAllowed = "move";
+        event.originalEvent.dataTransfer.effectAllowed = "move"
+        # set draging cursor style to a blank image
+        cursorIcon = $('<img src="data:image/gif;base64,R0lGODlhAQABAJAAAP///wAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==" />');
+        event.originalEvent.dataTransfer.setDragImage(cursorIcon[0], 0, 0);
 
     'ondragend .products-list .drag-source': (event, template)->
         console.log "drag-source ondragend"
