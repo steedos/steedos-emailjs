@@ -246,7 +246,7 @@ MailManager.selectMailBox = function(mailBox){
 
 MailManager.getNewBoxMessages = function(path, callback){
   var box = MailManager.getBox(path);
-  if(!box)
+  if(!box || !box.info)
       return ;
   var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
 
@@ -385,7 +385,15 @@ MailManager.getContacts = function(id){
   return contacts;
 }
 
-
-// MailManager.moveMessages = function(uids, fromPath, toPath, callback){
-//   ImapClientManager.moveMessages(null, fromPath, toPath, uids, callback);
+//
+// MailManager.judgeClickEvent = function(){
+//   if(event.target.id == "compose-draft"){
+//     return true;
+//   }
+//   return false;
 // }
+
+
+MailManager.moveMessages = function(uids, fromPath, toPath, callback){
+  ImapClientManager.moveMessages(null, fromPath, toPath, uids, callback);
+}
