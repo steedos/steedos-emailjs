@@ -452,7 +452,9 @@ function handerBodyPart(bodyPart){
 			object.name = 'message' + bodyPart.part + ".eml";
 		}else{
 			// if(bodyPart.type == 'application/octet-stream'){
-				object.name = bodyPart.dispositionParameters.filename;
+				if(bodyPart.dispositionParameters){
+					object.name = bodyPart.dispositionParameters.filename;
+				}
 			// }
 		}
 	}
