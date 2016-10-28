@@ -526,6 +526,7 @@ function handerMessage(message){
 		ImapClientManager.handerBodystructure(rev, rev.bodystructure);
 	}catch(err){
 		console.error(err);
+		console.error(message);
 	}
 	// console.log("handerBodystructure ok");
 	return rev;
