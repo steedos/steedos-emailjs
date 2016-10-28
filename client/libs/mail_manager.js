@@ -17,6 +17,10 @@ MailManager.initMail = function(callback){
           if(callback){
             if(typeof(callback) == 'function'){
               callback();
+
+              draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
+
+              ImapClientManager.initMailboxInfo(draftBox, function(){});
             }
           }
         }catch(e){
@@ -407,4 +411,35 @@ MailManager.i18n = function(key){
     return t(key);
 
   return str;
+}
+
+MailManager.saveDrafts = function(message){
+  path = Session.get("mailBox")
+  
+  draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
+
+  function _save(message){
+    box = MailManager.getBox(Session.get("mailBox"))
+    newUid = box.info.uidNext;
+    ImapClientManager.upload(null, draftBox.path, message, function(){
+      MailManager.getNewBoxMessages(draftBox.path, function(){
+        Session.set("mailLoading",false);
+        uid = Session.get("mailMessageId")
+        if (path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts' || uid == "compose"){
+          FlowRouter.go('/emailjs/b/drafts/' + draftBox.path + '/'+newUid)
+          if (uid != "compose")
+            MailManager.deleteDraftMessages(draftBox.path, [parseInt(uid)])
+        }
+
+        Session.set("mailSending",false);
+        toastr.success("存草稿成功");
+      })
+          
+    })
+      
+  }
+
+  if(draftBox.info){
+    _save(message)
+  }   
 }
