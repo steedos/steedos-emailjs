@@ -40,6 +40,10 @@
 
             {{#with getBox 'Inbox'}}
               <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="ion ion-android-mail"></i> <span>{{t name}}</span>
+              <span class="pull-right-container">
+                <span class="label pull-right bg-red">{{getUnseenCount}}</span>
+              </span>
+              </a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Sent'}}
               <li class="{{getLiClass path}}"><a class='box-item-info' data-href="/emailjs/b/{{path}}"><i class="ion ion-paper-airplane"></i> <span>{{t name}}</span></a></li>
