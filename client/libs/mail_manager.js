@@ -264,7 +264,7 @@ MailManager.getNewBoxMessages = function(path, callback){
       });
       console.log("MailManager.getNewBoxMessages length " + messages.length);
       if(typeof(callback) == 'function'){
-        callback();
+        callback(messages);
       }
     // }else{
     //   if(typeof(callback) == 'function'){
