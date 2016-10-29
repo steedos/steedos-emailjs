@@ -88,4 +88,5 @@ Template.mailButton.events
   'click #right_back': (event)->
     backURL =  "/emailjs/b/" + Session.get("mailBox")
     FlowRouter.go(backURL)
+    $(".steedos-mail").removeClass("right-show")
     Session.set("mailLoading",false)

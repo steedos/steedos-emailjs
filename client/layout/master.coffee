@@ -1,19 +1,13 @@
-# Template.emailjsLayout.onCreated ->
-#   self = this;
-#   $(window).resize ->
-#       if $(window).width()<=1180
-#           $("#emailjs_offcanvas").prop("disabled","true");
-#           $("body").addClass("sidebar-collapse")
-#       else
-#           $("#emailjs_offcanvas").prop("disabled","");
-#           $("body").removeClass("sidebar-collapse")
+Template.emailjsLayout.onCreated ->
+  self = this;
+  $(window).resize ->
+      if $(window).width()<=1200
+          $("body").addClass("sidebar-collapse")
+      else
+          $("body").removeClass("sidebar-collapse")
 
-# Template.emailjsLayout.onRendered ->
-
-#   self = this;
-
-#   $('body').removeClass('fixed');
-#   $(window).resize();
+Template.emailjsLayout.onRendered ->
+  $(window).resize();
 
 
 
