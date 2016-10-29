@@ -17,6 +17,10 @@ MailManager.initMail = function(callback){
           if(callback){
             if(typeof(callback) == 'function'){
               callback();
+
+              draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
+
+              ImapClientManager.initMailboxInfo(draftBox, function(){});
             }
           }
         }catch(e){
@@ -251,7 +255,7 @@ MailManager.getNewBoxMessages = function(path, callback){
   var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
 
   ImapClientManager.getNewMessage(path, function(messages){
-    if(messages.length > 0){
+    // if(messages.length > 0){
       ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
         if(path == "Inbox"){
           ImapClientManager.updateUnseenMessages();
@@ -262,11 +266,11 @@ MailManager.getNewBoxMessages = function(path, callback){
       if(typeof(callback) == 'function'){
         callback();
       }
-    }else{
-      if(typeof(callback) == 'function'){
-        callback();
-      }
-    }
+    // }else{
+    //   if(typeof(callback) == 'function'){
+    //     callback();
+    //   }
+    // }
   });
 }
 
@@ -396,4 +400,46 @@ MailManager.getContacts = function(id){
 
 MailManager.moveMessages = function(uids, fromPath, toPath, callback){
   ImapClientManager.moveMessages(null, fromPath, toPath, uids, callback);
+}
+
+
+MailManager.i18n = function(key){
+  var key2 = "mail_" + key.toLowerCase();
+  var str = t(key2);
+
+  if(str == key2)
+    return t(key);
+
+  return str;
+}
+
+MailManager.saveDrafts = function(message){
+  path = Session.get("mailBox")
+  
+  draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
+
+  function _save(message){
+    box = MailManager.getBox(Session.get("mailBox"))
+    newUid = box.info.uidNext;
+    ImapClientManager.upload(null, draftBox.path, message, function(){
+      MailManager.getNewBoxMessages(draftBox.path, function(){
+        Session.set("mailLoading",false);
+        uid = Session.get("mailMessageId")
+        if (path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts' || uid == "compose"){
+          FlowRouter.go('/emailjs/b/drafts/' + draftBox.path + '/'+newUid)
+          if (uid != "compose")
+            MailManager.deleteDraftMessages(draftBox.path, [parseInt(uid)])
+        }
+
+        Session.set("mailSending",false);
+        toastr.success("存草稿成功");
+      })
+          
+    })
+      
+  }
+
+  if(draftBox.info){
+    _save(message)
+  }   
 }

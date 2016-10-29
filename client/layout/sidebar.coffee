@@ -55,19 +55,15 @@ Template.emailjsSidebar.helpers
         Session.get("mailInit");
         return MailManager.getUnseenUid().uids.length;
 
-    getLiClass: (path)->
+    getLiClass: (path,isDroppable)->
         Session.get("mailInit");
-        return if path == Session.get("mailBox") then "active" else ""
+        if isDroppable
+            return if path == Session.get("mailBox") then "active" else "drag-target"
+        else
+            return if path == Session.get("mailBox") then "active" else ""
 
     t:(key)->
-        key2 = "mail_" + key.toLowerCase();
-        str = t(key2);
-
-        if str == key2
-            
-            return t(key);
-
-        return str;
+        return MailManager.i18n(key);
     
     box: ->
         if Session.get("mailInit")
@@ -82,17 +78,56 @@ Template.emailjsSidebar.events
     'click .main-header .logo': (event) ->
         Modal.show "app_list_box_modal"
 
-    "click .box-item-info": (e, t) ->
-        FlowRouter.go(e.currentTarget.dataset.href);
+    "click .box-item-info": (event, template) ->
+        FlowRouter.go(event.currentTarget.dataset.href);
 
         Session.set("mailLoading",true);
         MailManager.getNewBoxMessages Session.get("mailBox"), () ->
             Session.set("mailLoading",false);
 
-    "click .mail-add-btn": (e, t) ->
-        FlowRouter.go(e.currentTarget.dataset.href);
+    "click .mail-add-btn": (event, template) ->
+        FlowRouter.go(event.currentTarget.dataset.href);
 
-        FlowRouter.go(e.currentTarget.dataset.href + "/compose");
+        FlowRouter.go(event.currentTarget.dataset.href + "/compose");
 
-    "click .settings-mail-account": (e, t)->
+    "click .settings-mail-account": (event, template)->
         Modal.show("mailAccount");
+
+    "dragenter .sidebar-menu .drag-target": (event, template) ->
+        console.log "drag-target dragenter"
+        target = $(event.currentTarget)
+        toPath = target.find(".box-item-info").data("path")
+        # 要拖动到的目标路径正好是当前所在箱则不需要处理active样式
+        unless toPath == Session.get("mailBox")
+            target.addClass("active")
+
+    "dragleave .sidebar-menu .drag-target": (event, template) ->
+        console.log "drag-target dragleave"
+        target = $(event.currentTarget)
+        toPath = target.find(".box-item-info").data("path")
+        # 要拖动到的目标路径正好是当前所在箱则不需要处理active样式
+        unless toPath == Session.get("mailBox")
+            target.removeClass("active")
+
+    "dragover .sidebar-menu .drag-target": (event, template) ->
+        console.log "drag-target dragover"
+        event.preventDefault()
+
+    "drop .sidebar-menu .drag-target": (event, template) ->
+        console.log "drag-target drop"
+        target = $(event.currentTarget)
+        uids = Template.mail_list.getCheckedUids()
+        fromPath = Session.get("mailBox")
+        toPath = target.find(".box-item-info").data("path")
+        # 要拖动到的目标路径正好是当前所在箱则不需要处理active样式
+        unless toPath == Session.get("mailBox")
+            target.removeClass("active")
+        
+        toBox = MailManager.getBox(toPath)
+        if toBox && uids.length
+            MailManager.moveMessages uids,fromPath,toPath,->
+                MailManager.getNewBoxMessages fromPath, ->
+                    console.log "MailManager.moveMessages execute successfully"
+                    toastr.success(t("mail_removeto_success", MailManager.i18n(toBox.name)))
+
+        return false

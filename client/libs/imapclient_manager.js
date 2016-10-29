@@ -452,7 +452,9 @@ function handerBodyPart(bodyPart){
 			object.name = 'message' + bodyPart.part + ".eml";
 		}else{
 			// if(bodyPart.type == 'application/octet-stream'){
-				object.name = bodyPart.dispositionParameters.filename;
+				if(bodyPart.dispositionParameters){
+					object.name = bodyPart.dispositionParameters.filename;
+				}
 			// }
 		}
 	}
@@ -526,6 +528,7 @@ function handerMessage(message){
 		ImapClientManager.handerBodystructure(rev, rev.bodystructure);
 	}catch(err){
 		console.error(err);
+		console.error(message);
 	}
 	// console.log("handerBodystructure ok");
 	return rev;
