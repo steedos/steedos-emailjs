@@ -1,13 +1,13 @@
 Template.emailjsLayout.onCreated ->
   self = this;
-  $(window).resize ->
-      if $(window).width()<=1200
-          $("body").addClass("sidebar-collapse")
-      else
-          $("body").removeClass("sidebar-collapse")
+  # $(window).resize ->
+  #     if $(window).width()<=1200
+  #         $("body").addClass("sidebar-collapse")
+  #     else
+  #         $("body").removeClass("sidebar-collapse")
 
 Template.emailjsLayout.onRendered ->
-  $(window).resize();
+  # $(window).resize();
 
 
 
