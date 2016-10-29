@@ -79,6 +79,7 @@ Template.emailjsSidebar.events
         Modal.show "app_list_box_modal"
 
     "click .box-item-info": (event, template) ->
+        $(".steedos-mail").removeClass("right-show")
         FlowRouter.go(event.currentTarget.dataset.href);
 
         Session.set("mailLoading",true);
