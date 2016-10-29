@@ -244,6 +244,8 @@ html, body{
 
     @summernoteBarHeight: 50px;
 
+    @backgroundColor: rgba(255, 255, 255, 0.9);
+
     height: 100%;
 
     background-color: transparent;
@@ -282,7 +284,7 @@ html, body{
         .mail_list{
             height: calc(~"100% - @{barHeight}");
             width:100%;
-            background-color: #ffffff;
+            background-color: @backgroundColor;
             border-top: 0px;
             margin-bottom: 0px;
             border-radius: 0px !important;
@@ -313,6 +315,7 @@ html, body{
                 border-bottom: 1px solid #f4f4f4;
                 .item{
                     padding: 0px;
+                    background: @backgroundColor;
                     .message{
                         padding: 10px 5px;
                     }
@@ -417,7 +420,7 @@ html, body{
     .right{
         min-width: 420px;
         height: 100%;
-        background-color: #fff;
+        background-color: @backgroundColor;
         #attachment_donwLoadding{
             display: none;
         }
@@ -471,7 +474,7 @@ html, body{
             // padding-right: 5px;
             .mail-read{
                 // height: 100%;
-                background: #fff;
+                background: @backgroundColor;
 
                 .mailbox-read-message{
                     padding: 0px;
