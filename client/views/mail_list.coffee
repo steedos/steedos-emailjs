@@ -26,6 +26,12 @@ Template.mail_list.helpers
             return  true
         return false
 
+    isSentOrDrafts: ->
+        path = Session.get("mailBox");
+        if path == 'Sent' || MailManager.getBoxBySpecialUse(path)?.specialUse == '\\Sent' || path == 'Drafts' || MailManager.getBoxBySpecialUse(path)?.specialUse == '\\Drafts'
+            return  true
+        return false
+
     boxExists: ->
         if Session.get("mailInit") && Session.get("mailBoxInit")
             if Session.get("mailBoxFilter")
@@ -98,6 +104,14 @@ Template.mail_list.helpers
     fromName: (from)->
         if(from && from.length > 0)
             return if from[0].name then from[0].name else from[0].address
+
+    oneToName: (to)->
+      return if to[0].name then to[0].name else to[0].address
+
+    onlyOneTo: (to)->
+      if to.length == 1
+          return true;
+      return false;
 
     getLiClass: (uid)->
         return if uid+"" == Session.get("mailMessageId") then "active" else ""

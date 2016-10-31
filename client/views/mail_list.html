@@ -62,13 +62,37 @@
                       </div> -->
                       <div class="product-info">
                         <div class="steedos-emailjs-item" data-drafts='{{isDraftsBox}}' data-box="{{box.path}}" data-href="{{#if isDraftsBox}}/emailjs/b/drafts/{{box.path}}/{{else}}/emailjs/b/{{box.path}}/{{/if}}" data-uid="{{uid}}">
-                          <div>
-                            {{fromName from}}
-                            <span class="pull-right">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}{{modifiedFromNow date}}</span>
-                            <span class="product-description">
-                              {{subject}}
-                            </span>
-                          </div>
+                          {{#if isSentOrDrafts}}
+                            <div class="to">
+                              {{#if to}}
+                                {{#if onlyOneTo to}}
+                                  <span class="mail-address">
+                                    {{oneToName to}}
+                                  </span>
+                                {{else}}
+                                  {{#each to}}
+                                    <span class="mail-address">
+                                      {{#if name}}
+                                        {{name}}&#44;
+                                      {{else}}
+                                        {{address}}&#44;
+                                      {{/if}}
+                                    </span>
+                                  {{/each}}
+                                {{/if}}
+                              {{else}}
+                                &#91;无&#93;
+                              {{/if}}
+                            </div>
+                          {{else}}
+                            <div class= "from">
+                              {{fromName from}}
+                            </div>
+                          {{/if}}
+                          <span class="pull-right">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}{{modifiedFromNow date}}</span>
+                          <span class="product-description">
+                            {{subject}}
+                          </span>
                         </div>
                       </div>
                     </div>
