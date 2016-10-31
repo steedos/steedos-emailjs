@@ -22,30 +22,30 @@
               <div class="subject">{{subject}}</div>
               <div class="mailbox-read-time">{{modifiedString date}}</div>
               <div class= "from">
-                发件人: 
+                发件人:
                 {{#each from}}
-                  <a href="#" class="mail-address">
+                  <span class="mail-address">
                     {{name}} &lt;{{address}}&gt;;
-                  </a>
+                  </span>
                 {{/each}}
               </div>
               {{#if to}}
                 <div class="to">
-                  收件人: 
+                  收件人:
                   {{#each to}}
-                    <a href="#" class="mail-address">
+                    <span class="mail-address">
                       {{name}} &lt;{{address}}&gt;;
-                    </a>
+                    </span>
                   {{/each}}
                 </div>
               {{/if}}
               {{#if cc}}
               <div class="cc">
-                抄送人: 
+                抄送人:
                 {{#each cc}}
-                  <a href="#" class="mail-address">
+                  <span class="mail-address">
                     {{name}} &lt;{{address}}&gt;;
-                  </a>
+                  </span>
                 {{/each}}
               </div>
               {{/if}}

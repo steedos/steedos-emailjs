@@ -65,6 +65,8 @@ Template.read_mail.events
     queryKey = {or: {to: currentAddress, from: currentAddress}}
     path = Session.get("mailBox");
 
+    FlowRouter.go("/emailjs/b/" + path)
+    $(".steedos-mail").removeClass("right-show")
     ImapClientManager.search null, path, queryKey, (result)->
       if !result || result.length == 0
           toastr.info("未搜索到数据");
