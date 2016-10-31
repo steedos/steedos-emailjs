@@ -275,18 +275,18 @@ MailManager.getNewBoxMessages = function(path, callback){
 }
 
 
-MailManager.getDeleteBoxMessages = function(path){
+MailManager.updateBoxInfo = function(path){
   var box = MailManager.getBox(path);
   if(!box)
       return ;
-  var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
+  //var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
   if(path == "Inbox"){
     ImapClientManager.updateUnseenMessages();
   }
   ImapClientManager.getNewMessage(path, function(){
     ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
-      ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
-      console.log("MailManager.getDeleteBoxMessages run ...." );
+      //ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
+      console.log("MailManager.updateBoxInfo run ...." );
     });
   });
 }
@@ -298,7 +298,7 @@ MailManager.deleteMessages = function(path, uids, callback){
     FlowRouter.go('/emailjs/b/' + path);
     console.log("deleteMessages run ....");
 
-    MailManager.getDeleteBoxMessages(path);
+    MailManager.updateBoxInfo(path);
     callback();
   })
 }
@@ -312,7 +312,7 @@ MailManager.completeDeleteMessages = function(path, uids, callback){
 
     FlowRouter.go('/emailjs/b/' + path);
 
-    MailManager.getDeleteBoxMessages(path);
+    MailManager.updateBoxInfo(path);
     callback();
    })
 }
@@ -335,7 +335,7 @@ MailManager.judgeDelete = function(path, uid, callback){
 MailManager.deleteDraftMessages = function(path, uid){
   console.log("MailManager.deleteDraftMessagess :" );
   ImapClientManager.completeDeleteMessages(null, path, uid, function(){
-    MailManager.getDeleteBoxMessages(path);
+    MailManager.updateBoxInfo(path);
    })
 }
 
@@ -415,7 +415,7 @@ MailManager.i18n = function(key){
 
 MailManager.saveDrafts = function(message){
   path = Session.get("mailBox")
-  
+
   draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
 
   function _save(message){
@@ -434,12 +434,12 @@ MailManager.saveDrafts = function(message){
         Session.set("mailSending",false);
         toastr.success("存草稿成功");
       })
-          
+
     })
-      
+
   }
 
   if(draftBox.info){
     _save(message)
-  }   
+  }
 }

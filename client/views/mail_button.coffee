@@ -53,7 +53,7 @@ Template.mailButton.events
         MailCollection.getMessageCollection(path).remove({uid:parseInt(uid)});
 
         FlowRouter.go('/emailjs/b/' + path);
-        MailManager.getDeleteBoxMessages(path);
+        MailManager.updateBoxInfo(path);
       else
         FlowRouter.go('/emailjs/b/' + path);
 
