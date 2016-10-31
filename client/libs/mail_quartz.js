@@ -17,7 +17,7 @@ MailQuartz.getNewMessages = function(){
 				var emailjsPath = "/emailjs/b/" + inboxPath + "/";
 		    	var msg = new Audio("/sound/notification.mp3");
 		        if(messages.length > 1){
-		        	title = "邮件";
+		        	title = "未读邮件";
 		        	body = "您有" + messages.length + "封未读邮件";
 		        	openUrl = emailjsPath;
 		        }else{  
