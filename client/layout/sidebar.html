@@ -7,7 +7,7 @@
             </span>
             <span class="logo-mini">
               <i class="ion ion-grid"></i>
-            </span> 
+            </span>
           </div>
         </header>
         <div class="sidebar" id="scrollspy">
@@ -41,7 +41,7 @@
             {{#with getBox 'Inbox'}}
               <li class="{{getLiClass path true}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-android-mail"></i> <span>{{t name}}</span>
               <span class="pull-right-container">
-                <span class="label pull-right bg-red">{{getUnseenCount}}</span>
+                <span class="label pull-right bg-orange">{{getUnseenCount}} / {{info.exists}}</span>
               </span>
               </a></li>
             {{/with}}
@@ -49,14 +49,19 @@
               <li class="{{getLiClass path true}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-paper-airplane"></i> <span>{{t name}}</span></a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Drafts'}}
-              <li class="{{getLiClass path false}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-compose-outline"></i> <span>{{t name}}</span></a></li>
+              <li class="{{getLiClass path false}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-compose-outline"></i> <span>{{t name}}</span>
+                <span class="label pull-right bg-orange"> {{info.exists}}</span>
+              </a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Junk'}}
               <li class="{{getLiClass path true}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-funnel"></i> <span>{{t name}}</span>
-              <span class="label label-warning pull-right">{{info.exists}}</span></a></li>
+                <span class="label pull-right bg-orange">{{info.exists}}</span>
+              </a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Trash'}}
-              <li class="{{getLiClass path true}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-trash-outline"></i> <span>{{t name}}</span></a></li>
+              <li class="{{getLiClass path true}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-ios-trash-outline"></i> <span>{{t name}}</span>
+                <span class="label pull-right bg-orange">{{info.exists}}</span>
+              </a></li>
             {{/with}}
             {{#with getBoxBySpecialUse '\\Archive'}}
               <li class="{{getLiClass path true}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-archive"></i> <span>{{t name}}</span></a></li>
