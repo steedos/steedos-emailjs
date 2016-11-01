@@ -68,8 +68,14 @@ Template.mail_list.helpers
 
             if Session.get("mailBoxInit")
                 if Session.get("mailBoxFilter")
-                  rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize, ()->
-                    Session.set("mailLoading",false);
+                  len = Session.get("mailBoxFilter").length
+                  if Session.get("mailPage") * MailPage.pageSize + 1 > len
+                    page = MailPage.pageCount(len)
+                    rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), page-1, MailPage.pageSize, ()->
+                      Session.set("mailLoading",false);
+                  else
+                      rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize, ()->
+                        Session.set("mailLoading",false);
                 else
                   rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
                     Session.set("mailLoading",false);
@@ -94,8 +100,8 @@ Template.mail_list.helpers
             return true;
         return false;
 
-    pageStart: ->
-        return  MailPage.PageStart();
+    pageStart: (boxMessageNumber)->
+        return  MailPage.PageStart(boxMessageNumber);
 
     pageEnd: (boxMessageNumber)->
         pageEnd = MailPage.PageEnd(boxMessageNumber);

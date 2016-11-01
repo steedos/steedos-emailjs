@@ -11,11 +11,11 @@ MailPage.pageCount  = function(boxMessageNumber){
 
 //向后翻页
  MailPage.pageBack = function(){
- 	if (Session.get("mailPage") <= 1) 
+ 	if (Session.get("mailPage") <= 1)
  		Session.set("mailPage", 1);
  	else 
  		Session.set("mailPage", Session.get("mailPage") - 1);
- } 
+ }
 
 //向前翻页
 MailPage.pageForward = function(boxMessageNumber){
@@ -23,12 +23,16 @@ MailPage.pageForward = function(boxMessageNumber){
 	if (Session.get("mailPage") >= MailPage.pageCount(boxMessageNumber))
 		Session.set("mailPage", MailPage.pageCount(boxMessageNumber));
 	else
-		Session.set("mailPage", Session.get("mailPage") + 1);		
+		Session.set("mailPage", Session.get("mailPage") + 1);
 }
 
 //起始数
-MailPage.PageStart = function(){
- 	return (Session.get("mailPage") - 1) * MailPage.pageSize +1;
+MailPage.PageStart = function(boxMessageNumber){
+  var rev = (Session.get("mailPage") - 1) * MailPage.pageSize +1;
+	if(rev > boxMessageNumber)
+		rev = boxMessageNumber - (boxMessageNumber % MailPage.pageSize) + 1;
+  console.log("MailPage.PageStart ......")
+ 	return rev;
 }
 
 //结束数
@@ -41,6 +45,3 @@ MailPage.PageEnd = function(boxMessageNumber){
 
 	return rev;
 }
-
-
-
