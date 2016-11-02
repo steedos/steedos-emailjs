@@ -283,13 +283,10 @@ ImapClientManager.search = function(client, path, query, callback){
 
 			MailCollection.mail_search.update({},{uids:result});
 
-			var sequence = result.toString();
-
 			client.close();
 
-			ImapClientManager.listMessages(null, path, sequence, {byUid: true}, function(){
-				callback(result);
-			})
+      callback(result);
+
 		}, function(reject){
 			callback([]);
 			toastr.error("您的邮箱不支持搜索功能");

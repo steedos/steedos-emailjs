@@ -68,14 +68,8 @@ Template.mail_list.helpers
 
             if Session.get("mailBoxInit")
                 if Session.get("mailBoxFilter")
-                  len = Session.get("mailBoxFilter").length
-                  if Session.get("mailPage") * MailPage.pageSize + 1 > len
-                    page = MailPage.pageCount(len)
-                    rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), page-1, MailPage.pageSize, ()->
-                      Session.set("mailLoading",false);
-                  else
-                      rev = MailManager.getBoxMessagesByUids Session.get("mailBoxFilter"), Session.get("mailPage")-1, MailPage.pageSize, ()->
-                        Session.set("mailLoading",false);
+                  rev = MailManager.getSearchMessages Session.get("mailBoxFilter"), path, Session.get("mailPage")-1, MailPage.pageSize, ()->
+                    Session.set("mailLoading",false);
                 else
                   rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
                     Session.set("mailLoading",false);
