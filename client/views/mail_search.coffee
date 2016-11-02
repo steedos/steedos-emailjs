@@ -12,6 +12,7 @@ Template.mail_search.subjectSearch = ()->
         if !result || result.length == 0
             toastr.info("未搜索到数据");
         else
+            Session.set("mailPage", 1);
             Session.set("mailBoxFilter", result);
         Session.set("mailLoading",false);
 
