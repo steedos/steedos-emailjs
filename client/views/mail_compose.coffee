@@ -105,7 +105,8 @@ Template.mail_compose.events
     $("#attachment_file").val('')
 
   'click .mailbox-attachment-delete': (event)->
-    event.target.parentNode.parentNode.parentNode.remove();
+    console.log("click .mailbox-attachment-delete is run...")
+    event.target.parentNode.parentNode.parentNode.parentNode.remove();
 
 
 Template.mail_compose.onRendered ->
