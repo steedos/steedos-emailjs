@@ -24,9 +24,7 @@ Template.read_mail.helpers
 
     if message.bodyHtml?.data
       data = message.bodyHtml.data;
-      setTimeout (->
-         MailAttachment.handerInline(Session.get("mailBox"), message, $(".message-body"))
-      ), 10
+      MailAttachment.handerInline(Session.get("mailBox"), message)
       return MailManager.resetHrefs(data);
     else
       return message.bodyText.data;
