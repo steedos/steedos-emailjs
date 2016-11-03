@@ -1,10 +1,11 @@
 MailMimeBuilder = {};
 
-var MimeBuilder, fs;
+var MimeBuilder, fs, MimeCodec;
 
 if(Steedos.isNode()){
 	MimeBuilder = require('emailjs-mime-builder');
 	fs = nw.require('fs');
+	MimeCodec = require('emailjs-mime-codec');
 }
 
 MailMimeBuilder.getMessageMime = function(from, to, cc, bcc,subject, body, attachments){
@@ -24,7 +25,7 @@ MailMimeBuilder.getMessageMime = function(from, to, cc, bcc,subject, body, attac
 	if(attachments){
 		attachments.forEach(function(attachment){
 			var attachment_data = fs.readFileSync(attachment.path);
-			node.createChild(false, {}).setHeader("Content-Type","application/octet-stream").setHeader("Content-Disposition", "attachment; filename=" + attachment.name).setHeader("Content-Transfer-Encoding", "base64").setContent(new Uint8Array(attachment_data));
+			node.createChild(false, {filename:attachment.name}).setHeader("Content-Type","application/octet-stream").setHeader("Content-Disposition", "attachment").setHeader("Content-Transfer-Encoding", "base64").setContent(new Uint8Array(attachment_data));
 		});
 	}
 
