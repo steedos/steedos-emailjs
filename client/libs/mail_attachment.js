@@ -1,5 +1,5 @@
 
-var fs, path, os, exec, dirname, dirtemp ;
+var fs, path, os, exec, dirname, dirtemp, MimeCodec;
 
 
 
@@ -12,6 +12,8 @@ if(Steedos.isNode()){
 	dirname = path.join(path.normalize(process.env.HOME? process.env.HOME : process.env.USERPROFILE), "Downloads");
 
 	dirtemp = process.env.TEMP;
+
+	MimeCodec = require('emailjs-mime-codec')
 }
 
 
@@ -44,6 +46,24 @@ MailAttachment.save = function(name, data, callback){
         console.log("Export Account Success!");
         callback(dirname, name, filePath);
     })
+}
+
+MailAttachment.handerInline = function(path, message, bodyNode){
+	var imgs = bodyNode.find("img");
+	imgs.each(function(){
+		var img = $(this);
+		var src = img.prop("src");
+		if(src.split("cid:").length > 1){
+			var cid = src.split("cid:")[1];
+			message.attachments.forEach(function(att){
+				if(att.bodyPart.id == '<' + cid + '>'){
+					ImapClientManager.getAttachmentByPart(path, message.uid, att.bodyPart, function(filename, data){
+						img.prop("src","data:image/png;base64," + MimeCodec.base64.encode(data));
+					});
+				}
+			})
+		}
+	});
 }
 
 
