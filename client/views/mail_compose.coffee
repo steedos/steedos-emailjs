@@ -56,10 +56,17 @@ Template.mail_compose.helpers
       if Session.get("mailJumpDraft")
         return subject;
       else if Session.get("mailForward")
-        return "转发: " + subject;
+        if subject
+          return "转发: " + subject;
+        else
+          return "转发: "
       else if Session.get("mailReply") || Session.get("mailReplyAll")
-        return "回复: " + subject;
+        if subject
+          return "回复: " + subject;
+        else
+          return "回复: "
 
+      
   showLoadding: ->
     return Session.get("mailMessageLoadding");
 
