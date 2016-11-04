@@ -25,7 +25,9 @@
                 发件人:
                 {{#each from}}
                   <span class="mail-address">
-                    {{name}} &lt;{{address}}&gt;;
+                    <a class='address-name' data-path="{{path}}" data-href="/emailjs/b/{{path}}">
+                      {{name}} &lt;{{address}}&gt;;
+                    </a>
                   </span>
                 {{/each}}
               </div>
@@ -34,7 +36,9 @@
                   收件人:
                   {{#each to}}
                     <span class="mail-address">
-                      {{name}} &lt;{{address}}&gt;;
+                      <a class='address-name' data-path="{{path}}" data-href="/emailjs/b/{{path}}">
+                        {{name}} &lt;{{address}}&gt;;
+                      </a>
                     </span>
                   {{/each}}
                 </div>

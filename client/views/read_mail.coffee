@@ -58,14 +58,10 @@ Template.read_mail.events
   'click .mail-address': (event, template)->
     console.log("click .mail-address");
     Session.set("mailLoading",true);
+    $(".steedos-mail").removeClass("right-show")
 
     str = event.currentTarget.outerText;
     currentAddress = str.substring(str.indexOf("<") + 1, str.indexOf(">"))
-
-    path = Session.get("mailBox");
-
-    FlowRouter.go("/emailjs/b/" + path)
-    $(".steedos-mail").removeClass("right-show")
 
     MailManager.search currentAddress, (result) ->
       if !result || result.length == 0
