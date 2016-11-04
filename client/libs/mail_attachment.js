@@ -143,7 +143,7 @@ MailAttachment.getAttachmentIcon = function(fileName){
 
 	icon.excel = "fa fa-file-excel-o";
 
-	icon.ppt = "fa fa-file-ppt-o";
+	icon.ppt = "fa fa-file-powerpoint-o";
 
 	icon.zip = "fa fa-file-zip-o";
 
