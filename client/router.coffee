@@ -52,7 +52,7 @@ mailRoutes.route '/b/:mailBox/',
 		Session.set("mailBox", params.mailBox);
 		Session.set("mailMessageId", null);
 		Session.set("mailBoxFilter", "");
-    Session.set("mailSearchAddress", "");
+		Session.set("mailSearchAddress", "");
 		Session.set("mailMessageLoadding",false);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
