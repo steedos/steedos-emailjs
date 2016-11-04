@@ -49,35 +49,31 @@ MailAttachment.save = function(name, data, callback){
 }
 
 MailAttachment.handerInline = function(path, message){
-	var imgs = $(message.bodyHtml.data).find("img");
+	try{
+		var imgs = $(message.bodyHtml.data).find("img");
 
-	// var hasInline = false;
+		// var hasInline = false;
 
-	imgs.each(function(){
-		var img = $(this);
-		var src = img.prop("src");
-		if(src.split("cid:").length > 1){
-			// hasInline = true;
-			var cid = src.split("cid:")[1];
-			message.attachments.forEach(function(att){
-				if(att.bodyPart.id == '<' + cid + '>'){
-					ImapClientManager.getAttachmentByPart(path, message.uid, att.bodyPart, function(filename, data){
-						message.bodyHtml.data = message.bodyHtml.data.replace(src, "data:image/png;base64," + MimeCodec.base64.encode(data))
-						MailCollection.getMessageCollection(path).update(message._id ,message);
-						// img.prop("src","data:image/png;base64," + MimeCodec.base64.encode(data));
-					});
-				}
-			})
-		}
-	});
-
-	// if(hasInline){
-
-	// 	message.bodyHtml.data = $(".message-body").html();
-
-	// 	MailCollection.getMessageCollection(path).update(message._id ,message);
-	// }
-
+		imgs.each(function(){
+			var img = $(this);
+			var src = img.prop("src");
+			if(src.split("cid:").length > 1){
+				// hasInline = true;
+				var cid = src.split("cid:")[1];
+				message.attachments.forEach(function(att){
+					if(att.bodyPart.id == '<' + cid + '>'){
+						ImapClientManager.getAttachmentByPart(path, message.uid, att.bodyPart, function(filename, data){
+							message.bodyHtml.data = message.bodyHtml.data.replace(src, "data:image/png;base64," + MimeCodec.base64.encode(data))
+							MailCollection.getMessageCollection(path).update(message._id ,message);
+							// img.prop("src","data:image/png;base64," + MimeCodec.base64.encode(data));
+						});
+					}
+				})
+			}
+		});
+	}catch(e){
+		return ;
+	}
 }
 
 
