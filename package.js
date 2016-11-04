@@ -95,6 +95,8 @@ Package.onUse(function(api) {
 
 	api.addFiles('client/libs/mail_forward.js', 'client');
 
+	api.addFiles('client/libs/mail_notification.js', 'client');
+
 	api.addFiles('client/libs/mail_quartz.js', 'client');
 
 	api.addFiles('client/layout/master.html', 'client');
