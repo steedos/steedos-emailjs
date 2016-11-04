@@ -57,6 +57,8 @@ Template.mailButton.events
       else
         FlowRouter.go('/emailjs/b/' + path);
 
+      $(".steedos-mail").removeClass("right-show");
+
       Session.set("mailSending",false)
 
   'click #compose-draft': (event)->
