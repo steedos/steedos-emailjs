@@ -12,10 +12,19 @@ checkAccountLogin = (context, redirect) ->
 	AccountManager.checkAccount()
 	# FlowRouter.go '/admin/view/mail_accounts';
 # [ checkUserSigned, checkMailAccountIsNull, checkAccountLogin],
+
+
+getNewMessages = (context, redirect) ->
+	if context.path == "/emailjs" && MailCollection.email_accounts
+		MailManager.getNewBoxMessages "Inbox",(messages) ->
+			# MailNotification.send(messages);
+			console.log(messages);
+		
+
 mailRoutes = FlowRouter.group
 	prefix: '/emailjs',
 	name: 'mailRoute',
-	triggersEnter: [ checkUserSigned],
+	triggersEnter: [ checkUserSigned, getNewMessages],
 
 mailRoutes.route '/',
 	action: (params, queryParams)->
