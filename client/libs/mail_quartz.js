@@ -2,6 +2,8 @@ MailQuartz = {};
 
 MailQuartz.intervalId = null;
 
+MailQuartz._millisec = 1000 * 60 * 2;
+
 MailQuartz.getNewMessages = function(){
 	console.log("MailQuartz.getNewMessages run...");
 
@@ -13,5 +15,5 @@ MailQuartz.getNewMessages = function(){
 		MailManager.getNewBoxMessages("Inbox",function(messages){
 			MailNotification.send(messages);
 		});
-	},1000 * 30);
+	},MailQuartz._millisec);
 }
