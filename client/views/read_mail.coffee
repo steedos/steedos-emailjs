@@ -62,6 +62,7 @@ Template.read_mail.events
 
     str = event.currentTarget.outerText;
     currentAddress = str.substring(str.indexOf("<") + 1, str.indexOf(">"))
+    Session.set("mailSearchAddress", currentAddress);
 
     MailManager.search currentAddress, (result) ->
       if !result || result.length == 0

@@ -17,6 +17,11 @@ Template.mail_search.subjectSearch = ()->
         Session.set("mailLoading",false);
 
 
+Template.mail_search.helpers
+
+  searchAddress: ->
+    return Session.get("mailSearchAddress");
+
 
 Template.mail_search.events
 
