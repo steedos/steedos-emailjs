@@ -19,8 +19,11 @@ Template.emailjsLayout.helpers
                 if !message
                     Modal.hide("mailAccount");
                 else
-                    # toastr.error(message);
-                    Modal.show("mailAccount");
+                    setTimeout (->
+                      Modal.show "mailAccount"
+                      ),1000
+    
+
             return true;
         return false;
 
