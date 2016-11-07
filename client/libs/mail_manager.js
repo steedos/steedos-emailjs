@@ -109,7 +109,7 @@ MailManager.getboxMessages = function(page, page_size, callback){
 
   var messages = MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
 
-  if(messages.length >= page_size){
+  if(messages.length >= 1){
     if(typeof(callback) == 'function'){
       callback();
     }
