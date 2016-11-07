@@ -558,7 +558,7 @@ ImapClientManager.mailBoxMessages = function(path, callback){
 	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
 		ImapClientManager.updateLoadedMxistsIndex(path, sequence_s - 1);
 		if(typeof(callback) == "function"){
-			callback();
+			callback(messages);
 		}
 	});
 }

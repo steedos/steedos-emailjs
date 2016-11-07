@@ -116,7 +116,11 @@ MailManager.getboxMessages = function(page, page_size, callback){
     return messages;
   }
 
-  ImapClientManager.mailBoxMessages(Session.get("mailBox"), callback);
+  ImapClientManager.mailBoxMessages(Session.get("mailBox"), function(messages){
+    if(messages == null){
+      Session.set("mailMessageNull",true);
+    }
+  });
 
   return MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
 }
