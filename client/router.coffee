@@ -58,6 +58,25 @@ mailRoutes.route '/b/:mailBox/',
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
 
+mailRoutes.route '/b/search/:mailBox/',
+	action: (params, queryParams)->
+		if Session.get("mailBox") != params.mailBox
+			Session.set("mailPage",1)
+
+		Session.set("mailSearch", true);
+		Session.set("mailForward", false);
+		Session.set("mailReply", false);
+		Session.set("mailReplyAll", false);
+		Session.set("mailJumpDraft", false);
+		Session.set("mailBox", params.mailBox);
+		Session.set("mailMessageId", null);
+		Session.set("mailBoxFilter", "");
+		Session.set("mailSearchAddress", "");
+		Session.set("mailMessageLoadding",false);
+		Session.set("mailMessageNull",false);
+		BlazeLayout.render 'emailjsLayout',
+			main: "mail_home"
+
 mailRoutes.route '/b/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
 

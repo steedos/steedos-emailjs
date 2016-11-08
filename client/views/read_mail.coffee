@@ -58,6 +58,9 @@ Template.read_mail.events
   'click .mail-address': (event, template)->
     console.log("click .mail-address");
     Session.set("mailLoading",true);
+
+    path = Session.get("mailBox");
+    FlowRouter.go("/emailjs/b/search/" + path);
     $(".steedos-mail").removeClass("right-show")
 
     str = event.currentTarget.outerText;

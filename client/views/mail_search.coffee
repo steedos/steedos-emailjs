@@ -14,14 +14,15 @@ Template.mail_search.subjectSearch = ()->
         else
             Session.set("mailPage", 1);
             Session.set("mailBoxFilter", result);
+
         Session.set("mailLoading",false);
 
-
 Template.mail_search.helpers
+    searchAddress: ->
+        return Session.get("mailSearchAddress");
 
-  searchAddress: ->
-    return Session.get("mailSearchAddress");
-
+    path: ->
+        return Session.get("mailBox");
 
 Template.mail_search.events
 
@@ -30,6 +31,8 @@ Template.mail_search.events
     #    Template.mail_search.subjectSearch();
 
     'click #mail-search-btn': (event, template) ->
+        path = Session.get("mailBox");
+        FlowRouter.go("/emailjs/b/search/" + path);
         Template.mail_search.subjectSearch();
 
     'click #advanced_search': (event, template) ->

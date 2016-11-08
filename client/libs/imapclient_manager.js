@@ -245,6 +245,45 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	});
 }
 
+ImapClientManager.listSearchMessages = function(client, path, sequence, options, callback){
+	if (!client)
+		client = this.getClient();
+
+	var query = ['uid', 'flags', 'envelope','bodystructure'];
+
+	client.connect().then(function(){
+		console.log("listSearchMessages start, sequence is " + sequence);
+		client.listMessages(path, sequence, query, options).then(function(messages){
+
+			messages.forEach(function(message){
+				if(message && message.uid){
+
+					var hMessage = handerMessage(message);
+					if(!hMessage.bodyHtml && !hMessage.bodyText){
+
+						hMessage.summary = false;
+						hMessage.bodyText = {};
+						hMessage.bodyText.data="";
+
+					}else{
+						hMessage.summary = true;
+					}
+					var local_message = MailManager.getMessageByUid(path, message.uid);
+					if(local_message){
+						// MailCollection.searchMessageCollection(path).update(local_message._id ,hMessage);
+					}else
+						MailCollection.searchMessageCollection(path).insert(hMessage);
+				}
+			});
+
+			console.log("ImapClientManager.listMessages getMessages ok; messages length is " + messages.length);
+
+			client.close();
+			callback(messages);
+		});
+	});
+}
+
 ImapClientManager.searchUnseenMessages = function(client, path, query, callback){
 
 	if (!client)

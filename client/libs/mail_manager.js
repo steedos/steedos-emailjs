@@ -133,10 +133,10 @@ MailManager.getSearchMessages = function(uids, path, page, page_size, callback){
 
   	var pageUids = uids.slice(page_s, page_e);
 
-    ImapClientManager.listMessages(null, path, pageUids, {byUid: true}, callback);
+    ImapClientManager.listSearchMessages(null, path, pageUids, {byUid: true}, callback);
 
     callback();
-    return MailCollection.getMessageCollection(path).find({uid:{$in: uids}}, {sort: {uid:-1}, skip: page * page_size, limit: page_size}).fetch();
+    return MailCollection.searchMessageCollection(path).find({uid:{$in: uids}}, {sort: {uid:-1}, skip: page * page_size, limit: page_size}).fetch();
 }
 
 function getMesssageBodyPart(message){

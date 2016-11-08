@@ -14,13 +14,13 @@ MailCollection.before.update = function(userId, doc){
 
 MailCollection.create = function(key){
 	if(!MailCollection.keys.includes(key)){
-		
+
 		MailCollection[key] = new Mongo.Collection();
 
 		MailCollection[key].before.insert(MailCollection.before.insert);
 
 		MailCollection[key].before.update(MailCollection.before.update);
-		
+
 		MailCollection.keys.push(key);
 	}
 
@@ -44,9 +44,16 @@ MailCollection.init = function(){
 }
 
 MailCollection.getMessageCollection = function(path){
-	
+
 	var key = "mail_" + path + "_messages";
-	
+
+	return MailCollection.create(key);
+}
+
+MailCollection.searchMessageCollection = function(path){
+
+	var key = "mail_" + path + "_messages";
+
 	return MailCollection.create(key);
 }
 
@@ -64,7 +71,7 @@ MailCollection.getInboxMessage = function(selector, options){
 
 
 MailCollection.destroy = function(){
-	
+
 	console.log("MailCollection.destroy...");
 
 	MailCollection.keys.forEach(function(key){
