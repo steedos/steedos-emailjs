@@ -60,23 +60,26 @@ Template.mail_list.helpers
         path = Session.get("mailBox");
 
         rev ;
-        if Session.get("mailMessageNull") == false
-          if Session.get("mailInit")
-              inbox = MailManager.getBox(path);
-              ImapClientManager.initMailboxInfo inbox, ()->
-                  Session.set("mailBoxInit", true);
-                  console.log("ImapClientManager.initMailboxInfo ok...");
+        #if Session.get("mailMessageNull") == false
+        if Session.get("mailInit")
+            inbox = MailManager.getBox(path);
+            ImapClientManager.initMailboxInfo inbox, ()->
+                Session.set("mailBoxInit", true);
+                console.log("ImapClientManager.initMailboxInfo ok...");
+            if path == "Inbox"
+                rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize
 
-              if Session.get("mailBoxInit")
-                  if Session.get("mailBoxFilter")
-                    rev = MailManager.getSearchMessages Session.get("mailBoxFilter"), path, Session.get("mailPage")-1, MailPage.pageSize, ()->
-                      Session.set("mailLoading",false);
-                  else
-                    rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
-                      Session.set("mailMessageNull",false);
-                      Session.set("mailLoading",false);
-        else
-          Session.set("mailLoading",false);
+            if Session.get("mailMessageNull") == false
+                if Session.get("mailBoxInit")
+                    if Session.get("mailBoxFilter")
+                      rev = MailManager.getSearchMessages Session.get("mailBoxFilter"), path, Session.get("mailPage")-1, MailPage.pageSize, ()->
+                        Session.set("mailLoading",false);
+                    else
+                      rev = MailManager.getboxMessages Session.get("mailPage")-1, MailPage.pageSize, () ->
+                        Session.set("mailMessageNull",false);
+                        Session.set("mailLoading",false);
+            else
+              Session.set("mailLoading",false);
         return rev;
 
     isUnseen: (message)->
