@@ -425,7 +425,7 @@ ImapClientManager.initMailboxInfo = function(mailBox, callback){
 
 	console.log("ImapClientManager.initMailboxInfo");
 
-	Session.set("mailBoxInit", false)
+	Session.set("mailBoxInit", false);
 
 	ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
 		ImapClientManager.updateLoadedMxistsIndex(mailBox.path, m.exists);

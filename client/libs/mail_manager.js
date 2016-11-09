@@ -109,15 +109,15 @@ MailManager.getboxMessages = function(page, page_size, callback){
 
   var messages = MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
 
-  if(messages.length >= 1){
+  if((messages.length >= 1) || (Session.get("mailMessageNull") && (messages.length == 0))){
     if(typeof(callback) == 'function'){
       callback();
     }
     return messages;
   }
 
-  ImapClientManager.mailBoxMessages(Session.get("mailBox"), function(messages){
-    if(messages == null){
+  ImapClientManager.mailBoxMessages(Session.get("mailBox"),function(message){
+    if(message == undefined){
       Session.set("mailMessageNull",true);
     }
   });
