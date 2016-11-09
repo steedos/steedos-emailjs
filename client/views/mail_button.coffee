@@ -84,7 +84,7 @@ Template.mailButton.events
     message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
 
     uid = message.uid;
-
+    $(".steedos-mail").removeClass("right-show")
     MailManager.judgeDelete(path, [uid]);
 
   'click #right_back': (event)->
