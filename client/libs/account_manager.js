@@ -1,9 +1,10 @@
 AccountManager = {};
 
+_AccountsRemote = new AjaxCollection("mail_accounts")
 
 AccountManager.getAuth = function(){
 
-	var mail_account = db.mail_accounts.findOne();
+	var mail_account = _AccountsRemote.findOne();
 	if(!mail_account)
 		return ;
 	return {user: mail_account.email,pass: mail_account.password};
