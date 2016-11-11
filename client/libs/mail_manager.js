@@ -10,7 +10,9 @@ MailManager.initMail = function(callback){
       var inbox = MailManager.getBox("Inbox");
 
       ImapClientManager.initMailboxInfo(inbox, function(){
-        ImapClientManager.updateUnseenMessages();
+        ImapClientManager.updateUnseenMessages(function(){
+          MailUnseendisplay.listUnseenMessages();
+        });
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);
         try{
@@ -27,12 +29,14 @@ MailManager.initMail = function(callback){
           console.error("MailManager.initMail callback function error:" + e);
         }
         $(document.body).removeClass('loading');
+        //MailUnseendisplay.getInboxLastUid();
       })
     });
 
     setTimeout(MailQuartz.getNewMessages, 1000 * 120);
   }
 }
+
 
 MailManager.getBoxInfo = function(path){
 
@@ -109,7 +113,7 @@ MailManager.getboxMessages = function(page, page_size, callback){
 
   var messages = MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
 
-  if((messages.length >= 1) || (Session.get("mailMessageNull") && (messages.length == 0))){
+  if(((Session.get("mailPage") == 1 )&&(messages.length >= 1))||((Session.get("mailPage") != 1)&&(messages.length >= page_size) )|| ((Session.get("mailMessageNull") && (messages.length == 0)))){
     if(typeof(callback) == 'function'){
       callback();
     }
@@ -276,7 +280,9 @@ MailManager.getNewBoxMessages = function(path, callback){
     // if(messages.length > 0){
       ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
         if(path == "Inbox"){
-          ImapClientManager.updateUnseenMessages();
+          ImapClientManager.updateUnseenMessages(function(){
+            //MailUnseendisplay.listUnseenMessages();
+          });
         }
         ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
       });
@@ -299,7 +305,7 @@ MailManager.updateBoxInfo = function(path){
       return ;
   //var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
   if(path == "Inbox"){
-    ImapClientManager.updateUnseenMessages();
+    ImapClientManager.updateUnseenMessages(callback);
   }
   ImapClientManager.getNewMessage(path, function(){
     ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){

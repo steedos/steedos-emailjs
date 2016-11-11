@@ -9,10 +9,10 @@ MailNotification.send = function(messages){
 		var inboxPath = MailManager.getBoxBySpecialUse("\\Inbox").path;
 		var emailjsPath = "/emailjs/b/" + inboxPath + "/";
 	    if(messages.length > 1){
-	    	title = "未读邮件";
-	    	body = "您有" + messages.length + "封未读邮件";
+	    	title = "新邮件";
+	    	body = "您有" + messages.length + "新邮件";
 	    	openUrl = emailjsPath;
-	    }else{  
+	    }else{
 	        var envelope = messages[0]["envelope"];
 	        var uid = messages[0].uid;
 	        if(envelope){
@@ -33,7 +33,7 @@ MailNotification.send = function(messages){
 		}
 		options.onclick = function(){
 			// var domainsArr = FlowRouter._current.path.split("/");
-			
+
 			FlowRouter.go(openUrl);
 
 			// if (domainsArr[1] && (domainsArr[1] == "emailjs")){

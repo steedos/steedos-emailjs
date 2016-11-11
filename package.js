@@ -20,7 +20,7 @@ Npm.depends({
 });
 
 
-Package.onUse(function(api) { 
+Package.onUse(function(api) {
 
 	api.versionsFrom('1.0');
 
@@ -66,7 +66,7 @@ Package.onUse(function(api) {
 	api.use('tap:i18n', ['client', 'server']);
 	tapi18nFiles = ['i18n/en.i18n.json', 'i18n/zh-CN.i18n.json']
 	api.addFiles(tapi18nFiles, ['client', 'server']);
-	
+
 	api.addFiles('lib/core.coffee', ['client', 'server']);
 	api.addFiles('lib/models/mail_accounts.coffee', ['client', 'server']);
 	api.addFiles('lib/models/mail_domains.coffee', ['client', 'server']);
@@ -80,9 +80,9 @@ Package.onUse(function(api) {
 	api.addFiles('client/router.coffee', 'client');
 
 	api.addFiles('client/libs/account_manager.js','client')
-	
+
 	api.addFiles('client/libs/mail_attachment.js','client')
-	
+
 	api.addFiles('client/libs/mail_page.js', 'client');
 
 	api.addFiles('client/libs/mail_collection.js', 'client');
@@ -93,6 +93,8 @@ Package.onUse(function(api) {
 	api.addFiles('client/libs/mail_manager.js', 'client');
 
 	api.addFiles('client/libs/smtpclient_manager.js', 'client');
+
+	api.addFiles('client/libs/mail_unseendisplay.js', 'client');
 
 	api.addFiles('client/libs/mail_forward.js', 'client');
 
@@ -114,7 +116,7 @@ Package.onUse(function(api) {
 
 	api.addFiles('client/views/contact_modal.html', 'client');
 	api.addFiles('client/views/contact_modal.coffee', 'client');
-	
+
 	api.addFiles('client/views/select_mail.less', 'client');
 	api.addFiles('client/views/select_mail.html', 'client');
 	api.addFiles('client/views/select_mail.js', 'client');
@@ -136,22 +138,23 @@ Package.onUse(function(api) {
 
 	api.addFiles('client/views/right.html', 'client');
 	api.addFiles('client/views/right.coffee', 'client');
-	
+
 	api.addFiles('client/views/mail_home.html', 'client');
 	api.addFiles('client/views/mail_home.coffee', 'client');
 
 	api.addFiles('client/views/mail_button.html', 'client');
 	api.addFiles('client/views/mail_button.coffee', 'client');
- 
+
     api.addAssets('client/assets/forge.min.js', 'client');
     api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
 
- 	api.export('MailMimeBuilder'); 
+ 	api.export('MailMimeBuilder');
 	api.export('AccountManager');
 	api.export('MailCollection');
 	api.export("MailManager");
 	api.export("ImapClientManager");
 	api.export("MailPage");
+	api.export("MailUnseendisplay");
 	api.export("MailAttachment");
 	api.export("MailForward");
 	api.export("SmtpClientManager");

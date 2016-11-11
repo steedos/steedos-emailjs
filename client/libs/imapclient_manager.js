@@ -435,10 +435,13 @@ ImapClientManager.initMailboxInfo = function(mailBox, callback){
 
 }
 
-ImapClientManager.updateUnseenMessages = function(){
+ImapClientManager.updateUnseenMessages = function(callback){
 	ImapClientManager.searchUnseenMessages(null ,"Inbox", {unseen: true}, function(result){
 		MailCollection.mail_unseen.update({},{uids:result});
-	});
+		if(typeof(callback) == "function"){
+			callback();
+		}
+  });
 }
 
 ImapClientManager.updateLoadedMxistsIndex = function(path, loadedMxistsIndex){
