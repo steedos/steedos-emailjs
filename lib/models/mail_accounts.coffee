@@ -55,25 +55,28 @@ if Meteor.isServer
     
     
     MailDecrypt::decrypt = (passwordHash, email) ->
-        key32 = ""
-        len = email.length
-        if len < 32
-            c = ""
-            i = 0
-            m = 32 - len
-            while i < m
-                c = " " + c
-                i++
-            key32 = email + c
-        else if len >= 32
-            key32 = email.slice(0, 32)
-        
-        decipher = crypto.createDecipheriv('aes-256-cbc', new Buffer(key32, 'utf8'), new Buffer(@IV, 'utf8'))
-        
-        decipherMsg = Buffer.concat([decipher.update(passwordHash, 'base64'), decipher.final()])
-        
-        password = decipherMsg.toString();
-        return password;
+        try
+            key32 = ""
+            len = email.length
+            if len < 32
+                c = ""
+                i = 0
+                m = 32 - len
+                while i < m
+                    c = " " + c
+                    i++
+                key32 = email + c
+            else if len >= 32
+                key32 = email.slice(0, 32)
+            
+            decipher = crypto.createDecipheriv('aes-256-cbc', new Buffer(key32, 'utf8'), new Buffer(@IV, 'utf8'))
+            
+            decipherMsg = Buffer.concat([decipher.update(passwordHash, 'base64'), decipher.final()])
+            
+            password = decipherMsg.toString();
+            return password;
+        catch e
+            return passwordHash;
     
     
     MailDecrypt::encrypt = (password, email) ->
