@@ -79,6 +79,8 @@ Package.onUse(function(api) {
 	api.addFiles('client/subcribe.coffee', 'client');
 	api.addFiles('client/router.coffee', 'client');
 
+	api.addFiles('client/api.js', 'client');
+
 	api.addFiles('client/libs/account_manager.js','client')
 
 	api.addFiles('client/libs/mail_attachment.js','client')
@@ -90,6 +92,7 @@ Package.onUse(function(api) {
 	api.addFiles('client/libs/mail_mimebuilder.js', 'client');
 
 	api.addFiles('client/libs/imapclient_manager.js', 'client');
+
 	api.addFiles('client/libs/mail_manager.js', 'client');
 
 	api.addFiles('client/libs/smtpclient_manager.js', 'client');
@@ -103,11 +106,10 @@ Package.onUse(function(api) {
 	api.addFiles('client/libs/mail_quartz.js', 'client');
 
 	api.addFiles('client/layout/master.html', 'client');
-    api.addFiles('client/layout/master.coffee', 'client');
-    api.addFiles('client/layout/master.less', 'client');
-    api.addFiles('client/layout/sidebar.html', 'client');
-    api.addFiles('client/layout/sidebar.coffee', 'client');
-
+  api.addFiles('client/layout/master.coffee', 'client');
+  api.addFiles('client/layout/master.less', 'client');
+  api.addFiles('client/layout/sidebar.html', 'client');
+  api.addFiles('client/layout/sidebar.coffee', 'client');
 
 	api.addFiles('client/views/mail.less', 'client');
 
@@ -145,19 +147,21 @@ Package.onUse(function(api) {
 	api.addFiles('client/views/mail_button.html', 'client');
 	api.addFiles('client/views/mail_button.coffee', 'client');
 
-    api.addAssets('client/assets/forge.min.js', 'client');
-    api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
+  api.addAssets('client/assets/forge.min.js', 'client');
+  api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
 
- 	api.export('MailMimeBuilder');
+	api.export('Mail');
+
+	api.export('MailMimeBuilder');
 	api.export('AccountManager');
 	api.export('MailCollection');
 	api.export("MailManager");
 	api.export("ImapClientManager");
 	api.export("MailPage");
-	api.export("MailUnseendisplay");
 	api.export("MailAttachment");
 	api.export("MailForward");
 	api.export("SmtpClientManager");
+
 });
 
 Package.onTest(function(api) {

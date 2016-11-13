@@ -11,7 +11,8 @@ MailManager.initMail = function(callback){
 
       ImapClientManager.initMailboxInfo(inbox, function(){
         ImapClientManager.updateUnseenMessages(function(){
-          MailUnseendisplay.listUnseenMessages();
+          var unseenUids = MailUnseendisplay.getUnseenUids();
+          MailUnseendisplay.listUnseenMessages(unseenUids, callback);
         });
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);

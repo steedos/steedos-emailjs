@@ -77,18 +77,21 @@ function getOtherUnseenUids(uids, sameUids){
 
 
 //获取10封未读邮件的message
-MailUnseendisplay.listUnseenMessages = function(){
-  var unseenUids = MailUnseendisplay.getUnseenUids();
+MailUnseendisplay.listUnseenMessages = function(unseenUids, callback){
+  if((!unseenUids) || (unseenUids.length < 1)){
+    return ;
+  }
   var inboxUids = getInboxUids();
   var sameUids = getSameUids(inboxUids, unseenUids);
   var otherUnseenUids = getOtherUnseenUids(unseenUids, sameUids);
 
   var messages = MailCollection.getMessageCollection("Inbox").find({uid:{$in: otherUnseenUids}}, {sort: {uid:-1}, skip: 0, limit: 10}).fetch();
 
-  unseenUids = MailUnseendisplay.getUnseenUids();
+  var uid = MailUnseendisplay.getUnseenUids();
   if(messages.length < unseenUids.length){
-    ImapClientManager.listMessages(null, "Inbox", unseenUids, {byUid: true}, function(messages){
+    ImapClientManager.listMessages(null, "Inbox", uid, {byUid: true}, function(messages){
       console.log("messages :>>>" + messages);
+      callback(messages);
     });
   }else{
     return ;

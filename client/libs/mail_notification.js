@@ -10,7 +10,7 @@ MailNotification.send = function(messages){
 		var emailjsPath = "/emailjs/b/" + inboxPath + "/";
 	    if(messages.length > 1){
 	    	title = "新邮件";
-	    	body = "您有" + messages.length + "新邮件";
+	    	body = "您有" + messages.length + "封新邮件";
 	    	openUrl = emailjsPath;
 	    }else{
 	        var envelope = messages[0]["envelope"];
