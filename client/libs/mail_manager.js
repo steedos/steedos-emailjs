@@ -110,10 +110,13 @@ MailManager.getBoxMessagesByUids = function(uids, page, page_size ,callback){
 
 
 MailManager.getboxMessages = function(page, page_size, callback){
+  var path = Session.get("mailBox");
+  var messages = MailManager.getMessages(MailCollection.getMessageCollection(path), page, page_size);
 
-  var messages = MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
+  var box = MailManager.getBox(path);
+  var lastPage = MailPage.pageCount(box.info.exists);
 
-  if(((Session.get("mailPage") == 1 )&&(messages.length >= 1))||((Session.get("mailPage") != 1)&&(messages.length >= page_size) )|| ((Session.get("mailMessageNull") && (messages.length == 0)))){
+  if(((Session.get("mailPage") == 1 )&&(messages.length >= 1)) || ((Session.get("mailPage") == lastPage)&&(messages.length >= 1))||((Session.get("mailPage") != 1)&&(messages.length >= page_size) )|| ((Session.get("mailMessageNull") && (messages.length == 0)))){
     if(typeof(callback) == 'function'){
       callback();
     }
@@ -281,7 +284,7 @@ MailManager.getNewBoxMessages = function(path, callback){
       ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
         if(path == "Inbox"){
           ImapClientManager.updateUnseenMessages(function(){
-            //MailUnseendisplay.listUnseenMessages();
+            MailUnseendisplay.listUnseenMessages();
           });
         }
         ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
