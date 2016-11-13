@@ -1,3 +1,4 @@
-Mail.listUnseenMessages = function(unseenUids, callback){
-  MailUnseendisplay.listUnseenMessages(unseenUids, callback);
+Mail.listUnseenMessages = function(){
+  var unseenUids = MailUnseendisplay.getUnseenUids();
+  return MailUnseendisplay.listUnseenMessages(unseenUids, callback);
 }

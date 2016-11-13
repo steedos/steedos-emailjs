@@ -157,6 +157,7 @@ Package.onUse(function(api) {
 	api.export('MailCollection');
 	api.export("MailManager");
 	api.export("ImapClientManager");
+	api.export("MailUnseendisplay");
 	api.export("MailPage");
 	api.export("MailAttachment");
 	api.export("MailForward");
