@@ -12,7 +12,7 @@ MailManager.initMail = function(callback){
       ImapClientManager.initMailboxInfo(inbox, function(){
         ImapClientManager.updateUnseenMessages(function(){
           var unseenUids = MailUnseendisplay.getUnseenUids();
-          MailUnseendisplay.listUnseenMessages(unseenUids, callback);
+          MailUnseendisplay.listUnseenMessages(unseenUids);
         });
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);

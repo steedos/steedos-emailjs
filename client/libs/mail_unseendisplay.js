@@ -17,7 +17,7 @@ MailUnseendisplay.uidNumber = 10;
 // }
 
 
-//取前10的未读邮件的uid
+//获取前10的未读邮件的uid
  MailUnseendisplay.getUnseenUids = function(){
   var arr = MailCollection.mail_unseen.find().fetch();
   var uids = arr[0].uids;
@@ -32,7 +32,7 @@ MailUnseendisplay.uidNumber = 10;
   return unseenUids;
 }
 
-//取得部分messages的uids
+//获得inbox中message已经存到本地的uid
 function getInboxUids(){
   var inboxUids = [];
   var conn = MailCollection.getMessageCollection("Inbox").find().fetch();
@@ -40,7 +40,7 @@ function getInboxUids(){
   return inboxUids;
 }
 
-//inbox前pageSize条中，包含未读邮件的uid
+//从inbox中message已经存到本地的uid中，选取包含的未读邮件的uid
 function  getSameUids(inboxUids, uids){
   var sameUids = new Array();
   var c = uids.toString();
@@ -60,24 +60,30 @@ function  getSameUids(inboxUids, uids){
   return sameUids;
 }
 
-//前10的未读邮件的uid中, 不包含在inbox前pageSize条中的uid
-function getOtherUnseenUids(uids, sameUids){
+//获取前10封未读邮件中message没有下载到本地的uid
+function getOtherUnseenUids(unseenUids, sameUids){
+  var otherUids = new Array();
   for(var i=0; i<sameUids.length; i++)
-      {
-        for(var j=0; j<uids.length; j++)
-        {
-          if(uids[j] == sameUids[i]){
-            uids.splice(j,1);
-            j=j-1;
-          }
-        }
+  {
+    for(var j=0; j<unseenUids.length; j++)
+    {
+      if(unseenUids[j] == sameUids[i]){
+        unseenUids.splice(j,1);
+        j=j-1;
       }
-    return uids;
+    }
+  }
+  for(var j=0; j<unseenUids.length; j++)
+  {
+    otherUids.push(unseenUids[j]);
+  }
+  return otherUids;
 }
 
 
-//获取10封未读邮件的message
-MailUnseendisplay.listUnseenMessages = function(unseenUids, callback){
+//下载前10封未读邮件中本地不存在的message
+MailUnseendisplay.listUnseenMessages = function(){
+  var unseenUids = MailUnseendisplay.getUnseenUids();
   if((!unseenUids) || (unseenUids.length < 1)){
     return ;
   }
@@ -85,16 +91,12 @@ MailUnseendisplay.listUnseenMessages = function(unseenUids, callback){
   var sameUids = getSameUids(inboxUids, unseenUids);
   var otherUnseenUids = getOtherUnseenUids(unseenUids, sameUids);
 
-  var messages = MailCollection.getMessageCollection("Inbox").find({uid:{$in: otherUnseenUids}}, {sort: {uid:-1}, skip: 0, limit: 10}).fetch();
-
-  var uid = MailUnseendisplay.getUnseenUids();
-  if(messages.length < unseenUids.length){
-    ImapClientManager.listMessages(null, "Inbox", uid, {byUid: true}, function(messages){
-      console.log("messages :>>>" + messages);
-      callback(messages);
-    });
-  }else{
+  if((!otherUnseenUids) || (otherUnseenUids.length < 1)){
     return ;
   }
-  //MailCollection.getMessageCollection("Inbox").find({uid:{$in: unseenUids}}, {sort: {uid:-1}, skip: 0, limit: 10}).fetch();
+  else{
+    ImapClientManager.listMessages(null, "Inbox", otherUnseenUids, {byUid: true}, function(messages){
+      console.log("messages :>>>" + messages);
+    });
+  }
 }
