@@ -82,7 +82,7 @@ function getOtherUnseenUids(unseenUids, sameUids){
 
 
 //下载前10封未读邮件中本地不存在的message
-MailUnseendisplay.listUnseenMessages = function(){
+MailUnseendisplay.listUnseenMessages = function(callback){
   var unseenUids = MailUnseendisplay.getUnseenUids();
   if((!unseenUids) || (unseenUids.length < 1)){
     return ;
@@ -98,5 +98,8 @@ MailUnseendisplay.listUnseenMessages = function(){
     ImapClientManager.listMessages(null, "Inbox", otherUnseenUids, {byUid: true}, function(messages){
       console.log("messages :>>>" + messages);
     });
+  }
+  if(typeof(callback) == 'function'){
+    callback();
   }
 }

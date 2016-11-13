@@ -11,25 +11,27 @@ MailManager.initMail = function(callback){
 
       ImapClientManager.initMailboxInfo(inbox, function(){
         ImapClientManager.updateUnseenMessages(function(){
-          MailUnseendisplay.listUnseenMessages();
-        });
+          MailUnseendisplay.listUnseenMessages(function(){
+            try{
+              if(callback){
+                if(typeof(callback) == 'function'){
+                  callback();
+
+                  draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
+
+                  ImapClientManager.initMailboxInfo(draftBox, function(){});
+                }
+              }
+            }catch(e){
+              console.error("MailManager.initMail callback function error:" + e);
+            }
+          });
+        })
+
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);
-        try{
-          if(callback){
-            if(typeof(callback) == 'function'){
-              callback();
 
-              draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
-
-              ImapClientManager.initMailboxInfo(draftBox, function(){});
-            }
-          }
-        }catch(e){
-          console.error("MailManager.initMail callback function error:" + e);
-        }
         $(document.body).removeClass('loading');
-        //MailUnseendisplay.getInboxLastUid();
       })
     });
 
