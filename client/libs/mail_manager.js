@@ -14,6 +14,7 @@ MailManager.initMail = function(callback){
           //下载前10封未读邮件中本地不存在的message
           MailUnseendisplay.listUnseenMessages(function(){
             try{
+              $(document.body).removeClass('loading');
               if(callback){
                 if(typeof(callback) == 'function'){
                   callback();
@@ -26,7 +27,6 @@ MailManager.initMail = function(callback){
             }catch(e){
               console.error("MailManager.initMail callback function error:" + e);
             }
-            $(document.body).removeClass('loading');
           });
         })
 
