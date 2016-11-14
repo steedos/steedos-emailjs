@@ -92,7 +92,10 @@ MailUnseendisplay.listUnseenMessages = function(callback){
   var otherUnseenUids = getOtherUnseenUids(unseenUids, sameUids);
 
   if((!otherUnseenUids) || (otherUnseenUids.length < 1)){
-    return ;
+    if(typeof(callback) == 'function'){
+      callback();
+    }
+    //return ;
   }
   else{
     ImapClientManager.listMessages(null, "Inbox", otherUnseenUids, {byUid: true}, function(messages){
