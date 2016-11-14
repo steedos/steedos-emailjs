@@ -11,6 +11,7 @@ MailManager.initMail = function(callback){
 
       ImapClientManager.initMailboxInfo(inbox, function(){
         ImapClientManager.updateUnseenMessages(function(){
+          //下载前10封未读邮件中本地不存在的message
           MailUnseendisplay.listUnseenMessages(function(){
             try{
               if(callback){
