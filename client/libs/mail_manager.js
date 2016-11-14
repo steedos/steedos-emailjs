@@ -26,13 +26,13 @@ MailManager.initMail = function(callback){
             }catch(e){
               console.error("MailManager.initMail callback function error:" + e);
             }
+            $(document.body).removeClass('loading');
           });
         })
 
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);
 
-        $(document.body).removeClass('loading');
       })
     });
 
