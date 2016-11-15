@@ -14,7 +14,6 @@ MailManager.initMail = function(callback){
           //下载前10封未读邮件中本地不存在的message
           MailUnseendisplay.listUnseenMessages(function(){
             try{
-              $(document.body).removeClass('loading');
               if(callback){
                 if(typeof(callback) == 'function'){
                   callback();
@@ -28,6 +27,7 @@ MailManager.initMail = function(callback){
               console.error("MailManager.initMail callback function error:" + e);
             }
           });
+          $(document.body).removeClass('loading');
         })
 
         Session.set("mailInit", true);
@@ -117,10 +117,15 @@ MailManager.getboxMessages = function(page, page_size, callback){
   var messages = MailManager.getMessages(MailCollection.getMessageCollection(path), page, page_size);
 
   var box = MailManager.getBox(path);
-  var lastPage = MailPage.pageCount(box.info.exists);
+  var lastPage ;
+  if((!box)||(!box.info) || (box == undefined) ||(box.info == undefined)){
+    lastPage = 0;
+  }else{
+    lastPage = MailPage.pageCount(box.info.exists);
+  }
 
-  if(((Session.get("mailPage") == 1 )&&(messages.length >= 1)) || ((Session.get("mailPage") == lastPage)&&(messages.length >= 1))||((Session.get("mailPage") != 1)&&(messages.length >= page_size) )|| ((Session.get("mailMessageNull") && (messages.length == 0)))){
-    if(typeof(callback) == 'function'){
+  if(((Session.get("mailPage") == 1)&&(lastPage != 1)&&(messages.length >= page_size)) || ((Session.get("mailPage") == lastPage)&&(messages.length >= 1))||((Session.get("mailPage") != 1)&&(messages.length >= page_size)) || ((Session.get("mailMessageNull") && (messages.length == 0)))){
+  if(typeof(callback) == 'function'){
       callback();
     }
     return messages;
@@ -311,7 +316,7 @@ MailManager.updateBoxInfo = function(path){
       return ;
   //var sequence_s = box.info.exists <= MailPage.pageSize ? 1 : (box.info.exists - MailPage.pageSize + 1);
   if(path == "Inbox"){
-    ImapClientManager.updateUnseenMessages(callback);
+    ImapClientManager.updateUnseenMessages();
   }
   ImapClientManager.getNewMessage(path, function(){
     ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
