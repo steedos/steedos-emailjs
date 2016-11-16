@@ -79,12 +79,6 @@ html, body{
             .contacts-applicant {
                     padding-left: 10px;
             }
-
-            .box-body{
-                overflow-y: auto;
-                height: calc(~"100% - 52px");
-            }
-
         }
 
         .navigation-title {
@@ -148,6 +142,7 @@ html, body{
             right: 0px;
             left: 0px;
             padding: 0px;
+            height: 100%;
             background-color: white;
             // .box-body{
             //     overflow-y: scroll;
@@ -160,12 +155,15 @@ html, body{
             .contacts-suggestion.box {
                 //border-top: 0px;
             }
-
-            .box-body {
-                padding-left: 15px;
-                padding-right: 15px;
+            .box{
+                height: 100%;
+                .box-body {
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    overflow-y: auto;
+                    height: calc(~"100% - 52px");
+                }
             }
-
             .contacts-form .box-body, .contacts-suggestion .box-body {
                 padding-left: 0px;
                 padding-right: 0px;
