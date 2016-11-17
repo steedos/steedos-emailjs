@@ -66,7 +66,7 @@ Template.mail_compose.helpers
         else
           return "回复: "
 
-      
+
   showLoadding: ->
     return Session.get("mailMessageLoadding");
 
@@ -118,6 +118,7 @@ Template.mail_compose.events
 
 Template.mail_compose.onRendered ->
   console.log("mail_compose.onRendered run... ");
+  $('[data-toggle="tooltip"]').tooltip()
   if Session.get("mailForward") || Session.get("mailJumpDraft")
     MailForward.getAttachmentsHtml();
 

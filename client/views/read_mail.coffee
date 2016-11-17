@@ -79,3 +79,7 @@ Template.read_mail.events
   'click .next_mail': (event, template)->
     console.log("click next_mail");
     MailManager.getNextMessage();
+
+
+Template.read_mail.onRendered ->
+    $('[data-toggle="tooltip"]').tooltip()
