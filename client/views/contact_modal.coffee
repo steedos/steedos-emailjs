@@ -7,6 +7,10 @@ Template.contacts_modal.helpers
         return Steedos.subsAddressBook.ready() and Steedos.subsSpace.ready();
 
 Template.contacts_modal.events
+#	'shown.bs.modal #contacts_modal': (event, template) ->
+#		debugger;
+#		$(".steedos-mail-contacts-modal").css("max-height", ($(window).height() - 180 - 25) + "px")
+
     'click #confirm': (event, template) ->
         console.log("..confirm");
         
@@ -17,8 +21,10 @@ Template.contacts_modal.events
         values = ContactsManager.getContactModalValue();
 
         values.forEach (value)->
-           console.log value.name
+#           console.log value.name
            selectize.createItem(value.name + "<" + value.email + ">")
 
         Modal.hide("contacts_modal");
 
+Template.contacts_modal.onRendered ->
+	$(".steedos-mail-contacts-modal").css("height", ($(window).height() - 180 - 25) + "px")

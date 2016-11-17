@@ -31,9 +31,15 @@ html, body{
 
 
 .steedos-mail.steedos-contacts{
-
+    .modal-header{
+        border-bottom: 1px solid #d2d6de;
+    }
+    .modal-footer{
+        border-top:1px solid #d2d6de;
+    }
     .contacts-list-wrapper {
         //width: 350px;
+        height: 100%;
         right: 0;
         left: 0;
         float: left;
@@ -49,13 +55,15 @@ html, body{
         .contacts-tree{
             background-color: #fff;
             overflow-y: auto;
-            height: auto !important;
+            height: 100% !important;
             .box-solid{
+                height: 100%;
                 margin-bottom: 0px;
             }
             .box-body{
-                height: 751px;
+                height: calc(~"100% - 0px");
                 overflow: auto;
+                padding: 0px;
             }
         }
 
@@ -161,7 +169,7 @@ html, body{
                     padding-left: 15px;
                     padding-right: 15px;
                     overflow-y: auto;
-                    height: calc(~"100% - 52px");
+                    height: calc(~"100% - 50px");
                 }
             }
             .contacts-form .box-body, .contacts-suggestion .box-body {
@@ -233,8 +241,7 @@ html, body{
     }
 
     .modal-body{
-        height: calc(~"100% - 240px");
-        min-height: 754px;
+        padding: 0px;
     }
 }
 
