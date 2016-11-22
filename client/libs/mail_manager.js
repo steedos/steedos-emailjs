@@ -291,9 +291,7 @@ MailManager.getNewBoxMessages = function(path, callback){
     // if(messages.length > 0){
       ImapClientManager.selectMailBox(null, box, {readOnly:true}, function(){
         if(path == "Inbox"){
-          ImapClientManager.updateUnseenMessages(function(){
-            MailUnseendisplay.listUnseenMessages();
-          });
+          ImapClientManager.updateUnseenMessages();
         }
         ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
       });
