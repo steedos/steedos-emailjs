@@ -19,6 +19,7 @@ AccountManager.getMailDomain = function(user){
 
 AccountManager.checkAccount = function(callback){
 
+	$(document.body).addClass('loading');
 	try{
 		console.log("AccountManager.checkAccount...");
 		var userAuth = AccountManager.getAuth();
@@ -32,10 +33,10 @@ AccountManager.checkAccount = function(callback){
 	            }
 	          }
 	        }catch(e){
+              $(document.body).removeClass('loading');
 	          console.error("AccountManager.checkAccount callback function error:" + e);
 	        }
 
-			$(document.body).removeClass('loading');
 			return false;
 		}
 
@@ -61,7 +62,7 @@ AccountManager.checkAccount = function(callback){
 		var pro = imapClient.connect();
 
 		pro.then(function(){
-			
+
 			imapClient.close();
 
 			console.log("账户验证完成");
@@ -71,7 +72,7 @@ AccountManager.checkAccount = function(callback){
 				email_accounts = MailCollection.email_accounts.findOne({account:userAuth.user});
 
 			if(!email_accounts){
-				
+
 				Session.set("email_account", userAuth.user);
 
 				MailCollection.destroy();
@@ -89,9 +90,9 @@ AccountManager.checkAccount = function(callback){
 		            }
 		          }
 		        }catch(e){
+		          $(document.body).removeClass('loading');
 		          console.error("AccountManager.checkAccount callback function error:" + e);
 		        }
-				$(document.body).removeClass('loading');
 			}
 		});
 
@@ -108,7 +109,7 @@ AccountManager.checkAccount = function(callback){
 	          console.error("AccountManager.checkAccount callback function error:" + e);
 	        }
 			$(document.body).removeClass('loading');
-			
+
 		});
 	}catch(e){
 		toastr.error("账户验证失败，错误信息：" + e.message);

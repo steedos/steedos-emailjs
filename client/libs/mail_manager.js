@@ -20,14 +20,14 @@ MailManager.initMail = function(callback){
 
                   draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
 
-                  ImapClientManager.initMailboxInfo(draftBox, function(){});
+                  ImapClientManager.initMailboxInfo(draftBox,function(){});
+                  $(document.body).removeClass('loading');
                 }
               }
             }catch(e){
               console.error("MailManager.initMail callback function error:" + e);
             }
           });
-          $(document.body).removeClass('loading');
         })
 
         Session.set("mailInit", true);
