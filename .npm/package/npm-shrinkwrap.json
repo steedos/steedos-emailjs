@@ -33,7 +33,7 @@
     "emailjs-imap-client": {
       "version": "2.0.2",
       "resolved": "git://github.com/steedos/emailjs-imap-client.git#74ce3f43ef5734d80ed3af9c003e7ae846d22a61",
-      "from": "git://github.com/steedos/emailjs-imap-client.git"
+      "from": "emailjs-imap-client@git://github.com/steedos/emailjs-imap-client.git"
     },
     "emailjs-imap-handler": {
       "version": "1.0.0",
@@ -43,7 +43,7 @@
     "emailjs-mime-builder": {
       "version": "1.0.1",
       "resolved": "git://github.com/steedos/emailjs-mime-builder.git#bfbfeee99472fb3fd96262aff612a9a6bc0ecb0f",
-      "from": "git://github.com/steedos/emailjs-mime-builder.git"
+      "from": "emailjs-mime-builder@git://github.com/steedos/emailjs-mime-builder.git"
     },
     "emailjs-mime-codec": {
       "version": "1.0.2",
@@ -63,7 +63,7 @@
     "emailjs-smtp-client": {
       "version": "1.0.0",
       "resolved": "git://github.com/steedos/emailjs-smtp-client.git#ada10929b1b23bd2f3eaedd01da2e8d5ccf677a9",
-      "from": "git://github.com/steedos/emailjs-smtp-client.git"
+      "from": "emailjs-smtp-client@git://github.com/steedos/emailjs-smtp-client.git"
     },
     "emailjs-stringencoding": {
       "version": "1.0.1",
@@ -73,7 +73,7 @@
     "emailjs-tcp-socket": {
       "version": "1.0.2",
       "resolved": "git://github.com/steedos/emailjs-tcp-socket.git#5e19d0ecfd4a4c221755911c9163ad593f7496c1",
-      "from": "git://github.com/steedos/emailjs-tcp-socket.git"
+      "from": "emailjs-tcp-socket@git://github.com/steedos/emailjs-tcp-socket.git"
     },
     "emailjs-utf7": {
       "version": "3.0.1",
