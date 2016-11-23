@@ -106,10 +106,10 @@ Package.onUse(function(api) {
 	api.addFiles('client/libs/mail_quartz.js', 'client');
 
 	api.addFiles('client/layout/master.html', 'client');
-  api.addFiles('client/layout/master.coffee', 'client');
-  api.addFiles('client/layout/master.less', 'client');
-  api.addFiles('client/layout/sidebar.html', 'client');
-  api.addFiles('client/layout/sidebar.coffee', 'client');
+	api.addFiles('client/layout/master.coffee', 'client');
+	api.addFiles('client/layout/master.less', 'client');
+	api.addFiles('client/layout/sidebar.html', 'client');
+	api.addFiles('client/layout/sidebar.coffee', 'client');
 
 	api.addFiles('client/views/mail.less', 'client');
 
@@ -147,8 +147,8 @@ Package.onUse(function(api) {
 	api.addFiles('client/views/mail_button.html', 'client');
 	api.addFiles('client/views/mail_button.coffee', 'client');
 
-  api.addAssets('client/assets/forge.min.js', 'client');
-  api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
+	api.addAssets('client/assets/forge.min.js', 'client');
+	api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
 
 	api.export('Mail');
 
