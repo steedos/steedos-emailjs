@@ -147,8 +147,10 @@ Package.onUse(function(api) {
 	api.addFiles('client/views/mail_button.html', 'client');
 	api.addFiles('client/views/mail_button.coffee', 'client');
 
-  api.addAssets('client/assets/forge.min.js', 'client');
-  api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
+    api.addFiles('client/assets/socket.io.min.js', 'client');
+    api.addFiles('client/assets/forge.min.js', 'client');
+    api.addAssets('client/assets/forge.min.js', 'client');
+    api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
 
 	api.export('Mail');
 
@@ -162,6 +164,7 @@ Package.onUse(function(api) {
 	api.export("MailAttachment");
 	api.export("MailForward");
 	api.export("SmtpClientManager");
+
 
 });
 

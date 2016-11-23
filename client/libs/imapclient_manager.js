@@ -595,7 +595,7 @@ ImapClientManager.mailBoxMessages = function(path, callback){
 
 	var options = {};
 
-	console.info("listMessages path[" + path + '] sequence[' + sequence + ']');
+	console.log("listMessages path[" + path + '], sequence[' + sequence + ']');
 
 	ImapClientManager.listMessages(null, path, sequence, options, function(messages){
 		ImapClientManager.updateLoadedMxistsIndex(path, sequence_s - 1);

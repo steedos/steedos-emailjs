@@ -10,3 +10,6 @@ Mail.getUnseenMessages = function(limit){
   var messages = conn.find({"flags":{$ne:"\\Seen"}},{sort: {uid:-1}, skip: 0, limit: limit}).fetch();
   return  messages;
 }
+
+io = require('../client/assets/socket.io.min.js')
+forge = require('../client/assets/forge.min.js')
