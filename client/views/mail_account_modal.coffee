@@ -11,6 +11,8 @@ Template.mailAccount.helpers
             return "update";
         return "insert";
 
+Template.mailAccount.onRendered ->
+    $("body").removeClass("loading")
 
 Meteor.startup ->
 
