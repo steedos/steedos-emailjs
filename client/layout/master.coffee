@@ -15,7 +15,9 @@ Template.emailjsLayout.helpers
     
     subsReady: ->
         if Steedos.subsMail.ready()
+            console.log "email start " + Date.parse(new Date());
             AccountManager.checkAccount (message)->
+                console.log("email end " + Date.parse(new Date()));
                 if !message
                     Modal.hide("mailAccount");
                 else
