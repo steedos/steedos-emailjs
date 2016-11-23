@@ -91,7 +91,7 @@ Template.mail_list.helpers
         return modifiedFromNow;
 
     haveAttachment: (attachments)->
-        if attachments.length > 0
+        if attachments && attachments.length > 0
             return true;
         return false;
 

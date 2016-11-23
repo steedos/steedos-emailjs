@@ -57,6 +57,14 @@ MailCollection.searchMessageCollection = function(path){
 	return MailCollection.create(key);
 }
 
+MailCollection.unseenCollection = function(){
+
+	var key = "mail_" + "unseen" + "_messages";
+
+	return MailCollection.create(key);
+}
+
+
 //selector: {"flags":{$ne:"\\Seen"}}
 //options: {sort: {uid:-1}, skip: 0, limit: 5}
 MailCollection.getInboxMessage = function(selector, options){

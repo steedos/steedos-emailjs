@@ -25,11 +25,6 @@ MailManager.initMail = function(callback){
         }catch(e){
           console.error("MailManager.initMail callback function error:" + e);
         }
-        ImapClientManager.updateUnseenMessages(function(){
-          //下载前10封未读邮件中本地不存在的message
-          // MailUnseendisplay.listUnseenMessages(function(){
-          // });
-        })
 
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);

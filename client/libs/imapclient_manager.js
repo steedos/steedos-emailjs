@@ -437,12 +437,9 @@ ImapClientManager.initMailboxInfo = function(mailBox, callback){
 
 }
 
-ImapClientManager.updateUnseenMessages = function(callback){
+ImapClientManager.updateUnseenMessages = function(){
 	ImapClientManager.searchUnseenMessages(null ,"Inbox", {unseen: true}, function(result){
 		MailCollection.mail_unseen.update({},{uids:result});
-		if(typeof(callback) == "function"){
-			callback();
-		}
   });
 }
 
