@@ -23,7 +23,7 @@ ImapClientManager.getClient = function(){
 		options.ws = {
 			url: Meteor.settings.public.webservices.wsproxy.url,
             options: {
-                upgrade: false // disable ws protocol
+                //upgrade: false // disable ws protocol
             }
 		}
 		options.tlsWorkerPath = "/packages/steedos_emailjs/client/assets/emailjs-tcp-socket-tls-worker.js"

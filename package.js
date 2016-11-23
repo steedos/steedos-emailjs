@@ -165,6 +165,8 @@ Package.onUse(function(api) {
 	api.export("MailForward");
 	api.export("SmtpClientManager");
 
+    api.export("io");
+    api.export("forge");
 
 });
 
