@@ -10,7 +10,9 @@ MailManager.initMail = function(callback){
       var inbox = MailManager.getBox("Inbox");
 
       ImapClientManager.initMailboxInfo(inbox, function(){
-
+        ImapClientManager.updateUnseenMessages();
+        Session.set("mailInit", true);
+        Session.set("mailBoxInit", true);
         try{
           if(callback){
             if(typeof(callback) == 'function'){
@@ -25,10 +27,6 @@ MailManager.initMail = function(callback){
         }catch(e){
           console.error("MailManager.initMail callback function error:" + e);
         }
-
-        Session.set("mailInit", true);
-        Session.set("mailBoxInit", true);
-
       })
     });
 
