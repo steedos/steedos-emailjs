@@ -1,107 +1,128 @@
 <template name="read_mail">
- {{#if message.uid}}
-  {{#with message}}
+{{#if message.uid}}
+	{{#with message}}
 
 	<div class="mail-read">
 
-      <!-- <div class="box-header with-border">
-        <h3 class="box-title">Read Mail</h3>
+	  <!-- <div class="box-header with-border">
+		<h3 class="box-title">Read Mail</h3>
 
-        <div class="box-tools pull-right" data-uid='{{uid}}'>
-          <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Previous"><i class="fa fa-chevron-left last_mail"></i></a>
-          <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Next"><i class="fa fa-chevron-right next_mail"></i></a>
-        </div>
-      </div> -->
-      <!-- /.box-header -->
+		<div class="box-tools pull-right" data-uid='{{uid}}'>
+		  <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Previous"><i class="fa fa-chevron-left last_mail"></i></a>
+		  <a href="#" class="btn btn-box-tool" data-toggle="tooltip" title="Next"><i class="fa fa-chevron-right next_mail"></i></a>
+		</div>
+	  </div> -->
+	  <!-- /.box-header -->
 
-      <div class="box-body no-padding">
+		<div class="box-body no-padding">
 
-        <!-- /.mailbox-controls -->
-        <div class="mailbox-read-message">
-            <div class="mailbox-read-info">
-              <div class="subject">{{subject}}</div>
-              <div class="mailbox-read-time">{{modifiedString date}}</div>
-              <div class= "from">
-                发件人:
-                {{#each from}}
-                  <span class="mail-address">
-                    {{name}} &lt;{{address}}&gt;;
-                  </span>
-                {{/each}}
-              </div>
-              {{#if to}}
-                <div class="to">
-                  收件人:
-                  {{#each to}}
-                    <span class="mail-address">
-                      {{name}} &lt;{{address}}&gt;;
-                    </span>
-                  {{/each}}
-                </div>
-              {{/if}}
-              {{#if cc}}
-              <div class="cc">
-                抄送人:
-                {{#each cc}}
-                  <span class="mail-address">
-                    {{name}} &lt;{{address}}&gt;;
-                  </span>
-                {{/each}}
-              </div>
-              {{/if}}
-            </div>
-            {{#if attachments.length}}
-              <div class="box-header">
-                <ul class="mailbox-attachments clearfix">
-                {{#each attachments}}
-                  <!-- <li>
-                    <div class="mailbox-attachment-info">
-                      <a href="#" class="mailbox-attachment-name" ><i class="fa fa-paperclip"></i> {{name}}</a>
-                          <span class="mailbox-attachment-size">{{fileSize size}}</span>
-                    </div>
-                  </li> -->
-                  <div class="col-md-12 col-sm-12 col-xs-12 attachment-item">
-                    <div class="attachment-info-box">
-                      <span class="attachment-info-box-icon"><i class="{{attachmentIcon name}}"></i></span>
-                      <div class="attachment-info-box-content">
-                          <span class="attachment-info-box-text">
-                            <a href="#" class="mailbox-attachment-name"  data-index='{{@index}}'>{{name}}</a>
-                          </span>
-                          <span class="mailbox-attachment-size">{{fileSize size}}</span>
-                      </div>
-                    </div>
-                  </div>
-                {{/each}}
-                </ul>
-              </div>
-            {{/if}}
+			<!-- /.mailbox-controls -->
+			<div class="mailbox-read-message">
+				<div class="mailbox-read-info">
+					<div class="subject">{{subject}}</div>
+					<div class="mailbox-read-time">{{modifiedString date}}</div>
+					<div class= "from">
+						发件人:
+						{{#each from}}
+							<div class="btn-group">
+								<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+									{{name}} &lt;{{address}}&gt; <span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li class="mail-address-serach"><a href="#">{{_ 'steedos_emailjs_serach'}}</a></li>
+									<li class="mail-address-add-to-books"><a href="#">{{_ 'steedos_emailjs_add_to_contacts'}}</a></li>
+									<li class="mail-address-send-email"><a href="/emailjs/b/drafts/Inbox/compose">{{_ 'steedos_emailjs_send'}}</a></li>
+								</ul>
+							</div>
+						{{/each}}
+					</div>
+					{{#if to}}
+						<div class="to">
+							收件人:
+							{{#each to}}
+								<div class="btn-group">
+									<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+										{{name}} &lt;{{address}}&gt; <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										<li class="mail-address-serach"><a href="#">{{_ 'steedos_emailjs_serach'}}</a></li>
+										<li class="mail-address-add-to-books"><a href="#">{{_ 'steedos_emailjs_add_to_contacts'}}</a></li>
+										<li class="mail-address-send-email"><a href="/emailjs/b/drafts/Inbox/compose">{{_ 'steedos_emailjs_send'}}</a></li>
+									</ul>
+								</div>
+							{{/each}}
+						</div>
+						{{/if}}
+					{{#if cc}}
+						<div class="cc">
+							抄送人:
+							{{#each cc}}
+								<div class="btn-group">
+									<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+										{{name}} &lt;{{address}}&gt; <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" role="menu">
+										<li class="mail-address-serach"><a href="#">{{_ 'steedos_emailjs_serach'}}</a></li>
+										<li class="mail-address-add-to-books"><a href="#">{{_ 'steedos_emailjs_add_to_contacts'}}</a></li>
+										<li class="mail-address-send-email"><a href="/emailjs/b/drafts/Inbox/compose">{{_ 'steedos_emailjs_send'}}</a></li>
+									</ul>
+								</div>
+							{{/each}}
+						</div>
+					{{/if}}
+				</div>
+				{{#if attachments.length}}
+					<div class="box-header">
+						<ul class="mailbox-attachments clearfix">
+						{{#each attachments}}
+						  <!-- <li>
+							<div class="mailbox-attachment-info">
+							  <a href="#" class="mailbox-attachment-name" ><i class="fa fa-paperclip"></i> {{name}}</a>
+								  <span class="mailbox-attachment-size">{{fileSize size}}</span>
+							</div>
+						  </li> -->
+							<div class="col-md-12 col-sm-12 col-xs-12 attachment-item">
+								<div class="attachment-info-box">
+									<span class="attachment-info-box-icon"><i class="{{attachmentIcon name}}"></i></span>
+									<div class="attachment-info-box-content">
+										<span class="attachment-info-box-text">
+											<a href="#" class="mailbox-attachment-name"  data-index='{{@index}}'>{{name}}</a>
+										</span>
+										<span class="mailbox-attachment-size">{{fileSize size}}</span>
+									</div>
+								</div>
+							</div>
+						{{/each}}
+						</ul>
+					</div>
+				{{/if}}
 
-            <!-- /.mailbox-read-info -->
-<!--             <div class="mailbox-controls with-border text-center">
-              <div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm mail-delete" data-toggle="tooltip" data-container="body" title="Delete">
-                  <i class="fa fa-trash-o"></i></button>
-                <a href="/emailjs/b/reply/{{path}}/{{uid}}"><button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="回复">
-                  <i class="fa fa-reply"></i></button></a>
-                <a href="/emailjs/b/replyAll/{{path}}/{{uid}}"><button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="全部回复">
-                  <i class="fa fa-reply-all"></i></button></a>
-                <a href="/emailjs/b/forward/{{path}}/{{uid}}"><button type="button" class="btn btn-default btn-sm mail-forward" data-toggle="tooltip" data-container="body" title="转发">
-                  <i class="fa fa-share"></i></button></a>
-              </div>
-            </div> -->
-          <div class="message-body">
-            {{#if showLoadding}}
-              加载中...
-            {{else}}
-              <p>{{{mailBody this}}}</p>
-            {{/if}}
-          </div>
-        </div>
-        <!-- /.mailbox-read-message -->
-   </div>
-    <!-- /.box-footer -->
-  </div>
-  {{/with}}
+				<!-- /.mailbox-read-info -->
+				<!-- <div class="mailbox-controls with-border text-center">
+				  <div class="btn-group">
+					<button type="button" class="btn btn-default btn-sm mail-delete" data-toggle="tooltip" data-container="body" title="Delete">
+					  <i class="fa fa-trash-o"></i></button>
+					<a href="/emailjs/b/reply/{{path}}/{{uid}}"><button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="回复">
+					  <i class="fa fa-reply"></i></button></a>
+					<a href="/emailjs/b/replyAll/{{path}}/{{uid}}"><button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" data-container="body" title="全部回复">
+					  <i class="fa fa-reply-all"></i></button></a>
+					<a href="/emailjs/b/forward/{{path}}/{{uid}}"><button type="button" class="btn btn-default btn-sm mail-forward" data-toggle="tooltip" data-container="body" title="转发">
+					  <i class="fa fa-share"></i></button></a>
+				  </div>
+				</div> -->
+				<div class="message-body">
+					{{#if showLoadding}}
+						加载中...
+					{{else}}
+						<p>{{{mailBody this}}}</p>
+					{{/if}}
+				</div>
+			</div>
+			<!-- /.mailbox-read-message -->
+		</div>
+		<!-- /.box-footer -->
+	</div>
+	{{/with}}
 {{else}}
 
 {{/if}}
