@@ -2,6 +2,7 @@
     {{#if showRight}}
       <div class="right animated fadeInRight">
         {{> mailButton}}
+
         <div class="right-body" >
             {{#if isComPose}}
                 {{> mail_compose}}
@@ -9,12 +10,11 @@
                 {{> read_mail}}
             {{/if}}
         </div>
-        <div class="overlay {{isSending}}" id="mail_sending">
-            <i class="fa fa-spinner fa-spin"></i>
-        </div>
-        <div class="overlay {{attachmentLoadding}}" id="attachment_donwLoadding">
-            <i class="fa"><i class="fa fa-spinner fa-spin"></i></i>
-        </div>
+        {{#if isSending}}
+            <div class="loading">
+                {{> steedosLoading}}
+            </div>
+        {{/if}}
       </div>
     {{/if}}
 </template>

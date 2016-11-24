@@ -48,10 +48,6 @@ Template.mail_list.helpers
             return t("mail_inbox")
 
     isLoading: ->
-        if Session.get("mailLoading")
-            $("#mail_list_load").show();
-        else
-            $("#mail_list_load").hide();
         return Session.get("mailLoading");
 
     boxMessages: ->
