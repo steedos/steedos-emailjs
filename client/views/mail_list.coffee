@@ -140,10 +140,10 @@ Template.mail_list.events
             toastr.warning("请先选择需要删除的邮件");
 
     'click #page_forward': (event, template) ->
-        MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
+        MailPage.pageForward(parseInt(template.firstNode.dataset?.exists));
 
     'click #page_back': (event, template) ->
-        MailPage.pageBack(parseInt(template.firstNode.dataset.exists));
+        MailPage.pageBack(parseInt(template.firstNode.dataset?.exists));
 
     #'keydown .search-mail': (event, template) ->
     #    console.log("keydown mail-search" + event.keyCode);
