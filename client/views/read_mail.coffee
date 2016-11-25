@@ -80,7 +80,22 @@ Template.read_mail.events
 		MailManager.getNextMessage();
 
 	'click .mail-address-add-to-books': (event, template)->
-		AdminDashboard.modalNew 'address_books', { name: this.name, email: this.address}
+		owner = Meteor.userId()
+		email = this.address
+		name = this.name
+
+		Meteor.call('add_to_books', owner, email, name, (error, result) ->
+			if error
+				if error.error
+					toastr.error TAPi18n.__ error.reason
+				else
+					toastr.error error.message
+
+			if result
+				AdminDashboard.modalNew 'address_books', { name: name, email: email}
+				
+		)
+		
 
 	'click .mail-address-compose': (event, template)->
 		Session.set("mailAddress", this)

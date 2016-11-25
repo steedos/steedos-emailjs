@@ -96,7 +96,6 @@ MailUnseendisplay.listUnseenMessages = function(callback){
   }
   else{
     ImapClientManager.listMessages(null, "Inbox", otherUnseenUids, {byUid: true}, function(messages){
-      console.log("messages :>>>" + messages);
       if(typeof(callback) == 'function'){
         callback();
       }
