@@ -167,11 +167,21 @@ ImapClientManager.getMailCode = function(path, uid, callback){
 	var query = ["RFC822"];
 
 	client.connect().then(function(){
-		client.listMessages(path, uid, query, options).then(function(data){
+		client.listMessages(path, uid, query, options).then(function(message){
 			client.close();
-			var code = data[0].rfc822;
-			console.log("code : " + code );
-			callback(code);
+
+			var m = MailManager.getMessage(parseInt(uid));
+			var name = m.subject;
+			var filename;
+
+			if(name == "" || name == null || name == undefined){
+				filename = "[无主题].eml";
+			}else{
+				filename = name.replace(/[\\/:*?\"<>|]/g, "-") + ".eml";
+			}
+
+			var code = message[0].rfc822;
+			callback(filename, code);
 		});
 	});
 }
