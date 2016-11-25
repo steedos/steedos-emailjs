@@ -80,9 +80,9 @@ Template.read_mail.events
 		MailManager.getNextMessage();
 
 	'click .mail-address-add-to-books': (event, template)->
-		AdminDashboard.modalNew 'address_books', { name: this.name,email: this.address}
+		AdminDashboard.modalNew 'address_books', { name: this.name, email: this.address}
 
-	'click .mail-address-send-email': (event, template)->
+	'click .mail-address-compose': (event, template)->
 		Session.set("mailAddress", this)
 
 
