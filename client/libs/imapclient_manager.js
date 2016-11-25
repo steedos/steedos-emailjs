@@ -159,6 +159,22 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 	});
 }
 
+ImapClientManager.getMailCode = function(path, uid, callback){
+	var	client = this.getClient();
+
+	var options = {byUid: true};
+
+	var query = ["RFC822"];
+
+	client.connect().then(function(){
+		client.listMessages(path, uid, query, options).then(function(data){
+			client.close();
+			var code = data[0].rfc822;
+			console.log("code : " + code );
+			callback(code);
+		});
+	});
+}
 
 ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callback){
 
@@ -198,7 +214,6 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 			}catch(err){
 				console.error(err)
 			}
-
 			client.close();
 		});
 	});
@@ -437,9 +452,12 @@ ImapClientManager.initMailboxInfo = function(mailBox, callback){
 
 }
 
-ImapClientManager.updateUnseenMessages = function(){
+ImapClientManager.updateUnseenMessages = function(callback){
 	ImapClientManager.searchUnseenMessages(null ,"Inbox", {unseen: true}, function(result){
 		MailCollection.mail_unseen.update({},{uids:result});
+		if(typeof(callback) == "function"){
+			callback();
+		}
   });
 }
 
