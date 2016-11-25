@@ -1,0 +1,34 @@
+{
+  "dependencies": {
+    "busboy": {
+      "version": "0.2.13"
+    },
+    "cookies": {
+      "version": "0.6.1"
+    },
+    "mime": {
+      "version": "1.3.4"
+    },
+    "emailjs-imap-client": {
+      "version": "git://github.com/steedos/emailjs-imap-client.git"
+    },
+    "emailjs-smtp-client": {
+      "version": "git://github.com/steedos/emailjs-smtp-client.git"
+    },
+    "emailjs-tcp-socket": {
+      "version": "git://github.com/steedos/emailjs-tcp-socket.git"
+    },
+    "emailjs-mime-builder": {
+      "version": "git://github.com/steedos/emailjs-mime-builder.git"
+    },
+    "emailjs-mime-codec": {
+      "version": "1.0.2"
+    },
+    "emailjs-stringencoding": {
+      "version": "1.0.1"
+    },
+    "emailjs-mime-parser": {
+      "version": "1.0.0"
+    }
+  }
+}

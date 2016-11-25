@@ -1,5 +1,11 @@
 <template name="mail_list">
 
+    {{#if isLoading}}
+        <div class="loading">
+            {{> steedosLoading}}
+        </div>
+    {{/if}}
+
   <div class="navigation-bar" data-exists="{{boxExists}}">
 
         <!-- <a href="/workflow/space/{{spaceId}}" class="btn btn-default" title='{{_ "Workflow"}}'>

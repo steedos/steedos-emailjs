@@ -48,10 +48,6 @@ Template.mail_list.helpers
             return t("mail_inbox")
 
     isLoading: ->
-        if Session.get("mailLoading")
-            $("#mail_list_load").show();
-        else
-            $("#mail_list_load").hide();
         return Session.get("mailLoading");
 
     boxMessages: ->
@@ -91,7 +87,7 @@ Template.mail_list.helpers
         return modifiedFromNow;
 
     haveAttachment: (attachments)->
-        if attachments.length > 0
+        if attachments && attachments.length > 0
             return true;
         return false;
 
@@ -140,10 +136,10 @@ Template.mail_list.events
             toastr.warning("请先选择需要删除的邮件");
 
     'click #page_forward': (event, template) ->
-        MailPage.pageForward(parseInt(template.firstNode.dataset.exists));
+        MailPage.pageForward(parseInt(template.firstNode.dataset?.exists));
 
     'click #page_back': (event, template) ->
-        MailPage.pageBack(parseInt(template.firstNode.dataset.exists));
+        MailPage.pageBack(parseInt(template.firstNode.dataset?.exists));
 
     #'keydown .search-mail': (event, template) ->
     #    console.log("keydown mail-search" + event.keyCode);

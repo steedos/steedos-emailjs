@@ -64,8 +64,7 @@ AccountManager.checkAccount = function(callback){
 		pro.then(function(){
 
 			imapClient.close();
-
-			console.log("账户验证完成");
+			console.log("账户验证完成" + Date.parse(new Date()));
 
 			var email_accounts = null;
 			if(MailCollection.email_accounts)

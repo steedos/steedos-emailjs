@@ -34,30 +34,30 @@ Package.onUse(function(api) {
 	api.use('underscore');
 	api.use('tracker');
 	api.use('session');
-    api.use('blaze');
-    api.use('templating');
-    api.use('modules');
-    api.use('npm-bcrypt');
-    api.use('steedos:lib');
-    api.use('steedos:ui');
-    api.use('steedos:contacts');
-    api.use('flemay:less-autoprefixer@1.2.0');
-    api.use('simple:json-routes@2.1.0');
-    api.use('nimble:restivus@0.8.7');
-    api.use('aldeed:simple-schema@1.3.3');
-    api.use('aldeed:collection2@2.5.0');
-    api.use('aldeed:tabular@1.6.0');
-    api.use('aldeed:autoform@5.8.0');
-    api.use('matb33:collection-hooks@0.8.1');
-    api.use('cfs:standard-packages@0.5.9');
-    api.use('kadira:blaze-layout@2.3.0');
-    api.use('kadira:flow-router@2.10.1');
-    api.use('iyyang:cfs-aliyun')
-    api.use('cfs:s3');
+	api.use('blaze');
+	api.use('templating');
+	api.use('modules');
+	api.use('npm-bcrypt');
+	api.use('steedos:lib');
+	api.use('steedos:ui');
+	api.use('steedos:contacts');
+	api.use('flemay:less-autoprefixer@1.2.0');
+	api.use('simple:json-routes@2.1.0');
+	api.use('nimble:restivus@0.8.7');
+	api.use('aldeed:simple-schema@1.3.3');
+	api.use('aldeed:collection2@2.5.0');
+	api.use('aldeed:tabular@1.6.0');
+	api.use('aldeed:autoform@5.8.0');
+	api.use('matb33:collection-hooks@0.8.1');
+	api.use('cfs:standard-packages@0.5.9');
+	api.use('kadira:blaze-layout@2.3.0');
+	api.use('kadira:flow-router@2.10.1');
+	api.use('iyyang:cfs-aliyun')
+	api.use('cfs:s3');
 
-    api.use('meteorhacks:ssr@2.2.0');
-    api.use('meteorhacks:subs-manager');
-    api.use('tap:i18n@1.7.0');
+	api.use('meteorhacks:ssr@2.2.0');
+	api.use('meteorhacks:subs-manager');
+	api.use('tap:i18n@1.7.0');
 	api.use('momentjs:moment', 'client');
 	api.use('mrt:moment-timezone', 'client');
 
@@ -106,10 +106,10 @@ Package.onUse(function(api) {
 	api.addFiles('client/libs/mail_quartz.js', 'client');
 
 	api.addFiles('client/layout/master.html', 'client');
-  api.addFiles('client/layout/master.coffee', 'client');
-  api.addFiles('client/layout/master.less', 'client');
-  api.addFiles('client/layout/sidebar.html', 'client');
-  api.addFiles('client/layout/sidebar.coffee', 'client');
+	api.addFiles('client/layout/master.coffee', 'client');
+	api.addFiles('client/layout/master.less', 'client');
+	api.addFiles('client/layout/sidebar.html', 'client');
+	api.addFiles('client/layout/sidebar.coffee', 'client');
 
 	api.addFiles('client/views/mail.less', 'client');
 
@@ -147,10 +147,10 @@ Package.onUse(function(api) {
 	api.addFiles('client/views/mail_button.html', 'client');
 	api.addFiles('client/views/mail_button.coffee', 'client');
 
-    api.addFiles('client/assets/socket.io.min.js', 'client');
-    api.addFiles('client/assets/forge.min.js', 'client');
-    api.addAssets('client/assets/forge.min.js', 'client');
-    api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
+	api.addFiles('client/assets/socket.io.min.js', 'client');
+	api.addFiles('client/assets/forge.min.js', 'client');
+	api.addAssets('client/assets/forge.min.js', 'client');
+	api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
 
 	api.export('Mail');
 
@@ -165,8 +165,8 @@ Package.onUse(function(api) {
 	api.export("MailForward");
 	api.export("SmtpClientManager");
 
-    api.export("io");
-    api.export("forge");
+	api.export("io");
+	api.export("forge");
 
 });
 

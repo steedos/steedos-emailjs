@@ -10,29 +10,23 @@ MailManager.initMail = function(callback){
       var inbox = MailManager.getBox("Inbox");
 
       ImapClientManager.initMailboxInfo(inbox, function(){
-        ImapClientManager.updateUnseenMessages(function(){
-          //下载前10封未读邮件中本地不存在的message
-          MailUnseendisplay.listUnseenMessages(function(){
-            try{
-              if(callback){
-                if(typeof(callback) == 'function'){
-                  callback();
-
-                  draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
-
-                  ImapClientManager.initMailboxInfo(draftBox,function(){});
-                  $(document.body).removeClass('loading');
-                }
-              }
-            }catch(e){
-              console.error("MailManager.initMail callback function error:" + e);
-            }
-          });
-        })
-
+        ImapClientManager.updateUnseenMessages();
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);
+        try{
+          if(callback){
+            if(typeof(callback) == 'function'){
+              callback();
 
+              draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
+
+              ImapClientManager.initMailboxInfo(draftBox,function(){});
+              $(document.body).removeClass('loading');
+            }
+          }
+        }catch(e){
+          console.error("MailManager.initMail callback function error:" + e);
+        }
       })
     });
 

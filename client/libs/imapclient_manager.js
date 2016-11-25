@@ -205,6 +205,7 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 }
 
 ImapClientManager.listMessages = function(client, path, sequence, options, callback){
+	console.log("ImapClientManager.listMessages start "  + Date.parse(new Date()));
 	if (!client)
 		client = this.getClient();
 
@@ -213,7 +214,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	client.connect().then(function(){
 		console.log("listMessages start, sequence is " + sequence);
 		client.listMessages(path, sequence, query, options).then(function(messages){
-
+			console.log("ImapClientManager.listMessages getData "  + Date.parse(new Date()));
 			messages.forEach(function(message){
 				if(message && message.uid){
 					// console.log("listMessages messages 开始解析：" + message.uid);
@@ -240,6 +241,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 			console.log("ImapClientManager.listMessages getMessages ok; messages length is " + messages.length);
 
 			client.close();
+			console.log("ImapClientManager.listMessages end"  + Date.parse(new Date()));
 			callback(messages);
 		});
 	});
@@ -435,12 +437,9 @@ ImapClientManager.initMailboxInfo = function(mailBox, callback){
 
 }
 
-ImapClientManager.updateUnseenMessages = function(callback){
+ImapClientManager.updateUnseenMessages = function(){
 	ImapClientManager.searchUnseenMessages(null ,"Inbox", {unseen: true}, function(result){
 		MailCollection.mail_unseen.update({},{uids:result});
-		if(typeof(callback) == "function"){
-			callback();
-		}
   });
 }
 

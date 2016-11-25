@@ -72,7 +72,7 @@
     },
     "emailjs-tcp-socket": {
       "version": "1.0.2",
-      "resolved": "git://github.com/steedos/emailjs-tcp-socket.git#5e19d0ecfd4a4c221755911c9163ad593f7496c1",
+      "resolved": "git://github.com/steedos/emailjs-tcp-socket.git#0e7d8af3cd1adb7a1c905e47e3d27f7b17d69bac",
       "from": "emailjs-tcp-socket@git://github.com/steedos/emailjs-tcp-socket.git"
     },
     "emailjs-utf7": {
