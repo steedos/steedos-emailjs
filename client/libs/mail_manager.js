@@ -1,31 +1,35 @@
 MailManager = {};
 
 MailManager.initMail = function(callback){
-  $(document.body).addClass('loading');
+  // $(document.body).addClass('loading');
   Session.set("mailInit", false);
-  //MailCollection.init();
   if(AccountManager.getAuth()){
     ImapClientManager.mailBox(null, function(){
       var inbox = MailManager.getBox("Inbox");
 
       ImapClientManager.initMailboxInfo(inbox, function(){
-        ImapClientManager.updateUnseenMessages();
+        ImapClientManager.updateUnseenMessages(function(){
+          //下载前5封未读邮件中本地不存在的message
+          MailUnseendisplay.listUnseenMessages(function(){
+            try{
+              if(callback){
+                if(typeof(callback) == 'function'){
+                  callback();
+
+                  draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
+
+                  ImapClientManager.initMailboxInfo(draftBox, function(){});
+                }
+              }
+            }catch(e){
+              console.error("MailManager.initMail callback function error:" + e);
+            }
+          });
+        })
+
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);
-        try{
-          if(callback){
-            if(typeof(callback) == 'function'){
-              callback();
 
-              draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
-
-              ImapClientManager.initMailboxInfo(draftBox,function(){});
-
-            }
-          }
-        }catch(e){
-          console.error("MailManager.initMail callback function error:" + e);
-        }
         $(document.body).removeClass('loading');
       })
     });
