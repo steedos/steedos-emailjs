@@ -180,7 +180,5 @@ Template.mail_list.events
 Template.mail_list.onRendered ->
     console.log("Template.mail_list.onRendered run...");
     $('[data-toggle="tooltip"]').tooltip()
-    if Session.get("mailLoading") || Session.get("mailLoading") == undefined
-        $("#mail_list_load").hide();
 
     $(".mailbox-messages").perfectScrollbar();

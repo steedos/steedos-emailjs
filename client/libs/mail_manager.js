@@ -6,7 +6,6 @@ MailManager.initMail = function(callback){
   //MailCollection.init();
   if(AccountManager.getAuth()){
     ImapClientManager.mailBox(null, function(){
-
       var inbox = MailManager.getBox("Inbox");
 
       ImapClientManager.initMailboxInfo(inbox, function(){
@@ -21,12 +20,13 @@ MailManager.initMail = function(callback){
               draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
 
               ImapClientManager.initMailboxInfo(draftBox,function(){});
-              $(document.body).removeClass('loading');
+
             }
           }
         }catch(e){
           console.error("MailManager.initMail callback function error:" + e);
         }
+        $(document.body).removeClass('loading');
       })
     });
 
