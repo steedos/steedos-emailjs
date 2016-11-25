@@ -40,8 +40,8 @@ mailRoutes.route '/',
 
 mailRoutes.route '/b/:mailBox/',
 	action: (params, queryParams)->
-
-		if Session.get("mailBox") != params.mailBox
+		mailBox = FlowRouter._current.path.split("/")[3] #params.mailBox
+		if Session.get("mailBox") !=  mailBox
 			Session.set("mailPage",1)
 
 		# Session.set("mailLoading", true);
@@ -49,7 +49,8 @@ mailRoutes.route '/b/:mailBox/',
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox);
+		debugger;
+		Session.set("mailBox", mailBox);
 		Session.set("mailMessageId", null);
 		Session.set("mailBoxFilter", "");
 		Session.set("mailSearchAddress", "");
@@ -60,7 +61,8 @@ mailRoutes.route '/b/:mailBox/',
 
 mailRoutes.route '/b/search/:mailBox/',
 	action: (params, queryParams)->
-		if Session.get("mailBox") != params.mailBox
+		mailBox = FlowRouter._current.path.split("/")[4] #params.mailBox
+		if Session.get("mailBox") != mailBox
 			Session.set("mailPage",1)
 
 		Session.set("mailSearch", true);
@@ -68,7 +70,7 @@ mailRoutes.route '/b/search/:mailBox/',
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox);
+		Session.set("mailBox", mailBox);
 		Session.set("mailMessageId", null);
 		Session.set("mailBoxFilter", "");
 		Session.set("mailSearchAddress", "");
@@ -79,15 +81,15 @@ mailRoutes.route '/b/search/:mailBox/',
 
 mailRoutes.route '/b/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
-
-		if Session.get("mailBox") != params.mailBox
+		mailBox = FlowRouter._current.path.split("/")[3] #params.mailBox
+		if Session.get("mailBox") != mailBox
 			Session.set("mailPage",1)
 
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox);
+		Session.set("mailBox", mailBox);
 		Session.set("mailMessageLoadding",false);
 
 		Session.set("mailMessageId", params.mailMessageId);
@@ -96,13 +98,14 @@ mailRoutes.route '/b/:mailBox/:mailMessageId',
 
 mailRoutes.route '/b/forward/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
-		if Session.get("mailBox") != params.mailBox
+		mailBox = FlowRouter._current.path.split("/")[4] #params.mailBox
+		if Session.get("mailBox") != mailBox
 			Session.set("mailPage",1)
 		Session.set("mailForward", true);
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox);
+		Session.set("mailBox", mailBox);
 		Session.set("mailMessageLoadding",false);
 		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
@@ -110,12 +113,13 @@ mailRoutes.route '/b/forward/:mailBox/:mailMessageId',
 
 mailRoutes.route '/b/reply/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
-		if Session.get("mailBox") != params.mailBox
+		mailBox = FlowRouter._current.path.split("/")[4] #params.mailBox
+		if Session.get("mailBox") != mailBox
 			Session.set("mailPage",1)
 		Session.set("mailReply", true);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox);
+		Session.set("mailBox", mailBox);
 		Session.set("mailMessageLoadding",false);
 		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
@@ -123,11 +127,12 @@ mailRoutes.route '/b/reply/:mailBox/:mailMessageId',
 
 mailRoutes.route '/b/replyAll/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
-		if Session.get("mailBox") != params.mailBox
+		mailBox = FlowRouter._current.path.split("/")[4] #params.mailBox
+		if Session.get("mailBox") != mailBox
 			Session.set("mailPage",1)
 		Session.set("mailReplyAll", true);
 		Session.set("mailJumpDraft", false);
-		Session.set("mailBox", params.mailBox);
+		Session.set("mailBox", mailBox);
 		Session.set("mailMessageLoadding",false);
 		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
@@ -135,10 +140,11 @@ mailRoutes.route '/b/replyAll/:mailBox/:mailMessageId',
 
 mailRoutes.route '/b/drafts/:mailBox/:mailMessageId',
 	action: (params, queryParams)->
-		if Session.get("mailBox") != params.mailBox
+		mailBox = FlowRouter._current.path.split("/")[4] #params.mailBox
+		if Session.get("mailBox") != mailBox
 			Session.set("mailPage",1)
 		Session.set("mailJumpDraft", true);
-		Session.set("mailBox", params.mailBox);
+		Session.set("mailBox", mailBox);
 		Session.set("mailMessageId", params.mailMessageId);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"

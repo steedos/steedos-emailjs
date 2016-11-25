@@ -1,32 +1,36 @@
 MailManager = {};
 
 MailManager.initMail = function(callback){
-  $(document.body).addClass('loading');
+  // $(document.body).addClass('loading');
   Session.set("mailInit", false);
-  //MailCollection.init();
   if(AccountManager.getAuth()){
     ImapClientManager.mailBox(null, function(){
-
       var inbox = MailManager.getBox("Inbox");
 
       ImapClientManager.initMailboxInfo(inbox, function(){
-        ImapClientManager.updateUnseenMessages();
+        ImapClientManager.updateUnseenMessages(function(){
+          //下载前5封未读邮件中本地不存在的message
+          MailUnseendisplay.listUnseenMessages(function(){
+            try{
+              if(callback){
+                if(typeof(callback) == 'function'){
+                  callback();
+
+                  draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
+
+                  ImapClientManager.initMailboxInfo(draftBox, function(){});
+                }
+              }
+            }catch(e){
+              console.error("MailManager.initMail callback function error:" + e);
+            }
+          });
+        })
+
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);
-        try{
-          if(callback){
-            if(typeof(callback) == 'function'){
-              callback();
 
-              draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
-
-              ImapClientManager.initMailboxInfo(draftBox,function(){});
-              $(document.body).removeClass('loading');
-            }
-          }
-        }catch(e){
-          console.error("MailManager.initMail callback function error:" + e);
-        }
+        $(document.body).removeClass('loading');
       })
     });
 
@@ -428,6 +432,7 @@ MailManager.i18n = function(key){
   return str;
 }
 
+
 MailManager.saveDrafts = function(message){
   path = Session.get("mailBox")
 
@@ -457,4 +462,30 @@ MailManager.saveDrafts = function(message){
   if(draftBox.info){
     _save(message)
   }
+}
+
+
+MailManager.mailCodeDownload = function(path, uid, callback){
+	var message = MailManager.getMessage(parseInt(uid));
+	var filename = message.subject;
+
+	ImapClientManager.getMailCode (path, uid, function(code){
+		fs.exists(dirname, function(exists){
+			if(!exists){
+				fs.mkdir(dirname, function(err) {
+	                if (err) {
+	                    toastr.error(err);
+	                }else{
+	                	MailAttachment.save(filename, code, function(dirname, name, filePath){
+							callback(dirname, name, filePath);
+						})
+	                }
+	            })
+			}else{
+				MailAttachment.save(filename, code, function(dirname, name, filePath){
+					callback(dirname, name, filePath);
+				})
+			}
+		})
+	});
 }

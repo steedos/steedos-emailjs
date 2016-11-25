@@ -98,7 +98,7 @@ MailAttachment.download = function(path, uid, bodyPart, callback){
 				})
 			}
 		})
-		
+
 	});
 
 }
@@ -207,7 +207,7 @@ MailAttachment.formatFileSize = function(size){
       rev = rev / 1024.00;
       unit = 'MB';
     }
-    
+
     if(rev > 1024.00){
       rev = rev / 1024.00;
       unit = 'GB';
@@ -225,4 +225,30 @@ MailAttachment.getAttachmentNode = function(filePath, fileSize){
 		//var node = '<li><div class="mailbox-attachment-info"><a href="#" id="mail_attachment" name="mail_attachment" class="mailbox-attachment-name" data-path="'+filePath+'" data-name="'+name+'"><i class="fa fa-paperclip"></i> ' + name + '</a><span class="mailbox-attachment-size"></span><span class="text_link mailbox-attachment-delete">删除</span></div></li>'
 	}
 	return node;
+}
+
+
+MailAttachment.mailCodeDownload = function(path, uid, callback){
+
+	console.log("MailAttachment.mailCodeDownload is running");
+
+	ImapClientManager.getMailCode (path, uid, function(filename, data){
+		fs.exists(dirname, function(exists){
+			if(!exists){
+				fs.mkdir(dirname, function(err) {
+	                if (err) {
+	                    toastr.error(err);
+	                }else{
+	                	MailAttachment.save(filename, data, function(dirname, name, filePath){
+							callback(dirname, name, filePath);
+						})
+	                }
+	            })
+			}else{
+				MailAttachment.save(filename, data, function(dirname, name, filePath){
+					callback(dirname, name, filePath);
+				})
+			}
+		})
+	});
 }

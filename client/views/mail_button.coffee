@@ -87,6 +87,17 @@ Template.mailButton.events
     $(".steedos-mail").removeClass("right-show")
     MailManager.judgeDelete(path, [uid]);
 
+
+  'click .mail-code-download': (event, template)->
+    console.log("----mailbox-attachment-name------")
+    Session.set("donwLoadding",true);
+    path = Session.get("mailBox");
+    uid = Session.get("mailMessageId");
+    MailAttachment.mailCodeDownload path, uid, (dirname, name, filePath)->
+      toastr.success("邮件原文已存储");
+      Session.set("donwLoadding",false);
+
+
   'click #right_back': (event)->
     backURL =  "/emailjs/b/" + Session.get("mailBox")
     FlowRouter.go(backURL)

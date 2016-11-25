@@ -89,9 +89,9 @@ AccountManager.checkAccount = function(callback){
 		            }
 		          }
 		        }catch(e){
-		          $(document.body).removeClass('loading');
 		          console.error("AccountManager.checkAccount callback function error:" + e);
 		        }
+                $(document.body).removeClass('loading');
 			}
 		});
 

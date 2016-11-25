@@ -159,6 +159,32 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 	});
 }
 
+ImapClientManager.getMailCode = function(path, uid, callback){
+	var	client = this.getClient();
+
+	var options = {byUid: true};
+
+	var query = ["RFC822"];
+
+	client.connect().then(function(){
+		client.listMessages(path, uid, query, options).then(function(message){
+			client.close();
+
+			var m = MailManager.getMessage(parseInt(uid));
+			var name = m.subject;
+			var filename;
+
+			if(name == "" || name == null || name == undefined){
+				filename = "[无主题].eml";
+			}else{
+				filename = name.replace(/[\\/:*?\"<>|]/g, "-") + ".eml";
+			}
+
+			var code = message[0].rfc822;
+			callback(filename, code);
+		});
+	});
+}
 
 ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callback){
 
@@ -198,7 +224,6 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 			}catch(err){
 				console.error(err)
 			}
-
 			client.close();
 		});
 	});
@@ -437,9 +462,12 @@ ImapClientManager.initMailboxInfo = function(mailBox, callback){
 
 }
 
-ImapClientManager.updateUnseenMessages = function(){
+ImapClientManager.updateUnseenMessages = function(callback){
 	ImapClientManager.searchUnseenMessages(null ,"Inbox", {unseen: true}, function(result){
 		MailCollection.mail_unseen.update({},{uids:result});
+		if(typeof(callback) == "function"){
+			callback();
+		}
   });
 }
 

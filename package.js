@@ -75,6 +75,7 @@ Package.onUse(function(api) {
 
 	api.addFiles('server/publications/mail_accounts.coffee', 'server');
 	api.addFiles('server/publications/mail_domains.coffee', 'server');
+	api.addFiles('server/methods/add_to_books.js', 'server');
 
 	api.addFiles('client/subcribe.coffee', 'client');
 	api.addFiles('client/router.coffee', 'client');
