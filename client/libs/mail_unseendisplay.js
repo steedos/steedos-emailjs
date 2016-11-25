@@ -4,26 +4,12 @@ MailUnseendisplay.uidNumber = 5;
 
 //下载前5封未读邮件
 MailUnseendisplay.getUnseenMessages = function(callback){
-	//if(AccountManager.getAuth()){
 	var client = ImapClientManager.getClient();
 	if (!client)
 		client = this.getClient();
 
 	client.connect().then(function(){
-		var inbox = MailManager.getBox("Inbox");
-		var inboxPath = MailManager.getBoxBySpecialUse("\\Inbox").path;
-
-		if(!inbox)
-			return ;
-
-		var infoUidNext = inbox.info.uidNext;
-
-		if (inbox.loadedMxistsIndex < 1){
-			if(typeof(callback) == "function"){
-				callback();
-			}
-			return ;
-		}
+		var inboxPath = "Inbox";
 
 		client.search(inboxPath, {unseen:true}, {byUid: true}).then(function(result){
 			var len = result.length;
@@ -61,7 +47,6 @@ MailUnseendisplay.getUnseenMessages = function(callback){
 			});
 		})
 	})
-	//}
 }
 
 
