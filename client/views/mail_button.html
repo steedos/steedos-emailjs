@@ -39,6 +39,11 @@
 		    		<button type="button" data-toggle="tooltip" data-placement="bottom" title="{{_ 'mail_back'}}" class="btn btn-default" id="right_back"><i class="ion ion-chevron-right"></i></button>
 		        </div>
 		    </div>
+            {{#if isSending}}
+                <div class="loading">
+            {{> steedosLoading}}
+                </div>
+            {{/if}}
 	        {{/if}}
         {{/with}}
 	{{/if}}

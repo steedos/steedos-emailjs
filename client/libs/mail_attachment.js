@@ -229,26 +229,30 @@ MailAttachment.getAttachmentNode = function(filePath, fileSize){
 
 
 MailAttachment.mailCodeDownload = function(path, uid, callback){
+	try{
+		console.log("MailAttachment.mailCodeDownload is running");
 
-	console.log("MailAttachment.mailCodeDownload is running");
-
-	ImapClientManager.getMailCode (path, uid, function(filename, data){
-		fs.exists(dirname, function(exists){
-			if(!exists){
-				fs.mkdir(dirname, function(err) {
-	                if (err) {
-	                    toastr.error(err);
-	                }else{
-	                	MailAttachment.save(filename, data, function(dirname, name, filePath){
-							callback(dirname, name, filePath);
-						})
-	                }
-	            })
-			}else{
-				MailAttachment.save(filename, data, function(dirname, name, filePath){
-					callback(dirname, name, filePath);
-				})
-			}
-		})
-	});
+		ImapClientManager.getMailCode(path, uid, function(filename, data){
+			fs.exists(dirname, function(exists){
+				if(!exists){
+					fs.mkdir(dirname, function(err) {
+		                if (err) {
+		                    toastr.error(err);
+		                }else{
+		                	MailAttachment.save(filename, data, function(dirname, name, filePath){
+								callback(dirname, name, filePath);
+							})
+		                }
+		            })
+				}else{
+					MailAttachment.save(filename, data, function(dirname, name, filePath){
+						callback(dirname, name, filePath);
+					})
+				}
+			})
+		});
+	}catch(e){
+		Session.set("mailSending",false);
+		return ;
+	}
 }

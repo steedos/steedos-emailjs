@@ -168,7 +168,6 @@ ImapClientManager.getMailCode = function(path, uid, callback){
 
 	client.connect().then(function(){
 		client.listMessages(path, uid, query, options).then(function(message){
-			client.close();
 
 			var m = MailManager.getMessage(parseInt(uid));
 			var name = m.subject;
@@ -182,6 +181,7 @@ ImapClientManager.getMailCode = function(path, uid, callback){
 
 			var code = message[0].rfc822;
 			callback(filename, code);
+			client.close();
 		});
 	});
 }

@@ -9,6 +9,8 @@ Template.mailButton.helpers
   path: ->
     return Session.get("mailBox");
 
+  isSending: ->
+    return Session.get("mailSending");
 
 Template.mailButton.events
   'click .add_cc': (event, template) ->
@@ -90,12 +92,12 @@ Template.mailButton.events
 
   'click .mail-code-download': (event, template)->
     console.log("----mailbox-attachment-name------")
-    Session.set("donwLoadding",true);
+    Session.set("mailSending",true);
     path = Session.get("mailBox");
     uid = Session.get("mailMessageId");
     MailAttachment.mailCodeDownload path, uid, (dirname, name, filePath)->
       toastr.success("邮件原文已存储");
-      Session.set("donwLoadding",false);
+      Session.set("mailSending",false);
 
 
   'click #right_back': (event)->
