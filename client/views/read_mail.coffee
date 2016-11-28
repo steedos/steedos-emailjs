@@ -11,6 +11,12 @@ Template.read_mail.helpers
 	attachmentIcon: (name)->
 		return MailAttachment.getAttachmentIcon(name);
 
+	attachmentType: (attachment)->
+		if attachment.bodyPart?.type?.indexOf("image/") == 0
+			return false
+		else
+			return true
+
 	modifiedString: (date)->
 		modifiedString = moment(date).format('YYYY年MM月DD日 HH:mm');
 		return modifiedString;
@@ -34,6 +40,8 @@ Template.read_mail.helpers
 
 	equals: (a,b) ->
 		return (a == b)
+
+
 
 Template.read_mail.events
 	'click .mailbox-attachment-name': (event, template)->
@@ -93,9 +101,9 @@ Template.read_mail.events
 
 			if result
 				AdminDashboard.modalNew 'address_books', { name: name, email: email}
-				
+
 		)
-		
+
 
 	'click .mail-address-compose': (event, template)->
 		Session.set("mailAddress", this)

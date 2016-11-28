@@ -202,9 +202,6 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 			console.log("listMessages messages ok");
 			try{
 				messages.forEach(function(message){
-
-					// console.log("listMessages messages 开始解析：" + message.uid);
-					// console.log("[getAttachmentByPart] part.type is " + bodyPart.type);
 					var bodyMime = message['body[' + bodyPart.part + ']'];
 					var data = "";
 					var filename = "";
@@ -214,11 +211,13 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 					}else if(bodyPart.type == 'message/rfc822'){
 						filename = 'message' + bodyPart.part + ".eml";
 						data = bodyMime;
+					}else if(bodyPart.type.indexOf("image/") > -1){
+						filename = "image.jpg";
+						data = ImapClientManager.base64DecodeToUint8Array(bodyMime);
 					}else{
 						filename = bodyPart.dispositionParameters.filename;
 						data = ImapClientManager.base64DecodeToUint8Array(bodyMime);
 					}
-
 					callback(filename, data);
 				});
 			}catch(err){

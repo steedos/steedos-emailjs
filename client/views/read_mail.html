@@ -81,17 +81,19 @@
 								  <span class="mailbox-attachment-size">{{fileSize size}}</span>
 							</div>
 						  </li> -->
-							<div class="col-md-12 col-sm-12 col-xs-12 attachment-item">
-								<div class="attachment-info-box">
-									<span class="attachment-info-box-icon"><i class="{{attachmentIcon name}}"></i></span>
-									<div class="attachment-info-box-content">
-										<span class="attachment-info-box-text">
-											<a href="#" class="mailbox-attachment-name"  data-index='{{@index}}'>{{name}}</a>
-										</span>
-										<span class="mailbox-attachment-size">{{fileSize size}}</span>
+							{{#if attachmentType this}}
+								<div class="col-md-12 col-sm-12 col-xs-12 attachment-item">
+									<div class="attachment-info-box">
+										<span class="attachment-info-box-icon"><i class="{{attachmentIcon name}}"></i></span>
+										<div class="attachment-info-box-content">
+											<span class="attachment-info-box-text">
+												<a href="#" class="mailbox-attachment-name"  data-index='{{@index}}'>{{name}}</a>
+											</span>
+											<span class="mailbox-attachment-size">{{fileSize size}}</span>
+										</div>
 									</div>
 								</div>
-							</div>
+							{{/if}}
 						{{/each}}
 						</ul>
 					</div>
