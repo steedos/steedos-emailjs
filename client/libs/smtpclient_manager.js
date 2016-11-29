@@ -29,7 +29,7 @@ SmtpClientManager.getClient = function(){
 }
 
 
-SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, callback){
+SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, callback, checkLevel){
 	var client;
 	try{
 		//toastr.info("邮件发送中...");
@@ -38,9 +38,23 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 		var auth = AccountManager.getAuth();
 		var from = auth.user;
 
+		//获得发件人的domain
+		domain = AccountManager.getMailDomain(from)
+
+		if(domain.before_send){
+			try{
+				debugger;
+				eval(domain.before_send)
+			}catch(e){
+				console.error("Error[domain.before_send]:" + e);
+				Session.set("mailSending",false);
+				return ;
+			}
+		}
+
 		client = SmtpClientManager.getClient();
 
-	  var alreadySending  = false;
+		var alreadySending  = false;
 
 		client.onidle = function(){
 		    console.log("Connection has been established");
@@ -71,7 +85,6 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 			if(Meteor.user().name){
 				fromStr = Meteor.user().name + fromStr;
 			}
-
 			var message = MailMimeBuilder.getMessageMime(fromStr, to, cc, bcc, subject, body, attachments);
 
 			client.send(message);

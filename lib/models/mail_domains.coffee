@@ -10,7 +10,7 @@ db.mail_domains._simpleSchema = new SimpleSchema
 	smtp_ssl:
 		type: Boolean,
 		defaultValue: "false",
-	smtp_port :
+	smtp_port:
 		type: Number,
 		defaultValue: "25",
 	imap_server:
@@ -18,9 +18,21 @@ db.mail_domains._simpleSchema = new SimpleSchema
 	imap_ssl:
 		type: Boolean,
 		defaultValue: "false",
-	imap_port :
+	imap_port:
 		type: Number,
 		defaultValue: "143",
+	sensitive_keywords_alert:
+		type: String
+		autoform:
+			type: 'coreform-textarea'
+	sensitive_keywords_forbidden:
+		type: String
+		autoform:
+			type: 'coreform-textarea'
+	before_send:
+		type: String
+		autoform:
+			type: 'coreform-textarea'
 
 	created:
 		type: Date,
