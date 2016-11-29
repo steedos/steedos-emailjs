@@ -15,15 +15,15 @@ MailManager.initMail = function(callback){
               if(callback){
                 if(typeof(callback) == 'function'){
                   callback();
-
-                  draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
-
-                  ImapClientManager.initMailboxInfo(draftBox, function(){});
                 }
               }
             }catch(e){
               console.error("MailManager.initMail callback function error:" + e);
             }
+            
+            draftBox = MailManager.getBoxBySpecialUse("\\Drafts");
+
+            ImapClientManager.initMailboxInfo(draftBox, function(){});
           });
         })
 
