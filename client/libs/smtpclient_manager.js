@@ -57,25 +57,25 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 		var alreadySending  = false;
 
 		client.onidle = function(){
-		    console.log("Connection has been established");
-		    if(alreadySending ){
-		    	client.close();
-		    	return
-		    }
+			console.log("Connection has been established");
+			if(alreadySending ){
+				client.close();
+				return
+			}
 
-		    alreadySending = true;
+			alreadySending = true;
 
-		    var evnelope = {from: from, to: to.getProperty("email")};
+			var evnelope = {from: from, to: to.getProperty("email")};
 
-		    if(cc && cc.length > 0){
-		    	evnelope.cc = cc.getProperty("email");
-		    }
+			if(cc && cc.length > 0){
+				evnelope.cc = cc.getProperty("email");
+			}
 
-		    if(bcc && bcc.length > 0){
-		    	evnelope.bcc = bcc.getProperty("email") ;
-		    }
+			if(bcc && bcc.length > 0){
+				evnelope.bcc = bcc.getProperty("email") ;
+			}
 
-		    client.useEnvelope(new MimeBuilder().addHeader(evnelope).getEnvelope());
+			client.useEnvelope(new MimeBuilder().addHeader(evnelope).getEnvelope());
 		}
 
 		client.onready = function(){
@@ -89,7 +89,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 
 			client.send(message);
 
-		    client.end();
+			client.end();
 		}
 
     client.ondone = function(success){
@@ -100,17 +100,17 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
  			}else{
  				toastr.success("发送不成功");
  			}
-    }
+	}
 
-    client.onerror = function(err){
-    	client.onclose(isError);
-    }
+	client.onerror = function(err){
+		client.onclose(isError);
+	}
 
-    client.connect();
+	client.connect();
 
 	}catch(e){
 		console.error(e);
 	}finally{
-     	client.close();
-    }
+	 	client.close();
+	}
 }
