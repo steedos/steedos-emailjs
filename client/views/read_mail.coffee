@@ -76,10 +76,11 @@ Template.read_mail.events
 
 		MailManager.search currentAddress, (result) ->
 			if !result || result.length == 0
-					toastr.info("未搜索到数据");
+				toastr.info("未搜索到数据");
 			else
-					Session.set("mailPage",1);
-					Session.set("mailBoxFilter", result);
+				Session.set("mailPage",1);
+				Session.set("mailBoxFilter", result);
+				toastr.info("搜索完成");
 			Session.set("mailLoading",false);
 
 
