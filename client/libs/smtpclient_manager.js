@@ -29,30 +29,11 @@ SmtpClientManager.getClient = function(){
 }
 
 
-SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, callback, checkLevel){
-	var client;
+SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, callback){
+	var auth = AccountManager.getAuth();
+	var from = auth.user;
 	try{
-		//toastr.info("邮件发送中...");
-		console.log("SmtpClientManager.sendMai start");
-
-		var auth = AccountManager.getAuth();
-		var from = auth.user;
-
-		//获得发件人的domain
-		domain = AccountManager.getMailDomain(from)
-
-		if(domain.before_send){
-			try{
-				debugger;
-				eval(domain.before_send)
-			}catch(e){
-				console.error("Error[domain.before_send]:" + e);
-				Session.set("mailSending",false);
-				return ;
-			}
-		}
-
-		client = SmtpClientManager.getClient();
+		var client = SmtpClientManager.getClient();
 
 		var alreadySending  = false;
 
@@ -112,5 +93,27 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 		console.error(e);
 	}finally{
 	 	client.close();
+		Session.set("mailIsRunbeforSend",false);
+		Session.set("mailContinueSend",false);
+	}
+}
+
+
+SmtpClientManager.beforeSendFilter = function(to, cc, bcc,subject, body, attachments){
+	console.log("SmtpClientManager.sendMai start");
+
+	var auth = AccountManager.getAuth();
+	var from = auth.user;
+
+	var domain = AccountManager.getMailDomain(from);
+	try{
+		if(domain.before_send){
+			eval(domain.before_send);
+		}
+		Session.set("mailIsRunbeforSend",true);
+	}catch(e){
+		console.error("Error[domain.before_send]:" + e);
+		Session.set("mailSending",false);
+		return ;
 	}
 }

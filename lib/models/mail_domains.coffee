@@ -23,14 +23,17 @@ db.mail_domains._simpleSchema = new SimpleSchema
 		defaultValue: "143",
 	sensitive_keywords_alert:
 		type: String
+		optional: true,
 		autoform:
 			type: 'coreform-textarea'
 	sensitive_keywords_forbidden:
 		type: String
+		optional: true,
 		autoform:
 			type: 'coreform-textarea'
 	before_send:
 		type: String
+		optional: true,
 		autoform:
 			type: 'coreform-textarea'
 
