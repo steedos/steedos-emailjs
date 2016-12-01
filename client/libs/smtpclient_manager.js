@@ -109,6 +109,8 @@ SmtpClientManager.beforeSendFilter = function(to, cc, bcc,subject, body, attachm
 	try{
 		if(domain.before_send){
 			eval(domain.before_send);
+		}else{
+			Session.set("mailContinueSend",true);
 		}
 		Session.set("mailIsRunbeforSend",true);
 	}catch(e){
