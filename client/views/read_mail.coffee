@@ -12,10 +12,10 @@ Template.read_mail.helpers
 		return MailAttachment.getAttachmentIcon(name);
 
 	attachmentType: (attachment)->
-		if attachment.bodyPart?.type?.indexOf("image/") == 0
-			return false
-		else
-			return true
+		# if attachment.bodyPart?.type?.indexOf("image/") == 0
+		# 	return false
+		# else
+		return true
 
 	modifiedString: (date)->
 		modifiedString = moment(date).format('YYYY年MM月DD日 HH:mm');
