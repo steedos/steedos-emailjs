@@ -106,6 +106,10 @@ Template.mail_compose.events
 			toastr.error("附件: " + $("#attachment_file").val() + ", 上传失败！不允许上传此类型附件");
 			$("#attachment_file").val('')
 			return ;
+		if event.target.files[0].size > 104857600
+			toastr.error("附件超过100MB限制");
+			console.log "附件" + $("#attachment_file").val() + "超过100MB限制";
+			return ;
 
 		node = MailAttachment.getAttachmentNode($("#attachment_file").val(), event.target.files[0].size);
 		$("#compose_attachment_list").append(node);
