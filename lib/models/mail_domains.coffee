@@ -26,16 +26,19 @@ db.mail_domains._simpleSchema = new SimpleSchema
 		optional: true,
 		autoform:
 			type: 'coreform-textarea'
+			rows: '6',
 	sensitive_keywords_forbidden:
 		type: String
 		optional: true,
 		autoform:
 			type: 'coreform-textarea'
+			rows: '6',
 	before_send:
 		type: String
 		optional: true,
 		autoform:
 			type: 'coreform-textarea'
+			rows: '6',
 
 	created:
 		type: Date,
