@@ -26,10 +26,16 @@ MailAttachment.openFile = function(dirname, name){
 
 	var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"');
 
-	cmd += openFilePath ;
-	exec(cmd, function(error,stdout,stderr){
-		console.log("文件已关闭：" + dirname);
+	var openFileCMD = "explorer " + dirname;
+
+	exec(openFileCMD, function(error, stdout, stderr){
+		if (error){
+			console.log("文件已关闭：" + error);
+		}
 	});
+
+
+	
 	//判断是否是.eml文件,如果不是.eml文件，则还需要打开该文件
 	var nameLen = name.length;
 	var emlLen = name.indexOf(".eml");
