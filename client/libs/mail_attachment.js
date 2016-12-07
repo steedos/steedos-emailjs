@@ -24,13 +24,24 @@ MailAttachment.openFile = function(dirname, name){
 
 	var cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
 
-	var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"')
+	var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"');
 
-	cmd += path.join(openFilePath, '\"' + name + '\"');
+	cmd += openFilePath ;
+	exec(cmd, function(error,stdout,stderr){
+		console.log("文件已关闭：" + dirname);
+	});
+	//判断是否是.eml文件,如果不是.eml文件，则还需要打开该文件
+	var nameLen = name.length;
+	var emlLen = name.indexOf(".eml");
+	if(emlLen != (nameLen - 4)){
+		cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
+		cmd += path.join(openFilePath, '\"' + name + '"');
+		exec(cmd, function(error,stdout,stderr){
+			console.log("文件已关闭：" + dirname);
+		});
+	}else{
 
-    exec(cmd, function(error,stdout,stderr){
-    	console.log("文件已关闭：" + dirname);
-    });
+	}
 }
 
 //data_array: 此值应该来自于 Array.from(Uint8Array)   // new Buffer(new Uint8Array(data_array))

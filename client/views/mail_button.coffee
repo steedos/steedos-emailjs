@@ -111,6 +111,7 @@ Template.mailButton.events
 		MailAttachment.mailCodeDownload path, uid, (dirname, name, filePath)->
 			toastr.success("邮件原文已存储");
 			Session.set("mailSending",false);
+			MailAttachment.openFile(dirname, name);
 
 
 	'click #right_back': (event)->
