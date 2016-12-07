@@ -119,3 +119,23 @@ SmtpClientManager.beforeSendFilter = function(to, cc, bcc,subject, body, attachm
 		return ;
 	}
 }
+
+SmtpClientManager.beforeSaveFilter = function(to, cc, bcc,subject, body, attachments){
+	console.log("SmtpClientManager.sendMai start");
+
+	var auth = AccountManager.getAuth();
+	var from = auth.user;
+
+	var domain = AccountManager.getMailDomain(from);
+	try{
+		if(!domain.before_save){
+			eval(domain.before_save);
+		}else{
+			Session.set("mailIsRunbeforSave",true);
+		}
+	}catch(e){
+		console.error("Error[domain.before_save]:" + e);
+		Session.set("mailSending",false);
+		return ;
+	}
+}

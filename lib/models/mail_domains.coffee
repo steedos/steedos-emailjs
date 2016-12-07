@@ -39,6 +39,12 @@ db.mail_domains._simpleSchema = new SimpleSchema
 		autoform:
 			type: 'coreform-textarea'
 			rows: '6',
+	before_save:
+		type: String
+		optional: true,
+		autoform:
+			type: 'coreform-textarea'
+			rows: '6',
 
 	created:
 		type: Date,

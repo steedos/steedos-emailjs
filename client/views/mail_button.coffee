@@ -85,11 +85,21 @@ Template.mailButton.events
 				name: @dataset.name
 				path: @dataset.path
 
-		message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user ,MailManager.getContacts("mail_to"), MailManager.getContacts("mail_cc"), MailManager.getContacts("mail_bcc"), $(".subject", $(".mail-compose")).val(), $('#compose-textarea').summernote('code') ,attachments);
+		to = MailManager.getContacts("mail_to");
+		cc = MailManager.getContacts("mail_cc");
+		bcc = MailManager.getContacts("mail_bcc");
+		subject = $(".subject", $(".mail-compose")).val();
+		body = $('#compose-textarea').summernote('code');
 
-		console.log("click #compose-draft ....")
+		Session.set("mailIsRunbeforSave",false);
+		SmtpClientManager.beforeSaveFilter(to, cc, bcc, subject, body, attachments);
 
-		MailManager.saveDrafts(message);
+		if Session.get("mailIsRunbeforSave")
+			message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user , to, cc, bcc, subject, body,attachments);
+
+			console.log("click #compose-draft ....")
+
+			MailManager.saveDrafts(message);
 
 
 	'click .mail-delete': (event, template)->
