@@ -39,8 +39,6 @@ MailAttachment.openFile = function(dirname, name){
 		exec(cmd, function(error,stdout,stderr){
 			console.log("文件已关闭：" + dirname);
 		});
-	}else{
-
 	}
 }
 
