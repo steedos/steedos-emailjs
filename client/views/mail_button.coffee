@@ -46,6 +46,7 @@ Template.mailButton.events
 			attachments.push
 				name: @dataset.name
 				path: @dataset.path
+				size: parseFloat(@dataset.fileSize)
 
 		to = MailManager.getContacts("mail_to");
 		cc = MailManager.getContacts("mail_cc");
@@ -84,6 +85,7 @@ Template.mailButton.events
 			attachments.push
 				name: @dataset.name
 				path: @dataset.path
+				size: parseFloat(@dataset.fileSize)
 
 		to = MailManager.getContacts("mail_to");
 		cc = MailManager.getContacts("mail_cc");

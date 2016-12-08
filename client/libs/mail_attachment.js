@@ -236,7 +236,8 @@ MailAttachment.getAttachmentNode = function(filePath, fileSize){
 	var name = MailAttachment.getAttachmentName(filePath);
 	var node = "";
 	if(name){
-		node = '<div class="col-md-12 col-sm-12 col-xs-12 attachment-item" id="mail_attachment" name="mail_attachment" data-path="'+filePath+'" data-name="'+name+'"><div class="attachment-info-box"><span class="attachment-info-box-icon"><i class="'+MailAttachment.getAttachmentIcon(name)+'"></i></span><div class="attachment-info-box-content"><span class="attachment-info-box-text">' + name + '</span>' + '<span class="mailbox-attachment-size">' + MailAttachment.formatFileSize(fileSize) + '<span class="text_link mailbox-attachment-delete">删除</span></span></div></div></div>';
+		node = '<div class="col-md-12 col-sm-12 col-xs-12 attachment-item" id="mail_attachment" name="mail_attachment" data-path="'+filePath+'" data-name="'+name+'" data-file-size="'+fileSize
++'"><div class="attachment-info-box"><span class="attachment-info-box-icon"><i class="'+MailAttachment.getAttachmentIcon(name)+'"></i></span><div class="attachment-info-box-content"><span class="attachment-info-box-text">' + name + '</span>' + '<span class="mailbox-attachment-size">' + MailAttachment.formatFileSize(fileSize) + '<span class="text_link mailbox-attachment-delete">删除</span></span></div></div></div>';
 		//var node = '<li><div class="mailbox-attachment-info"><a href="#" id="mail_attachment" name="mail_attachment" class="mailbox-attachment-name" data-path="'+filePath+'" data-name="'+name+'"><i class="fa fa-paperclip"></i> ' + name + '</a><span class="mailbox-attachment-size"></span><span class="text_link mailbox-attachment-delete">删除</span></div></li>'
 	}
 	return node;

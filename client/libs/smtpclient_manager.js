@@ -128,7 +128,7 @@ SmtpClientManager.beforeSaveFilter = function(to, cc, bcc,subject, body, attachm
 
 	var domain = AccountManager.getMailDomain(from);
 	try{
-		if(!domain.before_save){
+		if(domain.before_save){
 			eval(domain.before_save);
 		}else{
 			Session.set("mailIsRunbeforSave",true);
