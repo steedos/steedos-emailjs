@@ -22,5 +22,8 @@ Mail.getUnseenMessages = function(limit){
   return  messages;
 }
 
-io = require('../client/assets/socket.io.min.js')
-forge = require('../client/assets/forge.min.js')
+// if (!Steedos.isNode())
+// {
+// 	io = require('../client/assets/socket.io.min.js')
+// 	forge = require('../client/assets/forge.min.js')
+// }

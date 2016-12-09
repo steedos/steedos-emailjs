@@ -9,6 +9,7 @@ Npm.depends({
 	busboy: "0.2.13",
 	cookies: "0.6.1",
 	mime: "1.3.4",
+	"node-forge": "0.6.45",
 	"emailjs-imap-client": "git://github.com/steedos/emailjs-imap-client.git",
 	"emailjs-smtp-client": "git://github.com/steedos/emailjs-smtp-client.git",
 	"emailjs-tcp-socket": "git://github.com/steedos/emailjs-tcp-socket.git", 
@@ -148,10 +149,10 @@ Package.onUse(function(api) {
 	api.addFiles('client/views/mail_button.html', 'client');
 	api.addFiles('client/views/mail_button.coffee', 'client');
 
-	api.addFiles('client/assets/socket.io.min.js', 'client');
-	api.addFiles('client/assets/forge.min.js', 'client');
-	api.addAssets('client/assets/forge.min.js', 'client');
-	api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
+	// api.addFiles('client/assets/socket.io.min.js', 'client');
+	// api.addFiles('client/assets/forge.min.js', 'client');
+	// api.addAssets('client/assets/forge.min.js', 'client');
+	// api.addAssets('client/assets/emailjs-tcp-socket-tls-worker.js', 'client');
 
 	api.export('Mail');
 
@@ -166,8 +167,8 @@ Package.onUse(function(api) {
 	api.export("MailForward");
 	api.export("SmtpClientManager");
 
-	api.export("io");
-	api.export("forge");
+	// api.export("io");
+	// api.export("forge");
 
 });
 
