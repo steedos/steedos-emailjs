@@ -85,6 +85,9 @@ function getOtherUnseenUids(unseenUids, sameUids){
 MailUnseendisplay.listUnseenMessages = function(callback){
   var unseenUids = MailUnseendisplay.getUnseenUids();
   if((!unseenUids) || (unseenUids.length < 1)){
+    if(typeof(callback) == 'function'){
+      callback();
+    }
     return ;
   }
   var inboxUids = getInboxUids();
@@ -92,9 +95,10 @@ MailUnseendisplay.listUnseenMessages = function(callback){
   var otherUnseenUids = getOtherUnseenUids(unseenUids, sameUids);
 
   if((!otherUnseenUids) || (otherUnseenUids.length < 1)){
-    return ;
-  }
-  else{
+    if(typeof(callback) == 'function'){
+      callback();
+    }
+  }else{
     ImapClientManager.listMessages(null, "Inbox", otherUnseenUids, {byUid: true}, function(messages){
       if(typeof(callback) == 'function'){
         callback();

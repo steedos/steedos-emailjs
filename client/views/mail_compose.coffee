@@ -42,7 +42,6 @@ Template.mail_compose.helpers
 		if Session.get("mailInit") && Session.get("mailBoxInit")
 			Session.get("mailMessageId")
 
-
 			rev = {name: "mail_cc", title: '抄&emsp;送', atts:{id: "mail_cc", name: "mail_cc"}};
 			if Session.get("mailJumpDraft") || Session.get("mailReplyAll")
 				rev.values  = cc;
@@ -67,7 +66,6 @@ Template.mail_compose.helpers
 					return "回复: " + subject;
 				else
 					return "回复: "
-
 
 	showLoadding: ->
 		return Session.get("mailMessageLoadding");
@@ -108,9 +106,19 @@ Template.mail_compose.events
 			toastr.error("附件: " + $("#attachment_file").val() + ", 上传失败！不允许上传此类型附件");
 			$("#attachment_file").val('')
 			return ;
+		if event.target.files[0].size > 104857600
+			toastr.error("附件超过100MB限制");
+			console.log "附件" + $("#attachment_file").val() + "超过100MB限制";
+			return ;
 
 		node = MailAttachment.getAttachmentNode($("#attachment_file").val(), event.target.files[0].size);
 		$("#compose_attachment_list").append(node);
+
+		attchmentName = MailAttachment.getAttachmentName($("#attachment_file").val());
+		subject = $(".subject").val();
+		if subject == "" || subject == undefined || subject == null
+			$(".subject").val(attchmentName);
+
 		$("#attachment_file").val('')
 
 	'click .mailbox-attachment-delete': (event)->

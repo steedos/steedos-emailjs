@@ -49,7 +49,6 @@ mailRoutes.route '/b/:mailBox/',
 		Session.set("mailReply", false);
 		Session.set("mailReplyAll", false);
 		Session.set("mailJumpDraft", false);
-		debugger;
 		Session.set("mailBox", mailBox);
 		Session.set("mailMessageId", null);
 		Session.set("mailBoxFilter", "");

@@ -11,6 +11,12 @@ Template.read_mail.helpers
 	attachmentIcon: (name)->
 		return MailAttachment.getAttachmentIcon(name);
 
+	attachmentType: (attachment)->
+		# if attachment.bodyPart?.type?.indexOf("image/") == 0
+		# 	return false
+		# else
+		return true
+
 	modifiedString: (date)->
 		modifiedString = moment(date).format('YYYY年MM月DD日 HH:mm');
 		return modifiedString;
@@ -34,6 +40,8 @@ Template.read_mail.helpers
 
 	equals: (a,b) ->
 		return (a == b)
+
+
 
 Template.read_mail.events
 	'click .mailbox-attachment-name': (event, template)->
@@ -68,10 +76,11 @@ Template.read_mail.events
 
 		MailManager.search currentAddress, (result) ->
 			if !result || result.length == 0
-					toastr.info("未搜索到数据");
+				toastr.info("未搜索到数据");
 			else
-					Session.set("mailPage",1);
-					Session.set("mailBoxFilter", result);
+				Session.set("mailPage",1);
+				Session.set("mailBoxFilter", result);
+				toastr.info("搜索完成");
 			Session.set("mailLoading",false);
 
 
@@ -93,9 +102,9 @@ Template.read_mail.events
 
 			if result
 				AdminDashboard.modalNew 'address_books', { name: name, email: email}
-				
+
 		)
-		
+
 
 	'click .mail-address-compose': (event, template)->
 		Session.set("mailAddress", this)

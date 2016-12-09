@@ -24,13 +24,28 @@ MailAttachment.openFile = function(dirname, name){
 
 	var cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
 
-	var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"')
+	var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"');
 
-	cmd += path.join(openFilePath, '\"' + name + '\"');
+	var openFileCMD = "explorer " + dirname;
 
-    exec(cmd, function(error,stdout,stderr){
-    	console.log("文件已关闭：" + dirname);
-    });
+	exec(openFileCMD, function(error, stdout, stderr){
+		if (error){
+			console.log("文件已关闭：" + error);
+		}
+	});
+
+
+	
+	//判断是否是.eml文件,如果不是.eml文件，则还需要打开该文件
+	var nameLen = name.length;
+	var emlLen = name.indexOf(".eml");
+	if(emlLen != (nameLen - 4)){
+		cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
+		cmd += path.join(openFilePath, '\"' + name + '"');
+		exec(cmd, function(error,stdout,stderr){
+			console.log("文件已关闭：" + dirname);
+		});
+	}
 }
 
 //data_array: 此值应该来自于 Array.from(Uint8Array)   // new Buffer(new Uint8Array(data_array))
@@ -189,7 +204,7 @@ MailAttachment.getAttachmentIcon = function(fileName){
 	return icon[key];
 }
 
-function getAttachmentName(filePath){
+MailAttachment.getAttachmentName = function(filePath){
 	var atts = filePath.split("\/");
 
 	var atts2 = filePath.split("\\");
@@ -218,10 +233,11 @@ MailAttachment.formatFileSize = function(size){
 
 MailAttachment.getAttachmentNode = function(filePath, fileSize){
 
-	var name = getAttachmentName(filePath);
+	var name = MailAttachment.getAttachmentName(filePath);
 	var node = "";
 	if(name){
-		node = '<div class="col-md-12 col-sm-12 col-xs-12 attachment-item" id="mail_attachment" name="mail_attachment" data-path="'+filePath+'" data-name="'+name+'"><div class="attachment-info-box"><span class="attachment-info-box-icon"><i class="'+MailAttachment.getAttachmentIcon(name)+'"></i></span><div class="attachment-info-box-content"><span class="attachment-info-box-text">' + name + '</span>' + '<span class="mailbox-attachment-size">' + MailAttachment.formatFileSize(fileSize) + '<span class="text_link mailbox-attachment-delete">删除</span></span></div></div></div>';
+		node = '<div class="col-md-12 col-sm-12 col-xs-12 attachment-item" id="mail_attachment" name="mail_attachment" data-path="'+filePath+'" data-name="'+name+'" data-file-size="'+fileSize
++'"><div class="attachment-info-box"><span class="attachment-info-box-icon"><i class="'+MailAttachment.getAttachmentIcon(name)+'"></i></span><div class="attachment-info-box-content"><span class="attachment-info-box-text">' + name + '</span>' + '<span class="mailbox-attachment-size">' + MailAttachment.formatFileSize(fileSize) + '<span class="text_link mailbox-attachment-delete">删除</span></span></div></div></div>';
 		//var node = '<li><div class="mailbox-attachment-info"><a href="#" id="mail_attachment" name="mail_attachment" class="mailbox-attachment-name" data-path="'+filePath+'" data-name="'+name+'"><i class="fa fa-paperclip"></i> ' + name + '</a><span class="mailbox-attachment-size"></span><span class="text_link mailbox-attachment-delete">删除</span></div></li>'
 	}
 	return node;
@@ -229,26 +245,30 @@ MailAttachment.getAttachmentNode = function(filePath, fileSize){
 
 
 MailAttachment.mailCodeDownload = function(path, uid, callback){
+	try{
+		console.log("MailAttachment.mailCodeDownload is running");
 
-	console.log("MailAttachment.mailCodeDownload is running");
-
-	ImapClientManager.getMailCode (path, uid, function(filename, data){
-		fs.exists(dirname, function(exists){
-			if(!exists){
-				fs.mkdir(dirname, function(err) {
-	                if (err) {
-	                    toastr.error(err);
-	                }else{
-	                	MailAttachment.save(filename, data, function(dirname, name, filePath){
-							callback(dirname, name, filePath);
-						})
-	                }
-	            })
-			}else{
-				MailAttachment.save(filename, data, function(dirname, name, filePath){
-					callback(dirname, name, filePath);
-				})
-			}
-		})
-	});
+		ImapClientManager.getMailCode(path, uid, function(filename, data){
+			fs.exists(dirname, function(exists){
+				if(!exists){
+					fs.mkdir(dirname, function(err) {
+		                if (err) {
+		                    toastr.error(err);
+		                }else{
+		                	MailAttachment.save(filename, data, function(dirname, name, filePath){
+								callback(dirname, name, filePath);
+							})
+		                }
+		            })
+				}else{
+					MailAttachment.save(filename, data, function(dirname, name, filePath){
+						callback(dirname, name, filePath);
+					})
+				}
+			})
+		});
+	}catch(e){
+		Session.set("mailSending",false);
+		return ;
+	}
 }

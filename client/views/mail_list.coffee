@@ -52,6 +52,7 @@ Template.mail_list.helpers
 
     boxMessages: ->
         console.log("[boxMessages]");
+        Session.set("mailSending",false);
         Session.set("mailLoading",true);
         path = Session.get("mailBox");
 

@@ -14,6 +14,7 @@ Template.mail_search.subjectSearch = ()->
         else
             Session.set("mailPage", 1);
             Session.set("mailBoxFilter", result);
+            toastr.info("搜索完成");
 
         Session.set("mailLoading",false);
 
