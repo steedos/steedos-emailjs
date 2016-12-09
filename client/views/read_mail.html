@@ -119,6 +119,13 @@
 						<p>{{{mailBody this}}}</p>
 					{{/if}}
 				</div>
+				{{#if isDispositionNotificationAlertNeeded}}
+					<div class="alert alert-warning alert-disposition-notification">
+						<h4>{{_ "mail_alert_disposition_notification_title"}}</h4>
+						<button type="button" class="btn btn-sm btn-primary btn-flat btn-ok">{{_ 'mail_alert_disposition_notification_yes'}}</button>
+						<button type="button" class="btn btn-sm btn-default btn-flat btn-cancel">{{_ 'mail_alert_disposition_notification_no'}}</button>
+					</div>
+				{{/if}}
 			</div>
 			<!-- /.mailbox-read-message -->
 		</div>

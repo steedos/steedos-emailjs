@@ -29,7 +29,7 @@ SmtpClientManager.getClient = function(){
 }
 
 
-SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, callback){
+SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, isDispositionNotification, callback){
 	var auth = AccountManager.getAuth();
 	var from = auth.user;
 	try{
@@ -66,7 +66,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, ca
 			if(Meteor.user().name){
 				fromStr = Meteor.user().name + fromStr;
 			}
-			var message = MailMimeBuilder.getMessageMime(fromStr, to, cc, bcc, subject, body, attachments);
+			var message = MailMimeBuilder.getMessageMime(fromStr, to, cc, bcc, subject, body, attachments, isDispositionNotification);
 
 			client.send(message);
 

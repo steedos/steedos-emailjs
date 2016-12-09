@@ -8,17 +8,21 @@ if(Steedos.isNode()){
 	MimeCodec = require('emailjs-mime-codec');
 }
 
-MailMimeBuilder.getMessageMime = function(from, to, cc, bcc,subject, body, attachments){
+MailMimeBuilder.getMessageMime = function(from, to, cc, bcc,subject, body, attachments, isDispositionNotification){
 
 	var node = new MimeBuilder("multipart/mixed").addHeader({ Subject: subject}).addHeader({ From:from}).addHeader({ To:MailManager.getAddress(to)});
 
-	if(cc && cc.length > 0){
-    	node.addHeader({ Cc: MailManager.getAddress(cc)});
-    }
+	if(isDispositionNotification){
+		node.addHeader({"Disposition-Notification-To": from});
+	}
 
-    if(bcc && bcc.length > 0){
-    	node.addHeader({ Bcc: MailManager.getAddress(bcc)});
-    }
+	if(cc && cc.length > 0){
+		node.addHeader({Cc: MailManager.getAddress(cc)});
+	}
+
+	if(bcc && bcc.length > 0){
+		node.addHeader({Bcc: MailManager.getAddress(bcc)});
+	}
 
 	node.createChild("text/html").setContent(body);
 

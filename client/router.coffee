@@ -92,6 +92,7 @@ mailRoutes.route '/b/:mailBox/:mailMessageId',
 		Session.set("mailMessageLoadding",false);
 
 		Session.set("mailMessageId", params.mailMessageId);
+		Session.set("isDispositionNotificationAlertNeeded", false);
 		BlazeLayout.render 'emailjsLayout',
 			main: "mail_home"
 

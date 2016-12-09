@@ -53,6 +53,7 @@ Template.mailButton.events
 		bcc = MailManager.getContacts("mail_bcc");
 		subject = $(".subject", $(".mail-compose")).val();
 		body = $('#compose-textarea').summernote('code');
+		isDispositionNotification = $("#ckb_disposition_notification").is(':checked')
 
 		if !Session.get("mailIsRunbeforSend")
 			Session.set("mailContinueSend",false); #是否继续
@@ -62,7 +63,7 @@ Template.mailButton.events
 
 		console.log("Session mailContinueSend is" + Session.get("mailContinueSend"));
 		if Session.get("mailContinueSend")
-			SmtpClientManager.sendMail to, cc, bcc, subject, body, attachments, ()->
+			SmtpClientManager.sendMail to, cc, bcc, subject, body, attachments, isDispositionNotification, ()->
 				path = Session.get("mailBox")
 
 				if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'

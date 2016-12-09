@@ -41,6 +41,14 @@ Template.read_mail.helpers
 	equals: (a,b) ->
 		return (a == b)
 
+	isDispositionNotificationAlertNeeded: () ->
+		if Session.get("mailInit")
+			uid = Session.get("mailMessageId");
+			message = MailManager.getMessage(parseInt(uid));
+			if message.dispositionNotificationTo and message?.flags?.indexOf("\\Seen") == -1
+				Session.set("isDispositionNotificationAlertNeeded", true)
+
+		return Session.get("isDispositionNotificationAlertNeeded")
 
 
 Template.read_mail.events
@@ -108,6 +116,23 @@ Template.read_mail.events
 
 	'click .mail-address-compose': (event, template)->
 		Session.set("mailAddress", this)
+
+	'click .alert-disposition-notification .btn-ok': (event, template)->
+		uid = Session.get("mailMessageId");
+		message = MailManager.getMessage(parseInt(uid));
+		dnt = message.dispositionNotificationTo
+		# newSubject = "对方已阅读：#{message.subject}"
+		newSubject = t "mail_alert_disposition_notification_subject",message.subject
+		auth = AccountManager.getAuth()
+		# newBody = "对方已经阅读您在#{moment(message.date).format('YYYY-MM-DD HH:mm')}发给 #{Meteor.user().username} &lt;#{auth.user}&gt;，主题为#{message.subject}的邮件。"
+		newBody = t "mail_alert_disposition_notification_body", moment(message.date).format('YYYY-MM-DD HH:mm'), Meteor.user().username, auth.user, message.subject
+
+		SmtpClientManager.sendMail [dnt], [], [], newSubject, newBody, [], false, ->
+			Session.set("isDispositionNotificationAlertNeeded",false)
+
+	'click .alert-disposition-notification .btn-cancel': (event, template)->
+		Session.set("isDispositionNotificationAlertNeeded",false)
+
 
 
 

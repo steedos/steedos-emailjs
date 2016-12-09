@@ -7,7 +7,7 @@ var ImapClient, MimeParser, Encoding, MimeCodec, loadStep = MailPage.pageSize;
 	ImapClient = require("emailjs-imap-client");
 	MimeParser  = require('emailjs-mime-parser');
 	Encoding = require('emailjs-stringencoding');
-	MimeCodec = require('emailjs-mime-codec')
+	MimeCodec = require('emailjs-mime-codec');
 // }
 
 ImapClientManager.getClient = function(){
@@ -233,7 +233,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	if (!client)
 		client = this.getClient();
 
-	var query = ['uid', 'flags', 'envelope','bodystructure'];
+	var query = ['uid', 'flags', 'envelope','bodystructure', 'body[header.fields (Disposition-Notification-To)]'];
 
 	client.connect().then(function(){
 		console.log("listMessages start, sequence is " + sequence);
@@ -500,6 +500,12 @@ function decode(str, part){
 	}
 }
 
+function mimeWordDecode(str){
+	if(!str)
+		return '';
+	return MimeCodec.mimeWordDecode(str)
+}
+
 function handerBodyPart(bodyPart){
 	var object = {};
 	if(bodyPart.part == undefined){
@@ -585,8 +591,26 @@ function handerMessage(message){
 	rev.bcc = envelope.bcc;
 	rev.in_reply_to = envelope["in-reply-to"];
 	rev.message_id  = envelope["message-id"];
-
 	rev.bodystructure = message["bodystructure"];
+
+	/*
+	message['body[header.fields ("disposition-notification-to")]']值格式如下：
+	"Disposition-Notification-To: "=?gb18030?B?TGl0YW50?=" <262370136@qq.com>
+
+"
+	 */
+	
+	var dntHeader = message['body[header.fields ("disposition-notification-to")]'];
+	var dntValue = dntHeader.replace(/[^:]+:/,"");//取冒号右侧字符
+	var dntInQuos = dntValue.match(/\"([^\"]*)\"/);//取引号内值，结果如[""=?gb18030?B?TGl0YW50?="", "=?gb18030?B?TGl0YW50?="]
+	var dntName = dntInQuos && dntInQuos.length > 1 ? dntInQuos[1] : "";
+	var dntInBrackets = dntValue.match(/<([^<>]*)>/);//取尖括号内值，结果如["<262370136@qq.com>", "262370136@qq.com"]
+	var dntAddress = dntInQuos && dntInBrackets.length > 1 ? dntInBrackets[1] : "";
+
+	rev["dispositionNotificationTo"] = {
+		name: mimeWordDecode(dntName),
+		email: dntAddress
+	};
 
 	// rev.attachments = new Array(), bodyText = "", bodyHtml = "";
 	try{
