@@ -601,16 +601,18 @@ function handerMessage(message){
 	 */
 	
 	var dntHeader = message['body[header.fields ("disposition-notification-to")]'];
-	var dntValue = dntHeader.replace(/[^:]+:/,"");//取冒号右侧字符
-	var dntInQuos = dntValue.match(/\"([^\"]*)\"/);//取引号内值，结果如[""=?gb18030?B?TGl0YW50?="", "=?gb18030?B?TGl0YW50?="]
-	var dntName = dntInQuos && dntInQuos.length > 1 ? dntInQuos[1] : "";
-	var dntInBrackets = dntValue.match(/<([^<>]*)>/);//取尖括号内值，结果如["<262370136@qq.com>", "262370136@qq.com"]
-	var dntAddress = dntInQuos && dntInBrackets.length > 1 ? dntInBrackets[1] : "";
+	if(dntHeader){
+		var dntValue = dntHeader.replace(/[^:]+:/,"");//取冒号右侧字符
+		var dntInQuos = dntValue.match(/\"([^\"]*)\"/);//取引号内值，结果如[""=?gb18030?B?TGl0YW50?="", "=?gb18030?B?TGl0YW50?="]
+		var dntName = dntInQuos && dntInQuos.length > 1 ? dntInQuos[1] : "";
+		var dntInBrackets = dntValue.match(/<([^<>]*)>/);//取尖括号内值，结果如["<262370136@qq.com>", "262370136@qq.com"]
+		var dntAddress = dntInQuos && dntInBrackets.length > 1 ? dntInBrackets[1] : "";
 
-	rev["dispositionNotificationTo"] = {
-		name: mimeWordDecode(dntName),
-		email: dntAddress
-	};
+		rev["dispositionNotificationTo"] = {
+			name: mimeWordDecode(dntName),
+			email: dntAddress
+		};
+	}
 
 	// rev.attachments = new Array(), bodyText = "", bodyHtml = "";
 	try{
