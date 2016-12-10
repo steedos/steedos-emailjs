@@ -601,6 +601,7 @@ function handerMessage(message){
 	 */
 	
 	var dntHeader = message['body[header.fields ("disposition-notification-to")]'];
+	dntHeader = dntHeader ? dntHeader.trim() : "";
 	if(dntHeader){
 		var dntValue = dntHeader.replace(/[^:]+:/,"");//取冒号右侧字符
 		var dntInQuos = dntValue.match(/\"([^\"]*)\"/);//取引号内值，结果如[""=?gb18030?B?TGl0YW50?="", "=?gb18030?B?TGl0YW50?="]
