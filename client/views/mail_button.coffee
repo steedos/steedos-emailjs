@@ -34,10 +34,10 @@ Template.mailButton.events
 		$(".remove_bcc").hide();
 
 	'click #compose-send': (event)->
-		Session.set("mailSending",true);
+		$(document.body).addClass('loading');
 		if MailManager.getContacts("mail_to") == null || MailManager.getContacts("mail_to").length < 1
 			toastr.warning("请填写收件人")
-			Session.set("mailSending",false);
+			$(document.body).removeClass('loading');
 			return
 
 		attachments = new Array();
@@ -76,7 +76,7 @@ Template.mailButton.events
 					FlowRouter.go('/emailjs/b/' + path);
 					$(".steedos-mail").removeClass("right-show");
 
-		Session.set("mailSending",false)
+				$(document.body).removeClass('loading');
 
 	'click #compose-draft': (event)->
 		Session.set("mailSending",true);
@@ -121,10 +121,9 @@ Template.mailButton.events
 		Session.set("mailSending",true);
 		path = Session.get("mailBox");
 		uid = Session.get("mailMessageId");
-		MailAttachment.mailCodeDownload path, uid, (dirname, name, filePath)->
-			toastr.success("邮件原文已存储");
+		MailAttachment.mailCodeDownload path, uid, true, (dirname, name, filePath)->
+			toastr.success("请选择存储目录");
 			Session.set("mailSending",false);
-			MailAttachment.openFile(dirname, name);
 
 
 	'click #right_back': (event)->

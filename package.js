@@ -67,7 +67,11 @@ Package.onUse(function(api) {
 	tapi18nFiles = ['i18n/en.i18n.json', 'i18n/zh-CN.i18n.json']
 	api.addFiles(tapi18nFiles, ['client', 'server']);
 
-	api.addFiles('lib/core.coffee', ['client', 'server']);
+
+    api.addFiles('client/libs/file-saver/FileSaver.js', 'client');
+    api.addFiles('client/libs/file-saver/SteedosMimeTypes.js', 'client');
+
+    api.addFiles('lib/core.coffee', ['client', 'server']);
 	api.addFiles('lib/models/mail_accounts.coffee', ['client', 'server']);
 	api.addFiles('lib/models/mail_domains.coffee', ['client', 'server']);
 
@@ -163,7 +167,8 @@ Package.onUse(function(api) {
 	api.export("MailAttachment");
 	api.export("MailForward");
 	api.export("SmtpClientManager");
-
+    api.export("steedosMime");
+    api.export("FileSaver");
 });
 
 Package.onTest(function(api) {

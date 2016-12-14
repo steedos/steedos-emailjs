@@ -1,5 +1,5 @@
 
-var fs, path, os, exec, dirname, dirtemp, MimeCodec;
+var fs, path, os, exec, dirname, dirtemp, MimeCodec , mime;
 
 
 
@@ -13,7 +13,7 @@ if(Steedos.isNode()){
 
 	dirtemp = process.env.TEMP;
 
-	MimeCodec = require('emailjs-mime-codec')
+	MimeCodec = require('emailjs-mime-codec');
 }
 
 
@@ -25,27 +25,25 @@ MailAttachment.openFile = function(dirname, name){
 	var cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
 
 	var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"');
-
-	var openFileCMD = "explorer " + dirname;
-
-	exec(openFileCMD, function(error, stdout, stderr){
-		if (error){
-			console.log("文件已关闭：" + error);
-		}
-	});
-
-
+    //
+	// var openFileCMD = "explorer " + dirname;
+    //
+	// exec(openFileCMD, function(error, stdout, stderr){
+	// 	if (error){
+	// 		console.log("文件已关闭：" + error);
+	// 	}
+	// });
 	
 	//判断是否是.eml文件,如果不是.eml文件，则还需要打开该文件
-	var nameLen = name.length;
-	var emlLen = name.indexOf(".eml");
-	if(emlLen != (nameLen - 4)){
+	// var nameLen = name.length;
+	// var emlLen = name.indexOf(".eml");
+	// if(emlLen != (nameLen - 4)){
 		cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
 		cmd += path.join(openFilePath, '\"' + name + '"');
 		exec(cmd, function(error,stdout,stderr){
 			console.log("文件已关闭：" + dirname);
 		});
-	}
+	// }
 }
 
 //data_array: 此值应该来自于 Array.from(Uint8Array)   // new Buffer(new Uint8Array(data_array))
@@ -54,13 +52,21 @@ MailAttachment.save = function(name, data, callback){
 	var filePath = path.join(path.normalize(dirname), name);
 
 	var file = fs.createWriteStream(filePath);
-
 	file.write(new Buffer(data), function (err) {
 		file.end();
         if (err) throw err;
         console.log("Export Account Success!");
         callback(dirname, name, filePath);
     })
+}
+
+MailAttachment.saveAs = function (name, data, callback) {
+    var filePath = path.join(path.normalize(dirname), name);
+
+    var file = new File([data], name, {type: steedosMime.lookup(name)});
+    FileSaver.saveAs(file);
+
+    callback(dirname, name, filePath);
 }
 
 MailAttachment.handerInline = function(path, message){
@@ -92,26 +98,32 @@ MailAttachment.handerInline = function(path, message){
 }
 
 
-MailAttachment.download = function(path, uid, bodyPart, callback){
+MailAttachment.download = function(path, uid, bodyPart, saveAs, callback){
 
 	ImapClientManager.getAttachmentByPart(path, uid, bodyPart, function(filename, data){
 		console.log("MailAttachment.download! filename: "+ filename);
 		fs.exists(dirname, function(exists){
-			if(!exists){
-				fs.mkdir(dirname, function(err) {
-	                if (err) {
-	                    toastr.error(err);
-	                }else{
-	                	MailAttachment.save(filename, data, function(dirname, name, filePath){
-							callback(dirname, name, filePath);
-						})
-	                }
-	            })
-			}else{
-				MailAttachment.save(filename, data, function(dirname, name, filePath){
-					callback(dirname, name, filePath);
-				})
-			}
+            if(saveAs){
+                MailAttachment.saveAs(filename, data, function(dirname, name, filePath){
+                    callback(dirname, name, filePath);
+                })
+            }else{
+                if(!exists){
+                    fs.mkdir(dirname, function(err) {
+                        if (err) {
+                            toastr.error(err);
+                        }else{
+                            MailAttachment.save(filename, data, function(dirname, name, filePath){
+                                callback(dirname, name, filePath);
+                            })
+                        }
+                    })
+                }else{
+                    MailAttachment.save(filename, data, function(dirname, name, filePath){
+                        callback(dirname, name, filePath);
+                    })
+                }
+            }
 		})
 
 	});
@@ -244,28 +256,34 @@ MailAttachment.getAttachmentNode = function(filePath, fileSize){
 }
 
 
-MailAttachment.mailCodeDownload = function(path, uid, callback){
+MailAttachment.mailCodeDownload = function(path, uid, saveAs, callback){
 	try{
 		console.log("MailAttachment.mailCodeDownload is running");
 
 		ImapClientManager.getMailCode(path, uid, function(filename, data){
-			fs.exists(dirname, function(exists){
-				if(!exists){
-					fs.mkdir(dirname, function(err) {
-		                if (err) {
-		                    toastr.error(err);
-		                }else{
-		                	MailAttachment.save(filename, data, function(dirname, name, filePath){
-								callback(dirname, name, filePath);
-							})
-		                }
-		            })
-				}else{
-					MailAttachment.save(filename, data, function(dirname, name, filePath){
-						callback(dirname, name, filePath);
-					})
-				}
-			})
+            if(saveAs){
+                MailAttachment.saveAs(filename, data, function(dirname, name, filePath){
+                    callback(dirname, name, filePath);
+                })
+            }else{
+                fs.exists(dirname, function(exists){
+                    if(!exists){
+                        fs.mkdir(dirname, function(err) {
+                            if (err) {
+                                toastr.error(err);
+                            }else{
+                                MailAttachment.save(filename, data, function(dirname, name, filePath){
+                                    callback(dirname, name, filePath);
+                                })
+                            }
+                        })
+                    }else{
+                        MailAttachment.save(filename, data, function(dirname, name, filePath){
+                            callback(dirname, name, filePath);
+                        })
+                    }
+                })
+            }
 		});
 	}catch(e){
 		Session.set("mailSending",false);

@@ -53,8 +53,8 @@ Template.read_mail.helpers
 
 Template.read_mail.events
 	'click .mailbox-attachment-name': (event, template)->
-		console.log("----mailbox-attachment-name------");
-		Session.set("donwLoadding",true)
+		$(document.body).addClass('loading');
+		toastr.info("下载中，请稍后...");
 		att_index = parseInt(event.target.dataset.index);
 
 		path = Session.get("mailBox");
@@ -65,11 +65,27 @@ Template.read_mail.events
 
 		att = message.attachments[att_index];
 
-		MailAttachment.download path, uid, att.bodyPart, (dirname, name, filePath)->
-			toastr.success("附件已存储");
-			Session.set("donwLoadding",false)
+		MailAttachment.download path, uid, att.bodyPart, false, (dirname, name, filePath)->
+			toastr.success("附件已打开");
+			$(document.body).removeClass('loading');
 			MailAttachment.openFile(dirname, name);
 
+	'click .mailbox-attachment-saveAs': (event, template)->
+		$(document.body).addClass('loading');
+		toastr.info("下载中，请稍后...");
+		att_index = parseInt(event.target.dataset.index);
+
+		path = Session.get("mailBox");
+
+		message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
+
+		uid = message.uid;
+
+		att = message.attachments[att_index];
+
+		MailAttachment.download path, uid, att.bodyPart, true, (dirname, name, filePath)->
+			toastr.success("请选择存储目录");
+			$(document.body).removeClass('loading');
 
 	'click .mail-address-serach': (event, template)->
 		console.log("click .mail-address");

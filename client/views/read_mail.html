@@ -87,10 +87,15 @@
 										<span class="attachment-info-box-icon"><i class="{{attachmentIcon name}}"></i></span>
 										<div class="attachment-info-box-content">
 											<span class="attachment-info-box-text">
-												<a href="#" class="mailbox-attachment-name"  data-index='{{@index}}'>{{name}}</a>
+												<a href="#" class="mailbox-attachment-name" data-toggle="tooltip" title="打开文件"  data-index='{{@index}}'>{{name}}</a>
 											</span>
-											<span class="mailbox-attachment-size">{{fileSize size}}</span>
+											<span class="mailbox-attachment-size">
+                                                {{fileSize size}}
+                                                <a href="#" class="mailbox-attachment-saveAs" data-index='{{@index}}'>下载</a>
+                                            </span>
+
 										</div>
+
 									</div>
 								</div>
 							{{/if}}
