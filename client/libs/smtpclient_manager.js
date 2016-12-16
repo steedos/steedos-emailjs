@@ -115,7 +115,7 @@ SmtpClientManager.beforeSendFilter = function(to, cc, bcc,subject, body, attachm
 		Session.set("mailIsRunbeforSend",true);
 	}catch(e){
 		console.error("Error[domain.before_send]:" + e);
-		Session.set("mailSending",false);
+        $(document.body).removeClass('loading');
 		return ;
 	}
 }
