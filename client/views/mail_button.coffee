@@ -77,6 +77,8 @@ Template.mailButton.events
 					$(".steedos-mail").removeClass("right-show");
 
 				$(document.body).removeClass('loading');
+		else
+			$(document.body).removeClass('loading');
 
 	'click #compose-draft': (event)->
 		Session.set("mailSending",true);
