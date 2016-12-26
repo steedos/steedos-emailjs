@@ -1,6 +1,7 @@
 /* iCheck plugin Flat skin, blue
 ----------------------------------- */
-html, body{
+/*这里不能写html height:100%;因为ie11下会出现滚动条*/
+body{
     height: 100%;
     .emailjs{
         height: 100%;
@@ -21,12 +22,11 @@ html, body{
 
 .steedos {
 
-    margin: 0px;
-    position: relative;
+    margin: 0px;/*
     .content-wrapper {
         height: 100%;
         position: relative;
-    }
+    }*/
 }
 
 
@@ -248,8 +248,6 @@ html, body{
 .steedos-mail {
     @barHeight: 51px;
 
-    // @searchHeight: 56px;
-
     @pageHeight: 40px;
 
     @summernoteBarHeight: 50px;
@@ -286,10 +284,7 @@ html, body{
         padding-right: 0px;
         border-right: 1px solid #d2d6de;
         height: 100%;
-        // min-width: 430px;
-        min-height: 500px;
         width: 400px;
-        // padding-left: 15px;
         float: left;
         .mail_list{
             height: calc(~"100% - @{barHeight}");
@@ -336,13 +331,11 @@ html, body{
                 }
 
                 .seen > div{
-                    // display: inline-block;
                     border-left: solid 5px transparent;
                     margin-left: 1px;
                 }
 
                 .unseen > div{
-                    // display: inline-block;
                     border-left: solid 5px #106EBE;
                     margin-left: 1px;
                 }
