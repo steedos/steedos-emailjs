@@ -73,26 +73,26 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, is
 			client.end();
 		}
 
-    client.ondone = function(success){
-    	if(success){
-    		toastr.success("发送成功");
+		client.ondone = function(success){
+			if(success){
+				toastr.success("发送成功");
 				Session.set("mailSending",false);
 				callback();
- 			}else{
- 				toastr.success("发送不成功");
- 			}
-	}
+			}else{
+				toastr.success("发送不成功");
+			}
+		}
 
-	client.onerror = function(err){
-		client.onclose(isError);
-	}
+		client.onerror = function(err){
+			client.onclose(isError);
+		}
 
-	client.connect();
+		client.connect();
 
 	}catch(e){
 		console.error(e);
 	}finally{
-	 	client.close();
+		client.close();
 		Session.set("mailIsRunbeforSend",false);
 		Session.set("mailContinueSend",false);
 	}
@@ -115,7 +115,7 @@ SmtpClientManager.beforeSendFilter = function(to, cc, bcc,subject, body, attachm
 		Session.set("mailIsRunbeforSend",true);
 	}catch(e){
 		console.error("Error[domain.before_send]:" + e);
-        $(document.body).removeClass('loading');
+		$(document.body).removeClass('loading');
 		return ;
 	}
 }

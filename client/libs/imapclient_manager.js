@@ -22,9 +22,9 @@ ImapClientManager.getClient = function(){
 	{
 		options.ws = {
 			url: Meteor.settings.public.webservices.wsproxy.url,
-            options: {
-                upgrade: false // disable ws protocol
-            }
+			options: {
+				upgrade: false // disable ws protocol
+			}
 		}
 		options.tlsWorkerPath = "/packages/steedos_emailjs/client/assets/emailjs-tcp-socket-tls-worker.js"
 	}
@@ -350,7 +350,7 @@ ImapClientManager.search = function(client, path, query, callback){
 
 			client.close();
 
-      callback(result);
+			callback(result);
 
 		}, function(reject){
 			callback([]);
@@ -375,24 +375,24 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 }
 
 ImapClientManager.moveMessages = function(client, fromPath, toPath, uids, callback){
-    if (!client)
-        client = this.getClient();
-    client.connect().then(function(){
-        client.moveMessages(fromPath, uids, toPath, {byUid:true}).then(function(){
-            client.close();
+	if (!client)
+		client = this.getClient();
+	client.connect().then(function(){
+		client.moveMessages(fromPath, uids, toPath, {byUid:true}).then(function(){
+			client.close();
 
-            MailCollection.getMessageCollection(fromPath).remove({uid:{$in: uids}});
+			MailCollection.getMessageCollection(fromPath).remove({uid:{$in: uids}});
 
-            if(typeof(callback) == 'function'){
-                callback();
-            }
-        })
-    })
+			if(typeof(callback) == 'function'){
+				callback();
+			}
+		})
+	})
 }
 
 ImapClientManager.deleteMessages = function(client, path, uids,callback){
 		var trash = MailManager.getBoxBySpecialUse("\\Trash").path;
-    ImapClientManager.moveMessages(client, path, trash, uids, callback);
+	ImapClientManager.moveMessages(client, path, trash, uids, callback);
 }
 
 ImapClientManager.completeDeleteMessages = function(client, path, uids, callback){
@@ -405,7 +405,7 @@ ImapClientManager.completeDeleteMessages = function(client, path, uids, callback
 			console.log("[completeDeleteMessages]uid values is " + uids);
 			client.close();
 
-     	MailCollection.getMessageCollection(path).remove({uid:{$in: uids}});
+		MailCollection.getMessageCollection(path).remove({uid:{$in: uids}});
 			if(typeof(callback) == 'function'){
 				callback();
 			}
@@ -467,7 +467,7 @@ ImapClientManager.updateUnseenMessages = function(callback){
 		if(typeof(callback) == "function"){
 			callback();
 		}
-  });
+	});
 }
 
 ImapClientManager.updateLoadedMxistsIndex = function(path, loadedMxistsIndex){
@@ -523,9 +523,9 @@ function handerBodyPart(bodyPart){
 			object.name = 'message' + bodyPart.part + ".eml";
 		}else{
 			// if(bodyPart.type == 'application/octet-stream'){
-				if(bodyPart.dispositionParameters){
-					object.name = bodyPart.dispositionParameters.filename;
-				}
+			if(bodyPart.dispositionParameters){
+				object.name = bodyPart.dispositionParameters.filename;
+			}
 			// }
 		}
 	}
@@ -550,22 +550,22 @@ ImapClientManager.handerBodystructure = function(messages, bodystructure){
 			messages.bodyHtml = handerBodyPart(bodystructure);
 		}else{
 			// if (bodystructure.type == 'multipart/alternative' || bodystructure.type == 'multipart/mixed' || bodystructure.type == 'multipart/related' || bodystructure.type == 'multipart/report'){
-				if(bodystructure.childNodes){
-					bodystructure.childNodes.forEach(function(bs, index){
-						if(bs.type == 'text/plain'){
-							messages.bodyText = handerBodyPart(bs);
-						}else if(bs.type == 'text/html'){
-							messages.bodyHtml = handerBodyPart(bs);
-						}else if(bs.childNodes && bs.childNodes.length > 0){
-							// console.log("[handerBodystructure] bs.type is " + bs.type);
-							ImapClientManager.handerBodystructure(messages, bs);
-						}else{
-							// if(bs.type == 'application/octet-stream'){
-								messages.attachments.push(handerBodyPart(bs));
-							// }
-						}
-					});
-				}
+			if(bodystructure.childNodes){
+				bodystructure.childNodes.forEach(function(bs, index){
+					if(bs.type == 'text/plain'){
+						messages.bodyText = handerBodyPart(bs);
+					}else if(bs.type == 'text/html'){
+						messages.bodyHtml = handerBodyPart(bs);
+					}else if(bs.childNodes && bs.childNodes.length > 0){
+						// console.log("[handerBodystructure] bs.type is " + bs.type);
+						ImapClientManager.handerBodystructure(messages, bs);
+					}else{
+						// if(bs.type == 'application/octet-stream'){
+						messages.attachments.push(handerBodyPart(bs));
+						// }
+					}
+				});
+			}
 			// }
 		}
 
@@ -604,11 +604,24 @@ function handerMessage(message){
 	dntHeader = dntHeader ? dntHeader.trim() : "";
 	if(dntHeader){
 		var dntValue = dntHeader.replace(/[^:]+:/,"");//取冒号右侧字符
-		var dntInQuos = dntValue.match(/\"([^\"]*)\"/);//取引号内值，结果如[""=?gb18030?B?TGl0YW50?="", "=?gb18030?B?TGl0YW50?="]
-		var dntName = dntInQuos && dntInQuos.length > 1 ? dntInQuos[1] : "";
-		var dntInBrackets = dntValue.match(/<([^<>]*)>/);//取尖括号内值，结果如["<262370136@qq.com>", "262370136@qq.com"]
-		var dntAddress = dntInQuos && dntInBrackets.length > 1 ? dntInBrackets[1] : "";
+		var dntNameParts = [],dntName = "";
+		if (dntValue.includes("\""))
+		{
+			//带引号的情况，格式如：" "=?gb18030?B?x8zDqw==?=" <736775410@qq.com>"
+			dntNameParts = dntValue.match(/\"([^\"]*)\"/);//取引号内值，结果如[""=?gb18030?B?TGl0YW50?="", "=?gb18030?B?TGl0YW50?="]
+			dntName = dntNameParts && dntNameParts.length > 1 ? dntNameParts[1] : "";
 
+		}
+		else{
+			/*不带引号的情况，格式如（有回车符）：" =?UTF-8?Q?=E9=99=88=E5=BF=97=E5=9F=B9?=
+			<hotoa@petrochina.com.cn>"
+			*/
+			dntNameParts = dntValue.match(/[^\r\n]+/g)//按回车符分割
+			dntName = dntNameParts && dntNameParts.length > 0 ? dntNameParts[0] : "";
+			dntName = dntName.trim();
+		}
+		var dntInBrackets = dntValue.match(/<([^<>]*)>/);//取尖括号内值，结果如["<262370136@qq.com>", "262370136@qq.com"]
+		var dntAddress = dntInBrackets.length > 1 ? dntInBrackets[1] : "";
 		rev["dispositionNotificationTo"] = {
 			name: mimeWordDecode(dntName),
 			email: dntAddress
