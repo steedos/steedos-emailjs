@@ -603,29 +603,43 @@ function handerMessage(message){
 	var dntHeader = message['body[header.fields ("disposition-notification-to")]'];
 	dntHeader = dntHeader ? dntHeader.trim() : "";
 	if(dntHeader){
-		var dntValue = dntHeader.replace(/[^:]+:/,"");//取冒号右侧字符
-		var dntNameParts = [],dntName = "";
-		if (dntValue.includes("\""))
-		{
-			//带引号的情况，格式如：" "=?gb18030?B?x8zDqw==?=" <736775410@qq.com>"
-			dntNameParts = dntValue.match(/\"([^\"]*)\"/);//取引号内值，结果如[""=?gb18030?B?TGl0YW50?="", "=?gb18030?B?TGl0YW50?="]
-			dntName = dntNameParts && dntNameParts.length > 1 ? dntNameParts[1] : "";
+		try{
+			var dntValue = dntHeader.replace(/[^:]+:/,"");//取冒号右侧字符
+			var dntNameParts = [],dntName = "";
+			if (dntValue.includes("\""))
+			{
+				//带引号的情况，格式如：" "=?gb18030?B?x8zDqw==?=" <736775410@qq.com>"
+				dntNameParts = dntValue.match(/\"([^\"]*)\"/);//取引号内值，结果如[""=?gb18030?B?TGl0YW50?="", "=?gb18030?B?TGl0YW50?="]
+				dntName = dntNameParts && dntNameParts.length > 1 ? dntNameParts[1] : "";
 
+			}
+			else{
+				/*不带引号的情况，格式如（有回车符）：" =?UTF-8?Q?=E9=99=88=E5=BF=97=E5=9F=B9?=
+				<hotoa@petrochina.com.cn>"
+				*/
+				//163邮箱格式为：18605199364@163.com，不带引号也不带回车，没有用户名，这时就直接取内容。
+				dntNameParts = dntValue.match(/[^\r\n]+/g)//按回车符分割
+				dntName = dntNameParts && dntNameParts.length > 0 ? dntNameParts[0] : "";
+				dntName = dntName.trim();
+			}
+			var dntInBrackets = dntValue.match(/<([^<>]*)>/);//取尖括号内值，结果如["<262370136@qq.com>", "262370136@qq.com"]
+			var dntAddress = "";
+			if (dntInBrackets){
+				dntAddress = dntInBrackets.length > 1 ? dntInBrackets[1] : "";
+			}
+			else{
+				dntAddress = dntName;
+			}
+			rev["dispositionNotificationTo"] = {
+				name: mimeWordDecode(dntName),
+				email: dntAddress
+			};
 		}
-		else{
-			/*不带引号的情况，格式如（有回车符）：" =?UTF-8?Q?=E9=99=88=E5=BF=97=E5=9F=B9?=
-			<hotoa@petrochina.com.cn>"
-			*/
-			dntNameParts = dntValue.match(/[^\r\n]+/g)//按回车符分割
-			dntName = dntNameParts && dntNameParts.length > 0 ? dntNameParts[0] : "";
-			dntName = dntName.trim();
+		catch(err){
+			console.error("设置header dispositionNotificationTo时出错：");
+			console.error(err);
+			console.error(message);
 		}
-		var dntInBrackets = dntValue.match(/<([^<>]*)>/);//取尖括号内值，结果如["<262370136@qq.com>", "262370136@qq.com"]
-		var dntAddress = dntInBrackets.length > 1 ? dntInBrackets[1] : "";
-		rev["dispositionNotificationTo"] = {
-			name: mimeWordDecode(dntName),
-			email: dntAddress
-		};
 	}
 
 	// rev.attachments = new Array(), bodyText = "", bodyHtml = "";
