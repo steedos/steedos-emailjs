@@ -55,6 +55,7 @@ Template.mail_list.helpers
         Session.set("mailSending",false);
         Session.set("mailLoading",true);
         path = Session.get("mailBox");
+        $(".mailbox-messages-checkAll").prop("checked", false);
 
         rev ;
         if Session.get("mailInit")
