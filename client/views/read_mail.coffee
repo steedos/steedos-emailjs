@@ -42,12 +42,6 @@ Template.read_mail.helpers
 		return (a == b)
 
 	isDispositionNotificationAlertNeeded: () ->
-		if Session.get("mailInit")
-			uid = Session.get("mailMessageId");
-			message = MailManager.getMessage(parseInt(uid));
-			if message.dispositionNotificationTo and message?.flags?.indexOf("\\Seen") == -1
-				Session.set("isDispositionNotificationAlertNeeded", true)
-
 		return Session.get("isDispositionNotificationAlertNeeded")
 
 

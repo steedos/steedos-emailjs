@@ -111,6 +111,7 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 	var query = ['uid', 'flags'];
 
 	query.push('body[' + bodyPart.part + ']');
+	query.push('body[header.fields (Disposition-Notification-To)]');
 
 	client.connect().then(function(){
 		console.log("listMessages start, sequence is " + sequence);
@@ -144,6 +145,7 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 
 						}
 
+						setDntHeader(message, local_message);
 						MailCollection.getMessageCollection(path).update(local_message._id ,local_message);
 
 					}
@@ -233,7 +235,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	if (!client)
 		client = this.getClient();
 
-	var query = ['uid', 'flags', 'envelope','bodystructure', 'body[header.fields (Disposition-Notification-To)]'];
+	var query = ['uid', 'flags', 'envelope','bodystructure'];
 
 	client.connect().then(function(){
 		console.log("listMessages start, sequence is " + sequence);
@@ -572,34 +574,7 @@ ImapClientManager.handerBodystructure = function(messages, bodystructure){
 	}
 }
 
-function handerMessage(message){
-
-	// console.log("handerMessage: " + JSON.stringify(handerMessage));
-
-	var rev = {};
-
-	var envelope = message["envelope"];
-	rev.uid = message.uid;
-	rev.flags = message.flags;
-	rev.date =envelope.date;
-	rev.subject = envelope.subject;
-	rev.from = envelope.from;
-	rev.sender = envelope.sender;
-	rev.reply_to = envelope["reply-to"];
-	rev.to = envelope.to;
-	rev.cc = envelope.cc;
-	rev.bcc = envelope.bcc;
-	rev.in_reply_to = envelope["in-reply-to"];
-	rev.message_id  = envelope["message-id"];
-	rev.bodystructure = message["bodystructure"];
-
-	/*
-	message['body[header.fields ("disposition-notification-to")]']值格式如下：
-	"Disposition-Notification-To: "=?gb18030?B?TGl0YW50?=" <262370136@qq.com>
-
-"
-	 */
-	
+function setDntHeader(message, rev){
 	var dntHeader = message['body[header.fields ("disposition-notification-to")]'];
 	dntHeader = dntHeader ? dntHeader.trim() : "";
 	if(dntHeader){
@@ -641,6 +616,37 @@ function handerMessage(message){
 			console.error(message);
 		}
 	}
+}
+
+
+
+function handerMessage(message){
+
+	// console.log("handerMessage: " + JSON.stringify(handerMessage));
+
+	var rev = {};
+
+	var envelope = message["envelope"];
+	rev.uid = message.uid;
+	rev.flags = message.flags;
+	rev.date =envelope.date;
+	rev.subject = envelope.subject;
+	rev.from = envelope.from;
+	rev.sender = envelope.sender;
+	rev.reply_to = envelope["reply-to"];
+	rev.to = envelope.to;
+	rev.cc = envelope.cc;
+	rev.bcc = envelope.bcc;
+	rev.in_reply_to = envelope["in-reply-to"];
+	rev.message_id  = envelope["message-id"];
+	rev.bodystructure = message["bodystructure"];
+
+	/*
+	message['body[header.fields ("disposition-notification-to")]']值格式如下：
+	"Disposition-Notification-To: "=?gb18030?B?TGl0YW50?=" <262370136@qq.com>
+
+"
+	 */
 
 	// rev.attachments = new Array(), bodyText = "", bodyHtml = "";
 	try{

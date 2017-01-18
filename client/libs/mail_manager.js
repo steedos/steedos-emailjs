@@ -178,6 +178,12 @@ MailManager.getMessage = function(uid){
           // console.log(m);
           // console.log("[updateSeenMessage] uid " + m.uid +" flags: " + m.flags)
           if(m.flags.indexOf("\\Seen") == -1){
+            if(path == "Inbox"){
+              var tempM = MailCollection.getMessageCollection(path).findOne({uid:m.uid})
+              if(tempM && tempM.dispositionNotificationTo){
+                Session.set("isDispositionNotificationAlertNeeded", true);
+              }
+            }
             ImapClientManager.updateSeenMessage(path, message.uid, function(){
                 ImapClientManager.updateUnseenMessages();
             });
