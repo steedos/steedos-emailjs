@@ -131,11 +131,12 @@ Template.read_mail.events
 		uid = Session.get("mailMessageId");
 		message = MailManager.getMessage(parseInt(uid));
 		dnt = message.dispositionNotificationTo
-		# newSubject = "对方已阅读：#{message.subject}"
-		newSubject = t "mail_alert_disposition_notification_subject",message.subject
+		subject = if message.subject then message.subject else t "mail_subject_empty"
+		# newSubject = "对方已阅读：#{subject}"
+		newSubject = t "mail_alert_disposition_notification_subject",subject
 		auth = AccountManager.getAuth()
-		# newBody = "对方已经阅读您在#{moment(message.date).format('YYYY-MM-DD HH:mm')}发给 #{Meteor.user().username} &lt;#{auth.user}&gt;，主题为#{message.subject}的邮件。"
-		newBody = t "mail_alert_disposition_notification_body", moment(message.date).format('YYYY-MM-DD HH:mm'), Meteor.user().name, auth.user, message.subject
+		# newBody = "对方已经阅读您在#{moment(message.date).format('YYYY-MM-DD HH:mm')}发给 #{Meteor.user().username} &lt;#{auth.user}&gt;，主题为#{subject}的邮件。"
+		newBody = t "mail_alert_disposition_notification_body", moment(message.date).format('YYYY-MM-DD HH:mm'), Meteor.user().name, auth.user, subject
 
 		SmtpClientManager.sendMail [dnt], [], [], newSubject, newBody, [], false, ->
 			Session.set("isDispositionNotificationAlertNeeded",false)
