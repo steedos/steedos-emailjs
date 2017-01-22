@@ -19,7 +19,7 @@
 			<!-- /.mailbox-controls -->
 			<div class="mailbox-read-message">
 				<div class="mailbox-read-info">
-					<div class="subject">{{subject}}</div>
+					<div class="subject">{{#if subject}}{{subject}}{{else}}{{_ 'mail_subject_empty'}}{{/if}}</div>
 					<div class="mailbox-read-time">{{modifiedString date}}</div>
 					<div class= "from">
 						发件人:

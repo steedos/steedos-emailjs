@@ -97,7 +97,7 @@
                           {{/if}}
                           <span class="pull-right">{{#if haveAttachment attachments}}<i class="fa fa-paperclip"></i>{{/if}}{{modifiedFromNow date}}</span>
                           <span class="product-description">
-                            {{subject}}
+                            {{#if subject}}{{subject}}{{else}}{{_ 'mail_subject_empty'}}{{/if}}
                           </span>
                         </div>
                       </div>
