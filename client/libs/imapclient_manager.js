@@ -10,8 +10,9 @@ var ImapClient, MimeParser, Encoding, MimeCodec, loadStep = MailPage.pageSize;
 	MimeCodec = require('emailjs-mime-codec');
 // }
 
-ImapClientManager.getClient = function(){
-	var auth = AccountManager.getAuth();
+ImapClientManager.getClient = function(auth){
+	if(!auth)
+		auth = AccountManager.getAuth();
 	if(!auth)
 		return ;
 	var domain = AccountManager.getMailDomain(auth.user);
