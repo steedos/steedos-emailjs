@@ -16,6 +16,12 @@ Template.emailjsLayout.helpers
     subsReady: ->
         if Steedos.subsMail.ready()
             console.log "email start " + Date.parse(new Date());
+
+            unless Meteor.userId()
+              return false
+            if Meteor.loggingIn()
+              # 正在登录中，则不做处理，因为此时Meteor.userId()不足于证明已登录状态
+              return false
             AccountManager.checkAccount (message)->
                 console.log("email end " + Date.parse(new Date()));
                 if !message
