@@ -56,10 +56,11 @@
           </div>
           <!-- /.pull-right -->
         </div>
-          <div class="products-list product-list-in-box mailbox-messages" >
+          <div class="products-list product-list-in-box mailbox-messages">
             {{#each boxMessages}}
-              <li class="item drag-source {{#if isUnseen this}}unseen{{else}}seen{{/if}} {{getLiClass uid}}" draggable="true">
+              <li class="item drag-source  {{getLiClass uid}}" draggable="true">
                   <div>
+                  {{#if isUnseen this}}<i class="ion ion-record unread"></i>{{/if}}
                     <div class="message">
                       <div class="product-checkbox">
                         <input type="checkbox" value="{{uid}}" name="uids">
