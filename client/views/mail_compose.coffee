@@ -77,6 +77,13 @@ Template.mail_compose.helpers
 			$("#mail_sending").hide();
 		return Session.get("mailSending");
 
+	attachmentLoadding: ->
+		if Session.get("donwLoadding")
+			$("#attachment_donwLoadding").show();
+		else
+			$("#attachment_donwLoadding").hide();
+		return Session.get("donwLoadding");
+
 	messageBody: ->
 		if !Session.get("mailMessageLoadding") && Session.get("mailInit") && Session.get("mailBoxInit")
 

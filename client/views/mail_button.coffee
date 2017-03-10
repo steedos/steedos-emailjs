@@ -34,77 +34,85 @@ Template.mailButton.events
 		$(".remove_bcc").hide();
 
 	'click #compose-send': (event)->
-		$(document.body).addClass('loading');
-		if MailManager.getContacts("mail_to") == null || MailManager.getContacts("mail_to").length < 1
-			toastr.warning("请填写收件人")
-			$(document.body).removeClass('loading');
-			return
-
-		attachments = new Array();
-
-		$('[name="mail_attachment"]').each ->
-			attachments.push
-				name: @dataset.name
-				path: @dataset.path
-				size: parseFloat(@dataset.fileSize)
-
-		to = MailManager.getContacts("mail_to");
-		cc = MailManager.getContacts("mail_cc");
-		bcc = MailManager.getContacts("mail_bcc");
-		subject = $(".subject", $(".mail-compose")).val();
-		body = $('#compose-textarea').summernote('code');
-		isDispositionNotification = $("#ckb_disposition_notification").is(':checked')
-
-		if !Session.get("mailIsRunbeforSend")
-			Session.set("mailContinueSend",false); #是否继续
-			Session.set("mailIsRunbeforSend",false); # 是否运行了beforeSend
-
-		SmtpClientManager.beforeSendFilter(to, cc, bcc, subject, body, attachments);
-
-		console.log("Session mailContinueSend is" + Session.get("mailContinueSend"));
-		if Session.get("mailContinueSend")
-			SmtpClientManager.sendMail to, cc, bcc, subject, body, attachments, isDispositionNotification, ()->
-				path = Session.get("mailBox")
-
-				if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
-					uid = Session.get("mailMessageId")
-					MailCollection.getMessageCollection(path).remove({uid:parseInt(uid)});
-
-					FlowRouter.go('/emailjs/b/' + path);
-					MailManager.updateBoxInfo(path);
-				else
-					FlowRouter.go('/emailjs/b/' + path);
-					$(".steedos-mail").removeClass("right-show");
-
-				$(document.body).removeClass('loading');
+		# mail_attachment_downloaded"表示邮件转发时正在加载附件，此时不能发送邮件
+		if Session.get("mail_attachment_downloaded") == false
+			toastr.error("附加正在加载中....请稍等");
 		else
-			$(document.body).removeClass('loading');
+			$(document.body).addClass('loading');
+			if MailManager.getContacts("mail_to") == null || MailManager.getContacts("mail_to").length < 1
+				toastr.warning("请填写收件人")
+				$(document.body).removeClass('loading');
+				return
+
+			attachments = new Array();
+
+			$('[name="mail_attachment"]').each ->
+				attachments.push
+					name: @dataset.name
+					path: @dataset.path
+					size: parseFloat(@dataset.fileSize)
+
+			to = MailManager.getContacts("mail_to");
+			cc = MailManager.getContacts("mail_cc");
+			bcc = MailManager.getContacts("mail_bcc");
+			subject = $(".subject", $(".mail-compose")).val();
+			body = $('#compose-textarea').summernote('code');
+			isDispositionNotification = $("#ckb_disposition_notification").is(':checked')
+
+			if !Session.get("mailIsRunbeforSend")
+				Session.set("mailContinueSend",false); #是否继续
+				Session.set("mailIsRunbeforSend",false); # 是否运行了beforeSend
+
+			SmtpClientManager.beforeSendFilter(to, cc, bcc, subject, body, attachments);
+
+			console.log("Session mailContinueSend is" + Session.get("mailContinueSend"));
+			if Session.get("mailContinueSend")
+				SmtpClientManager.sendMail to, cc, bcc, subject, body, attachments, isDispositionNotification, ()->
+					path = Session.get("mailBox")
+
+					if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
+						uid = Session.get("mailMessageId")
+						MailCollection.getMessageCollection(path).remove({uid:parseInt(uid)});
+
+						FlowRouter.go('/emailjs/b/' + path);
+						MailManager.updateBoxInfo(path);
+					else
+						FlowRouter.go('/emailjs/b/' + path);
+						$(".steedos-mail").removeClass("right-show");
+
+					$(document.body).removeClass('loading');
+			else
+				$(document.body).removeClass('loading');
 
 	'click #compose-draft': (event)->
-		Session.set("mailSending",true);
-		attachments = new Array();
+		# mail_attachment_downloaded"表示邮件转发时正在加载附件，此时不能发送邮件
+		if Session.get("mail_attachment_downloaded") == false
+			toastr.error("附加正在加载中....请稍等");
+		else
+			Session.set("mailSending",true);
+			attachments = new Array();
 
-		$('[name="mail_attachment"]').each ->
-			attachments.push
-				name: @dataset.name
-				path: @dataset.path
-				size: parseFloat(@dataset.fileSize)
+			$('[name="mail_attachment"]').each ->
+				attachments.push
+					name: @dataset.name
+					path: @dataset.path
+					size: parseFloat(@dataset.fileSize)
 
-		to = MailManager.getContacts("mail_to");
-		cc = MailManager.getContacts("mail_cc");
-		bcc = MailManager.getContacts("mail_bcc");
-		subject = $(".subject", $(".mail-compose")).val();
-		body = $('#compose-textarea').summernote('code');
+			to = MailManager.getContacts("mail_to");
+			cc = MailManager.getContacts("mail_cc");
+			bcc = MailManager.getContacts("mail_bcc");
+			subject = $(".subject", $(".mail-compose")).val();
+			body = $('#compose-textarea').summernote('code');
 
-		Session.set("mailIsRunbeforSave",false);
-		SmtpClientManager.beforeSaveFilter(to, cc, bcc, subject, body, attachments);
+			Session.set("mailIsRunbeforSave",false);
+			SmtpClientManager.beforeSaveFilter(to, cc, bcc, subject, body, attachments);
 
-		if Session.get("mailIsRunbeforSave")
-			message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user , to, cc, bcc, subject, body,attachments);
+			if Session.get("mailIsRunbeforSave")
+				message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user , to, cc, bcc, subject, body,attachments);
 
-			console.log("click #compose-draft ....")
+				console.log("click #compose-draft ....")
 
-			MailManager.saveDrafts(message);
+				MailManager.saveDrafts(message);
 
 
 	'click .mail-delete': (event, template)->
