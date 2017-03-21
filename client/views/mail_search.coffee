@@ -25,6 +25,17 @@ Template.mail_search.helpers
     path: ->
         return Session.get("mailBox");
 
+    searchHelp: ->
+        whichInput = Session.get("mailBox")
+
+        switch whichInput
+            when "Inbox" then text="搜索收件箱【邮件地址、标题】"
+            when "&XfJT0ZAB-" then text="搜索已发送【邮件地址、标题】"
+            when "&g0l6Pw-" then text="搜索草稿【邮件地址、标题】"
+            when "&V4NXPpCuTvY-" then text="搜索垃圾邮件【邮件地址、标题】"
+            when "&XfJSIJZkkK5O9g-" then text="搜索已删除邮件【邮件地址、标题】"
+        return text
+
 Template.mail_search.events
 
     #'click .search-mail-input': (event, template) ->
