@@ -6,7 +6,6 @@ Template.mail_search.subjectSearch = ()->
 
     Session.set("mailLoading",true);
 
-    console.log("keydown search-mail-input searchKey:" + searchKey);
 
     MailManager.search searchKey, (result) ->
         if !result || result.length == 0

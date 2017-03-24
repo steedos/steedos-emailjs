@@ -1,13 +1,10 @@
 Template.select_mail.events({
     'click .select_contacts': function(event, template){
-        // console.log("----select_contacts----");
         Modal.show("contacts_modal", {targetId: event.target.dataset.id, target: template.data.target});
     }
 })
 
 Template.select_mail.rendered = function(){
-    // console.log('--rendered--');
-    // console.log(this.data);
     
     var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
                        '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
@@ -74,7 +71,6 @@ Template.select_mail.rendered = function(){
             return regexpA.test(input) || regexpB.test(input);
         },
         create: function(input) {
-            console.log("selectize create...");
 
             if ((new RegExp('^' + REGEX_EMAIL + '$', 'i')).test(input)) {
                 return {
