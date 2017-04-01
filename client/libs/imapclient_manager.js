@@ -235,43 +235,68 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	console.log("ImapClientManager.listMessages start "  + Date.parse(new Date()));
 	if (!client)
 		client = this.getClient();
+	// if (!client)
+	// 	alert("error!");
+	// 	//callback();
+	// 	return;
 
 	var query = ['uid', 'flags', 'envelope','bodystructure'];
 
-	client.connect().then(function(){
-		console.log("listMessages start, sequence is " + sequence);
-		client.listMessages(path, sequence, query, options).then(function(messages){
-			console.log("ImapClientManager.listMessages getData "  + Date.parse(new Date()));
-			messages.forEach(function(message){
-				if(message && message.uid){
-					// console.log("listMessages messages 开始解析：" + message.uid);
+	if (client){
+		client.connect().then(function(){
+			console.log("listMessages start, sequence is " + sequence);
+			client.listMessages(path, sequence, query, options).then(function(messages){
+				console.log("ImapClientManager.listMessages getData "  + Date.parse(new Date()));
+				messages.forEach(function(message){
+					if(message && message.uid){
+						// console.log("listMessages messages 开始解析：" + message.uid);
 
-					var hMessage = handerMessage(message);
-					// console.log("listMessages messages 解析完成：" + message.uid);
-					if(!hMessage.bodyHtml && !hMessage.bodyText){
+						var hMessage = handerMessage(message);
+						// console.log("listMessages messages 解析完成：" + message.uid);
+						if(!hMessage.bodyHtml && !hMessage.bodyText){
 
-						hMessage.summary = false;
-						hMessage.bodyText = {};
-						hMessage.bodyText.data="";
+							hMessage.summary = false;
+							hMessage.bodyText = {};
+							hMessage.bodyText.data="";
 
-					}else{
-						hMessage.summary = true;
+						}else{
+							hMessage.summary = true;
+						}
+						var local_message = MailManager.getMessageByUid(path, message.uid);
+						if(local_message){
+							// MailCollection.getMessageCollection(path).update(local_message._id ,hMessage);
+						}else
+							MailCollection.getMessageCollection(path).insert(hMessage);
 					}
-					var local_message = MailManager.getMessageByUid(path, message.uid);
-					if(local_message){
-						// MailCollection.getMessageCollection(path).update(local_message._id ,hMessage);
-					}else
-						MailCollection.getMessageCollection(path).insert(hMessage);
-				}
+				});
+
+				console.log("ImapClientManager.listMessages getMessages ok; messages length is " + messages.length);
+
+				client.close();
+				console.log("ImapClientManager.listMessages end"  + Date.parse(new Date()));
+				callback(messages);
 			});
-
-			console.log("ImapClientManager.listMessages getMessages ok; messages length is " + messages.length);
-
-			client.close();
-			console.log("ImapClientManager.listMessages end"  + Date.parse(new Date()));
-			callback(messages);
 		});
-	});
+	} else{
+			swal({
+				title: t("mail_server_interrupte"),
+				text: t("mail_refresh"),
+				type: "warning",
+				showCancelButton: true,
+				cancelButtonText: "取消",
+				confirmButtonText: "刷新",
+				closeOnConfirm: false
+			},
+			function(reason){
+				if (reason == false){
+					//return ;
+					Modal.show("app_list_box_modal");
+				} else{
+					window.location.reload();
+					sweetAlert.close();
+				}
+			})
+	}
 }
 
 ImapClientManager.listSearchMessages = function(client, path, sequence, options, callback){
