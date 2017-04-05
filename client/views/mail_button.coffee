@@ -65,6 +65,7 @@ Template.mailButton.events
 
 			SmtpClientManager.beforeSendFilter(to, cc, bcc, subject, body, attachments);
 
+			console.log("Session mailContinueSend is" + Session.get("mailContinueSend"));
 			if Session.get("mailContinueSend")
 				SmtpClientManager.sendMail to, cc, bcc, subject, body, attachments, isDispositionNotification, ()->
 					path = Session.get("mailBox")
@@ -109,11 +110,13 @@ Template.mailButton.events
 			if Session.get("mailIsRunbeforSave")
 				message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user , to, cc, bcc, subject, body,attachments);
 
+				console.log("click #compose-draft ....")
 
 				MailManager.saveDrafts(message);
 
 
 	'click .mail-delete': (event, template)->
+		console.log("click mail-delete");
 		path = Session.get("mailBox");
 
 		message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
@@ -124,6 +127,7 @@ Template.mailButton.events
 
 
 	'click .mail-code-download': (event, template)->
+		console.log("----mailbox-attachment-name------")
 		Session.set("mailSending",true);
 		path = Session.get("mailBox");
 		uid = Session.get("mailMessageId");

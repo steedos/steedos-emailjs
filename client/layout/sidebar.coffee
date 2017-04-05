@@ -85,6 +85,7 @@ Template.emailjsSidebar.events
         Modal.show("mailAccount");
 
     "dragenter .sidebar-menu .drag-target": (event, template) ->
+        console.log "drag-target dragenter"
         target = $(event.currentTarget)
         toPath = target.find(".box-item-info").data("path")
         # 要拖动到的目标路径正好是当前所在箱则不需要处理active样式
@@ -92,6 +93,7 @@ Template.emailjsSidebar.events
             target.addClass("active")
 
     "dragleave .sidebar-menu .drag-target": (event, template) ->
+        console.log "drag-target dragleave"
         target = $(event.currentTarget)
         toPath = target.find(".box-item-info").data("path")
         # 要拖动到的目标路径正好是当前所在箱则不需要处理active样式
@@ -99,9 +101,11 @@ Template.emailjsSidebar.events
             target.removeClass("active")
 
     "dragover .sidebar-menu .drag-target": (event, template) ->
+        console.log "drag-target dragover"
         event.preventDefault()
 
     "drop .sidebar-menu .drag-target": (event, template) ->
+        console.log "drag-target drop"
         target = $(event.currentTarget)
         uids = Template.mail_list.getCheckedUids()
         fromPath = Session.get("mailBox")
@@ -109,10 +113,12 @@ Template.emailjsSidebar.events
         # 要拖动到的目标路径正好是当前所在箱则不需要处理active样式
         unless toPath == Session.get("mailBox")
             target.removeClass("active")
+        
         toBox = MailManager.getBox(toPath)
         if toBox && uids.length
             MailManager.moveMessages uids,fromPath,toPath,->
                 MailManager.getNewBoxMessages fromPath, ->
+                    console.log "MailManager.moveMessages execute successfully"
                     toastr.success(t("mail_removeto_success", MailManager.i18n(toBox.name)))
 
         return false

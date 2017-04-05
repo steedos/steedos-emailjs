@@ -14,6 +14,7 @@ Template.mail_compose.helpers
 
 	mail_to: (to,from) ->
 		if Session.get("mailInit") && Session.get("mailBoxInit")
+			console.log("mail_compose：mail_to run... ");
 			rev = {name: "mail_to", title: '收件人', atts:{id: "mail_to", name: "mail_to"}};
 
 			if Session.get("mailAddress")
@@ -104,6 +105,7 @@ Template.mail_compose.helpers
 
 Template.mail_compose.events
 	'change #attachment_file': (event, template) ->
+		console.log('add attachment_file');
 		if !$("#attachment_file").val()
 			return ;
 
@@ -113,6 +115,7 @@ Template.mail_compose.events
 			return ;
 		if event.target.files[0].size > 104857600
 			toastr.error("附件超过100MB限制");
+			console.log "附件" + $("#attachment_file").val() + "超过100MB限制";
 			return ;
 
 		node = MailAttachment.getAttachmentNode($("#attachment_file").val(), event.target.files[0].size);
@@ -126,10 +129,12 @@ Template.mail_compose.events
 		$("#attachment_file").val('')
 
 	'click .mailbox-attachment-delete': (event)->
+		console.log("click .mailbox-attachment-delete is run...")
 		event.target.parentNode.parentNode.parentNode.parentNode.remove();
 
 
 Template.mail_compose.onRendered ->
+	console.log("mail_compose.onRendered run... ");
 	$('[data-toggle="tooltip"]').tooltip()
 	if Session.get("mailForward") || Session.get("mailJumpDraft")
 		MailForward.getAttachmentsHtml();

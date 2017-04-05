@@ -38,6 +38,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, is
 		var alreadySending  = false;
 
 		client.onidle = function(){
+			console.log("Connection has been established");
 			if(alreadySending ){
 				client.close();
 				return
@@ -99,6 +100,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, is
 
 
 SmtpClientManager.beforeSendFilter = function(to, cc, bcc,subject, body, attachments){
+	console.log("SmtpClientManager.sendMai start");
 
 	var auth = AccountManager.getAuth();
 	var from = auth.user;
@@ -119,6 +121,7 @@ SmtpClientManager.beforeSendFilter = function(to, cc, bcc,subject, body, attachm
 }
 
 SmtpClientManager.beforeSaveFilter = function(to, cc, bcc,subject, body, attachments){
+	console.log("SmtpClientManager.sendMai start");
 
 	var auth = AccountManager.getAuth();
 	var from = auth.user;
