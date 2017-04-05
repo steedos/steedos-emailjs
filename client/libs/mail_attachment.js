@@ -55,7 +55,6 @@ MailAttachment.save = function(name, data, callback){
 	file.write(new Buffer(data), function (err) {
 		file.end();
         if (err) throw err;
-        console.log("Export Account Success!");
         callback(dirname, name, filePath);
     })
 }
@@ -101,7 +100,6 @@ MailAttachment.handerInline = function(path, message){
 MailAttachment.download = function(path, uid, bodyPart, saveAs, callback){
 
 	ImapClientManager.getAttachmentByPart(path, uid, bodyPart, function(filename, data){
-		console.log("MailAttachment.download! filename: "+ filename);
 		fs.exists(dirname, function(exists){
             if(saveAs){
                 MailAttachment.saveAs(filename, data, function(dirname, name, filePath){
@@ -258,7 +256,6 @@ MailAttachment.getAttachmentNode = function(filePath, fileSize){
 
 MailAttachment.mailCodeDownload = function(path, uid, saveAs, callback){
 	try{
-		console.log("MailAttachment.mailCodeDownload is running");
 
 		ImapClientManager.getMailCode(path, uid, function(filename, data){
             if(saveAs){

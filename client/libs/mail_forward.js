@@ -42,7 +42,6 @@ MailForward.getBody = function(message){
 }
 
 MailForward.getAttachmentsHtml = function(){
-	console.log("[MailForward.getAttachmentsHtml]");
 	var message = MailManager.getMessage(parseInt(Session.get("mailMessageId")));
 	if(message.uid){
 
@@ -61,7 +60,6 @@ MailForward.getAttachmentsHtml = function(){
 			MailAttachment.download(Session.get("mailBox"), message.uid, item.bodyPart, false, function(dirname, name, filePath){
 
 				var node = MailAttachment.getAttachmentNode(filePath, item.size);
-				console.log("name : "+ name + " ; dirname : " + dirname +" ; filePath : " + filePath);
 
 				$("#compose_attachment_list").append(node);
 

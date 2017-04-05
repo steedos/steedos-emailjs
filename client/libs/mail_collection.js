@@ -80,7 +80,6 @@ MailCollection.getInboxMessage = function(selector, options){
 
 MailCollection.destroy = function(){
 
-	console.log("MailCollection.destroy...");
 
 	MailCollection.keys.forEach(function(key){
 		MailCollection[key] = null;

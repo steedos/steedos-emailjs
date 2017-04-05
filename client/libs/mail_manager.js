@@ -55,7 +55,6 @@ MailManager.getBox = function(path){
   if(!box)
     return ;
   box.info = MailManager.getBoxInfo(path);
-  // console.log(box);
   return box;
 }
 
@@ -73,7 +72,6 @@ MailManager.getBoxBySpecialUse = function(specialUse){
   if(!box)
     return ;
   box.info = MailManager.getBoxInfo(box.path);
-  // console.log(box);
   return box;
 }
 
@@ -169,14 +167,9 @@ MailManager.getMessage = function(uid){
 
     if(Session.get("mailMessageLoadding") == false){
       Session.set("mailMessageLoadding",true);
-      // console.log("mailMessageLoadding  " + message.uid);
       ImapClientManager.getMessageByUid(path, message.uid, getMesssageBodyPart(message),function(messages){
         Session.set("mailMessageLoadding",false);
-        // console.log("set mailMessageLoadding is false");
         messages.forEach(function(m){
-          // console.log("[updateSeenMessage] message is ");
-          // console.log(m);
-          // console.log("[updateSeenMessage] uid " + m.uid +" flags: " + m.flags)
           if(m.flags.indexOf("\\Seen") == -1){
             if(path == "Inbox"){
               var tempM = MailCollection.getMessageCollection(path).findOne({uid:m.uid})
@@ -299,7 +292,6 @@ MailManager.getNewBoxMessages = function(path, callback){
         }
         ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
       });
-      console.log("MailManager.getNewBoxMessages length " + messages.length);
       if(typeof(callback) == 'function'){
         callback(messages);
       }
@@ -330,7 +322,6 @@ MailManager.updateBoxInfo = function(path){
 
 MailManager.deleteMessages = function(path, uids, callback){
   ImapClientManager.deleteMessages(null, path, uids, function(){
-    console.log("deleteMessages run ....");
     MailManager.updateBoxInfo(path);
     callback();
   })
@@ -339,7 +330,6 @@ MailManager.deleteMessages = function(path, uids, callback){
 
 MailManager.completeDeleteMessages = function(path, uids, callback){
   ImapClientManager.completeDeleteMessages(null, path, uids, function(){
-    console.log("ImapClientManager.CompleteDeleteMessages run :");
     MailManager.updateBoxInfo(path);
     callback();
    })
@@ -358,7 +348,6 @@ MailManager.judgeDelete = function(path, uid){
 }
 
 MailManager.deleteDraftMessages = function(path, uid){
-  console.log("MailManager.deleteDraftMessagess :" );
   ImapClientManager.completeDeleteMessages(null, path, uid, function(){
     MailManager.updateBoxInfo(path);
    })

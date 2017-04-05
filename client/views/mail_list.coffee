@@ -41,8 +41,6 @@ Template.mail_list.helpers
 
     boxName: ->
         if Session.get("mailBox")
-            console.log("mail_" + Session.get("mailBox"));
-            console.log(t("mail_" + Session.get("mailBox")));
             return t("mail_" + Session.get("mailBox"))
         else
             return t("mail_inbox")
@@ -51,7 +49,6 @@ Template.mail_list.helpers
         return Session.get("mailLoading");
 
     boxMessages: ->
-        console.log("[boxMessages]");
         Session.set("mailSending",false);
         Session.set("mailLoading",true);
         path = Session.get("mailBox");
@@ -62,7 +59,6 @@ Template.mail_list.helpers
             inbox = MailManager.getBox(path);
             ImapClientManager.initMailboxInfo inbox, ()->
                 Session.set("mailBoxInit", true);
-                console.log("ImapClientManager.initMailboxInfo ok...");
 
             if Session.get("mailBoxInit")
                 if Session.get("mailBoxFilter")
@@ -162,11 +158,9 @@ Template.mail_list.events
             FlowRouter.go(event.currentTarget.dataset.href + event.currentTarget.dataset.uid);
 
     'selectstart .products-list .drag-source': (event, template)->
-        console.log "drag-source selectstart"
         return false
 
     'dragstart .products-list .drag-source': (event, template)->
-        console.log "drag-source dragstart"
         checkbox = $(event.currentTarget).find(".product-checkbox input[type=checkbox]")
         unless checkbox.is(':checked')
             checkbox.click()
@@ -175,12 +169,10 @@ Template.mail_list.events
         event.originalEvent.dataTransfer.setDragImage(cursorIcon[0], 16, 15);
 
     'ondragend .products-list .drag-source': (event, template)->
-        console.log "drag-source ondragend"
         return false
 
 
 Template.mail_list.onRendered ->
-    console.log("Template.mail_list.onRendered run...");
     $('[data-toggle="tooltip"]').tooltip()
 
     $(".mailbox-messages").perfectScrollbar();
