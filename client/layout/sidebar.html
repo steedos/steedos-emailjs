@@ -36,7 +36,7 @@
             {{#with getBox 'Inbox'}}
               <li class="{{getLiClass path true}}"><a class='box-item-info' data-path="{{path}}" data-href="/emailjs/b/{{path}}"><i class="ion ion-android-mail"></i> <span>{{t name}}</span>
               <span class="pull-right-container">
-                <span class="label pull-right bg-red">{{getUnseenCount}}</span>
+                {{#if getUnseenCount}}<span class="label pull-right bg-red">{{getUnseenCount}}</span>{{/if}}
               </span>
               </a></li>
             {{/with}}
