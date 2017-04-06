@@ -5,7 +5,7 @@ Template.select_mail.events({
 })
 
 Template.select_mail.rendered = function(){
-    
+
     var REGEX_EMAIL = '([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@' +
                        '(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)';
 
@@ -19,7 +19,7 @@ Template.select_mail.rendered = function(){
         maxItems: null,
         valueField: 'return',
         labelField: 'name',
-        searchField: ['first_name', 'last_name', 'email'],
+        searchField: ['first_name', 'last_name', 'email','organizations'],
         openOnFocus: false,
         sortField: [
             {field: 'first_name', direction: 'asc'},
@@ -34,33 +34,39 @@ Template.select_mail.rendered = function(){
                 return '<div>' +
                     (name ? '<span class="name">' + escape(name) + '</span>' : '') +
                     (item.email ? '<span class="email">' + escape(item.email) + '</span>' : '') +
+                    (item.organizations ? '<span class="organizations">' + escape(item.organizations) + '</span>' : '') +
                 '</div>';
             },
             option: function(item, escape) {
                 var name = formatName(item);
                 var label = name || item.email;
                 var caption = name ? item.email : null;
+                var org = item.organizations;
                 return '<div>' +
                     '<span class="label">' + escape(label) + '</span>' +
                     (caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+                    (org ? '<span class="org pull-right">' + escape(org) + '</span>' : '') +
                 '</div>';
             }
         },
         load: function(query, callback) {
             if (!query.length) return callback();
-                
+
                 var res = [];
 
                 var books = db.address_books.find({email:{$regex: query}},{fields: {_id: 1, email: 1, name: 1},skip:0,limit:10}).fetch();
 
                 books.forEach(function(b){
-                    res.push({email: "<" + b.email + ">", first_name: b.name, last_name: '', return: JSON.stringify({name: b.name, email: "<" + b.email + ">"})});
+                  res.push({email: "<" + b.email + ">", first_name: b.name, last_name: '', return: JSON.stringify({name: b.name, email: "<" + b.email + ">"})});
                 });
 
-                var users = SteedosDataManager.spaceUserRemote.find({email:{$regex: query}},{fields: {_id: 1, email: 1, name: 1},skip:0,limit:10});
+                var users = SteedosDataManager.spaceUserRemote.find({email:{$regex: query}},{fields: {_id: 1, email: 1, name: 1, organizations:1},skip:0,limit:10});
 
                 users.forEach(function(u){
-                    res.push({email: "<" + u.email + ">", first_name: u.name, last_name: '', return: JSON.stringify({name: u.name, email: "<" + u.email + ">"})});
+                    var len = u.organizations.length;
+                    var orgId = u.organizations[0];
+                    var orgName = SteedosDataManager.organizationRemote.findOne({_id:orgId},{fields:{name: 1}}).name;
+                    res.push({email: "<" + u.email + ">", first_name: u.name, last_name: '', organizations: orgName, return: JSON.stringify({name: u.name, email: "<" + u.email + ">", organizations: orgName})});
                 });
 
                 callback(res);
@@ -109,8 +115,8 @@ Template.select_mail.rendered = function(){
 
     if(values && (values instanceof Array)){
         values.forEach(function(v){
-            selectize.createItem(v.name + "<" + v.address + ">")
+           selectize.createItem(v.name + "<" + v.address + ">" + v.organizations);
         });
-        
+
     }
 }
