@@ -264,11 +264,11 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	} else{
 			swal({
 				title: t("mail_server_interrupte"),
-				text: t("mail_refresh"),
+				text: t("emailjs_mail_refresh"),
 				type: "warning",
 				showCancelButton: true,
-				cancelButtonText: "取消",
-				confirmButtonText: "刷新",
+				cancelButtonText: t("emailjs_mail_cancel"),
+				confirmButtonText: t("emailjs_mail_refresh"),
 				closeOnConfirm: false
 			},
 			function(reason){
