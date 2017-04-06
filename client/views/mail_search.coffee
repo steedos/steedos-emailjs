@@ -25,9 +25,13 @@ Template.mail_search.helpers
         return Session.get("mailBox");
 
     searchHelp: ->
-        whichInput = MailManager.i18n(MailManager.getBox(Session.get("mailBox")).name)
+      box =  MailManager.getBox(Session.get("mailBox"));
+      if box
+        whichInput = MailManager.i18n(box.name)
         text = "搜索#{whichInput}【邮件地址、标题】"
         return text
+      else
+        return ''
 
 Template.mail_search.events
 
