@@ -268,7 +268,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 				type: "warning",
 				showCancelButton: true,
 				cancelButtonText: t("emailjs_mail_cancel"),
-				confirmButtonText: t("emailjs_mail_refresh"),
+				confirmButtonText: t("mail_refresh"),
 				closeOnConfirm: false
 			},
 			function(reason){
