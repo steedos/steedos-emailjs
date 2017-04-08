@@ -223,6 +223,11 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 }
 
 ImapClientManager.isNotClient = function(){
+	if (!Meteor.userId())
+		return false;
+	if (Meteor.loggingIn())
+		return false;
+	
 	swal({
 		title: t("mail_server_interrupte"),
 		text: t("emailjs_mail_refresh"),
