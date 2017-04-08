@@ -282,9 +282,11 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 					}
 				});
 
-
 				client.close();
 				callback(messages);
+			},function(err){
+				if (err)
+					ImapClientManager.isNotClient();
 			});
 		});
 	} else{
@@ -321,7 +323,6 @@ ImapClientManager.listSearchMessages = function(client, path, sequence, options,
 						MailCollection.searchMessageCollection(path).insert(hMessage);
 				}
 			});
-
 
 			client.close();
 			callback(messages);
