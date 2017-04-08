@@ -288,6 +288,9 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 				if (err)
 					ImapClientManager.isNotClient();
 			});
+		},function(err){
+			if (err)
+				ImapClientManager.isNotClient();
 		});
 	} else{
 		ImapClientManager.isNotClient();
