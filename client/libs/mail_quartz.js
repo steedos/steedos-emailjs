@@ -2,7 +2,7 @@ MailQuartz = {};
 
 MailQuartz.intervalId = null;
 
-MailQuartz._millisec = 1000 * 60 * 2;
+MailQuartz._millisec = 1000 * 60 * 10;
 
 MailQuartz.getNewMessages = function(){
 	console.log("MailQuartz.getNewMessages run...");
