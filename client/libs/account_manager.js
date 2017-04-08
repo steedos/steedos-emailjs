@@ -27,15 +27,15 @@ AccountManager.checkAccount = function(callback){
 		if(!userAuth){
 			// toastr.error("请配置邮件账户");
 			try{
-	          if(callback){
-	            if(typeof(callback) == 'function'){
-	              callback("未配置邮件账户");
-	            }
-	          }
-	        }catch(e){
-              $(document.body).removeClass('loading');
-	          console.error("AccountManager.checkAccount callback function error:" + e);
-	        }
+				if(callback){
+					if(typeof(callback) == 'function'){
+						callback("未配置邮件账户");
+					}
+				}
+			}catch(e){
+				$(document.body).removeClass('loading');
+				console.error("AccountManager.checkAccount callback function error:" + e);
+			}
 
 			return false;
 		}
@@ -44,14 +44,14 @@ AccountManager.checkAccount = function(callback){
 
 			// toastr.error("账户验证失败, 无效的邮件域名");
 			try{
-	          if(callback){
-	            if(typeof(callback) == 'function'){
-	              callback("账户验证失败, 无效的邮件域名");
-	            }
-	          }
-	        }catch(e){
-	          console.error("AccountManager.checkAccount callback function error:" + e);
-	        }
+				if(callback){
+					if(typeof(callback) == 'function'){
+						callback("账户验证失败, 无效的邮件域名");
+					}
+				}
+			}catch(e){
+				console.error("AccountManager.checkAccount callback function error:" + e);
+			}
 
 			$(document.body).removeClass('loading');
 
@@ -83,15 +83,15 @@ AccountManager.checkAccount = function(callback){
 				MailManager.initMail(callback);
 			}else{
 				try{
-		          if(callback){
-		            if(typeof(callback) == 'function'){
-		              callback("");
-		            }
-		          }
-		        }catch(e){
-		          console.error("AccountManager.checkAccount callback function error:" + e);
-		        }
-                $(document.body).removeClass('loading');
+					if(callback){
+						if(typeof(callback) == 'function'){
+							callback("");
+						}
+					}
+				}catch(e){
+					console.error("AccountManager.checkAccount callback function error:" + e);
+				}
+				$(document.body).removeClass('loading');
 			}
 		});
 
@@ -99,14 +99,14 @@ AccountManager.checkAccount = function(callback){
 			imapClient.close();
 			// FlowRouter.go('/admin/view/mail_accounts');
 			try{
-	          if(callback){
-	            if(typeof(callback) == 'function'){
-	              callback("账户验证失败");
-	            }
-	          }
-	        }catch(e){
-	          console.error("AccountManager.checkAccount callback function error:" + e);
-	        }
+				if(callback){
+					if(typeof(callback) == 'function'){
+						callback("账户验证失败");
+					}
+				}
+			}catch(e){
+			  console.error("AccountManager.checkAccount callback function error:" + e);
+			}
 			$(document.body).removeClass('loading');
 
 		});

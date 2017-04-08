@@ -222,6 +222,27 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 	});
 }
 
+ImapClientManager.isNotClient = function(){
+	swal({
+		title: t("mail_server_interrupte"),
+		text: t("emailjs_mail_refresh"),
+		type: "warning",
+		showCancelButton: true,
+		cancelButtonText: t("emailjs_mail_cancel"),
+		confirmButtonText: t("mail_refresh"),
+		closeOnConfirm: false
+	},function(reason){
+		if (reason == false){
+			//return ;
+			$('body').removeClass("loading");
+			Modal.show("app_list_box_modal");
+		} else{
+			window.location.reload();
+			sweetAlert.close();
+		}
+	})
+}
+
 ImapClientManager.listMessages = function(client, path, sequence, options, callback){
 	if (!client)
 		client = this.getClient();
@@ -262,24 +283,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 			});
 		});
 	} else{
-			swal({
-				title: t("mail_server_interrupte"),
-				text: t("emailjs_mail_refresh"),
-				type: "warning",
-				showCancelButton: true,
-				cancelButtonText: t("emailjs_mail_cancel"),
-				confirmButtonText: t("mail_refresh"),
-				closeOnConfirm: false
-			},
-			function(reason){
-				if (reason == false){
-					//return ;
-					Modal.show("app_list_box_modal");
-				} else{
-					window.location.reload();
-					sweetAlert.close();
-				}
-			})
+		ImapClientManager.isNotClient();
 	}
 }
 
