@@ -19,7 +19,7 @@ Template.select_mail.rendered = function(){
         maxItems: null,
         valueField: 'return',
         labelField: 'name',
-        searchField: ['first_name', 'last_name', 'email','organizations'],
+        searchField: ['first_name', 'last_name', 'email', 'organizations'],
         openOnFocus: false,
         sortField: [
             {field: 'first_name', direction: 'asc'},
@@ -32,9 +32,9 @@ Template.select_mail.rendered = function(){
             item: function(item, escape) {
                 var name = formatName(item);
                 return '<div>' +
-                    (name ? '<span class="name">' + escape(name) + '</span>' : '') +
+                    (name ? '<span class="name">"' + escape(name) + '</span>' : '') +
+                    (item.organizations ? '<span class="organizations"> (' + escape(item.organizations) + ')"</span>' : '') +
                     (item.email ? '<span class="email">' + escape(item.email) + '</span>' : '') +
-                    (item.organizations ? '<span class="organizations">' + escape(item.organizations) + '</span>' : '') +
                 '</div>';
             },
             option: function(item, escape) {
@@ -43,9 +43,9 @@ Template.select_mail.rendered = function(){
                 var caption = name ? item.email : null;
                 var org = item.organizations;
                 return '<div>' +
-                    '<span class="label">' + escape(label) + '</span>' +
+                    '<span class="label">"' + escape(label) + '</span>' +
+                    (org ? '<span class="org"> (' + escape(org) + ')"</span>' : '') +
                     (caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
-                    (org ? '<span class="org pull-right">' + escape(org) + '</span>' : '') +
                 '</div>';
             }
         },
@@ -66,7 +66,10 @@ Template.select_mail.rendered = function(){
                     var len = u.organizations.length;
                     var orgId = u.organizations[0];
                     var orgName = SteedosDataManager.organizationRemote.findOne({_id:orgId},{fields:{name: 1}}).name;
-                    res.push({email: "<" + u.email + ">", first_name: u.name, last_name: '', organizations: orgName, return: JSON.stringify({name: u.name, email: "<" + u.email + ">", organizations: orgName})});
+                    if(!orgName){
+                      orgName = '';
+                    }
+                    res.push({email: "<" + u.email + ">", first_name: u.name, last_name: '', organizations: orgName, return: JSON.stringify({name: u.name, organizations: orgName, email: "<" + u.email + ">"})});
                 });
 
                 callback(res);
@@ -83,9 +86,8 @@ Template.select_mail.rendered = function(){
                     email: "<" + input + ">",
                     first_name: "",
                     last_name: "",
-                    return: JSON.stringify({name:"", email:"<" + input + ">"})
+                    return: JSON.stringify({name:"",email:"<" + input + ">"})
                 };
-
             }
             var match = input.match(new RegExp('^([^<]*)\<' + REGEX_EMAIL + '\>$', 'i'));
             if (match) {
@@ -115,7 +117,12 @@ Template.select_mail.rendered = function(){
 
     if(values && (values instanceof Array)){
         values.forEach(function(v){
-           selectize.createItem(v.name + "<" + v.address + ">" + v.organizations);
+            if(v.name){
+              selectize.createItem(v.name + "\"" + "<" + v.address + ">");
+            }else{
+              selectize.createItem("<" + v.address + ">");
+            }
+
         });
 
     }
