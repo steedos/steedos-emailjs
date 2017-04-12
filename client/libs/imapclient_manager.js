@@ -511,7 +511,9 @@ function decode(str, part){
 		return base64Decode(str, part.parameters.charset);
 	}else if(part.encoding == 'quoted-printable'){
 		return quotedPrintableDecode(str, part.parameters.charset);
-	}else{
+	}else if(part.encoding == '8bit'){
+		return quotedPrintableDecode(str, part.parameters.charset);
+	}else {
 		return str;
 	}
 }
