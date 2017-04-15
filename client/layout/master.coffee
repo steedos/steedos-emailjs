@@ -8,7 +8,8 @@ Template.emailjsLayout.onCreated ->
 
 Template.emailjsLayout.onRendered ->
   # $(window).resize();
-  $("body").removeClass("sidebar-collapse")
+  Tracker.afterFlush ->
+    $("body").removeClass("sidebar-collapse")
 
 
 Template.emailjsLayout.helpers 
