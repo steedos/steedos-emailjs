@@ -116,8 +116,10 @@ Package.onUse(function(api) {
 	api.addFiles('client/layout/master.html', 'client');
 	api.addFiles('client/layout/master.coffee', 'client');
 	api.addFiles('client/layout/master.less', 'client');
+	
 	api.addFiles('client/layout/sidebar.html', 'client');
 	api.addFiles('client/layout/sidebar.coffee', 'client');
+	api.addFiles('client/layout/sidebar.less', 'client');
 
 	api.addFiles('client/views/mail.less', 'client');
 
