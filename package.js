@@ -110,6 +110,9 @@ Package.onUse(function(api) {
 
 	api.addFiles('client/libs/mail_quartz.js', 'client');
 
+	api.addFiles('client/layout/header.html', 'client');
+	api.addFiles('client/layout/header.coffee', 'client');
+
 	api.addFiles('client/layout/master.html', 'client');
 	api.addFiles('client/layout/master.coffee', 'client');
 	api.addFiles('client/layout/master.less', 'client');
