@@ -8,7 +8,7 @@ Template.emailjsLayout.onCreated ->
 
 Template.emailjsLayout.onRendered ->
   # $(window).resize();
-
+  $("body").removeClass("sidebar-collapse")
 
 
 Template.emailjsLayout.helpers 
