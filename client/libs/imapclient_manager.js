@@ -512,7 +512,11 @@ function decode(str, part){
 	}else if(part.encoding == 'quoted-printable'){
 		return quotedPrintableDecode(str, part.parameters.charset);
 	}else if(part.encoding == '8bit'){
-		return quotedPrintableDecode(str, part.parameters.charset);
+		var url = $("a",$(str)).attr("href");
+		var decodedStr = quotedPrintableDecode(str, part.parameters.charset);
+		var curl = $("a",$(decodedStr)).attr("href");
+		decodedStr = decodedStr.replace(curl, url);
+		return decodedStr;
 	}else {
 		return str;
 	}
