@@ -34,6 +34,9 @@ Template.mail_search.helpers
       else
         return ''
 
+    dropdownMenuSearchKey: ->
+        return Template.instance().search_key?.get()
+
 Template.mail_search.events
 
     'click .btn-search-mail': (event, template) ->
@@ -47,7 +50,7 @@ Template.mail_search.events
 
     'keyup .search-mail-input': (event, template) ->
         searchKey = $(".search-mail-input").val()
-        Session.set("mailSearchAddress",searchKey)
+        template.search_key.set(searchKey);
 
 Template.mail_search.onRendered ->
     $('#search_date_start').datetimepicker({
@@ -75,3 +78,6 @@ Template.mail_search.onRendered ->
     #         $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
 
     # );
+
+Template.mail_search.onCreated ->
+    this.search_key = new ReactiveVar()

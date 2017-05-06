@@ -4,12 +4,12 @@
 		<span class="input-group-btn">
 			<button type="submit" name="search" class="btn btn-default btn-search-mail"><i class="fa fa-search"></i></button>
 		</span>
-		{{#if searchAddress}}
+		{{#if dropdownMenuSearchKey}}
 			<ul class="dropdown-menu" role="menu">
-				<li><a class="btn-search-mail" data-type="address"><i class="fa fa-search"></i>搜索邮件地址包含"{{searchAddress}}"的邮件</a></li>
-				<li><a class="btn-search-mail" data-type="subject"><i class="fa fa-search"></i>搜索标题包含"{{searchAddress}}"的邮件</a></li>
+				<li><a class="btn-search-mail" data-type="address"><i class="fa fa-search"></i>搜索邮件地址包含"{{dropdownMenuSearchKey}}"的邮件</a></li>
+				<li><a class="btn-search-mail" data-type="subject"><i class="fa fa-search"></i>搜索标题包含"{{dropdownMenuSearchKey}}"的邮件</a></li>
 				<li class="divider"></li>
-				<li><a class="btn-search-mail" data-type="all"><i class="fa fa-search"></i>搜索邮件地址或标题包含"{{searchAddress}}"的邮件</a></li>
+				<li><a class="btn-search-mail" data-type="all"><i class="fa fa-search"></i>搜索邮件地址或标题包含"{{dropdownMenuSearchKey}}"的邮件</a></li>
 			</ul>
 		{{/if}}
 	</div>
