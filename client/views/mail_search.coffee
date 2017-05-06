@@ -9,8 +9,6 @@ Template.mail_search.subjectSearch = (type)->
 
     MailManager.search searchKey, type, (result) ->
         if !result || result.length == 0
-            # 未搜索到数据时应该清除邮件列表
-            Session.set("mailBoxFilter", [0]);
             toastr.info("未搜索到数据");
         else
             Session.set("mailPage", 1);
