@@ -26,13 +26,13 @@ Template.mail_search.helpers
         return Session.get("mailBox");
 
     searchHelp: ->
-      box =  MailManager.getBox(Session.get("mailBox"));
-      if box
-        whichInput = MailManager.i18n(box.name)
-        text = "搜索#{whichInput}【邮件地址、标题】"
-        return text
-      else
-        return ''
+        box =  MailManager.getBox(Session.get("mailBox"));
+        if box
+            boxName = MailManager.i18n("box.name")
+        else
+            boxName = MailManager.i18n("INBOX")
+
+        return "搜索#{boxName}【邮件地址、标题】"
 
     dropdownMenuSearchKey: ->
         return Template.instance().search_key?.get()
