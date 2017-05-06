@@ -1,4 +1,4 @@
-Template.mail_search.subjectSearch = ()->
+Template.mail_search.subjectSearch = (type)->
     searchKey = $("#keyword0").val();
     if searchKey.trim() == ''
         Session.set("mailBoxFilter","");
@@ -7,8 +7,9 @@ Template.mail_search.subjectSearch = ()->
     Session.set("mailLoading",true);
 
 
-    MailManager.search searchKey, (result) ->
+    MailManager.search searchKey, type, (result) ->
         if !result || result.length == 0
+            Session.set("mailBoxFilter", [0]);
             toastr.info("未搜索到数据");
         else
             Session.set("mailPage", 1);
@@ -35,18 +36,18 @@ Template.mail_search.helpers
 
 Template.mail_search.events
 
-    #'click .search-mail-input': (event, template) ->
-    #    if event.keyCode == 13
-    #    Template.mail_search.subjectSearch();
-
-    'click #mail-search-btn': (event, template) ->
+    'click .btn-search-mail': (event, template) ->
+        type = event.currentTarget.dataset?.type
         path = Session.get("mailBox");
         FlowRouter.go("/emailjs/b/search/" + path);
-        Template.mail_search.subjectSearch();
+        Template.mail_search.subjectSearch(type);
 
     'click #advanced_search': (event, template) ->
         $("#advanced_search_modal").show();
 
+    'keyup .search-mail-input': (event, template) ->
+        searchKey = $(".search-mail-input").val()
+        Session.set("mailSearchAddress",searchKey)
 
 Template.mail_search.onRendered ->
     $('#search_date_start').datetimepicker({

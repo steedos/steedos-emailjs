@@ -219,22 +219,52 @@ queryKey : {
         }
     }
 */
-MailManager.search = function(searchKey, callback){
+MailManager.search = function(searchKey, type, callback){
 
   if(!searchKey)
     return;
 
+  if(typeof type == "function"){
+    callback = type
+    type = "all"
+  }
+
   var path = Session.get("mailBox");
   var queryKey = {};
 
-  if(/.*[\u4e00-\u9fa5]+.*$/.test(searchKey)){
+  if(type == "subject"){
     queryKey = {subject: searchKey};
-  }else if((path == 'Inbox') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Inbox')){
-    queryKey = {or: {from: searchKey, subject: searchKey}};
-  }else if((path == 'Sent') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Sent') || (path == 'Drafts') ||  (MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts')){
-    queryKey = {or: {to: searchKey, subject: searchKey}};
-  }else{
-    queryKey = {or:{or: {to: searchKey, from: searchKey}},subject: searchKey};
+  }
+  else{
+    if(/.*[\u4e00-\u9fa5]+.*$/.test(searchKey)){
+      if(type == "address"){
+        queryKey = {from: searchKey};
+      }
+      else{
+        queryKey = {subject: searchKey};
+      }
+    }else if((path == 'Inbox') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Inbox')){
+      if(type == "address"){
+        queryKey = {from: searchKey};
+      }
+      else{
+        queryKey = {or: {from: searchKey, subject: searchKey}};
+      }
+    }else if((path == 'Sent') || (MailManager.getBoxBySpecialUse(path).specialUse == '\\Sent') || (path == 'Drafts') ||  (MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts')){
+      if(type == "address"){
+        queryKey = {to: searchKey};
+      }
+      else{
+        queryKey = {or: {to: searchKey, subject: searchKey}};
+      }
+    }else{
+      if(type == "address"){
+        queryKey = {or:{or: {to: searchKey, from: searchKey}}};
+      }
+      else{
+        queryKey = {or:{or: {to: searchKey, from: searchKey}},subject: searchKey};
+      }
+    }
   }
 
   ImapClientManager.search(null, path, queryKey,function(result){
