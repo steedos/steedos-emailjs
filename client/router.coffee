@@ -72,7 +72,6 @@ mailRoutes.route '/b/search/:mailBox/',
 		Session.set("mailBox", mailBox);
 		Session.set("mailMessageId", null);
 		Session.set("mailBoxFilter", "");
-		Session.set("mailSearchAddress", "");
 		Session.set("mailMessageLoadding",false);
 		Session.set("mailMessageNull",false);
 		BlazeLayout.render 'emailjsLayout',
