@@ -43,6 +43,7 @@ Template.mail_search.events
         path = Session.get("mailBox");
         FlowRouter.go("/emailjs/b/search/" + path);
         Template.mail_search.subjectSearch(type);
+        $(".products-list").scrollTop(0);
 
     'click #advanced_search': (event, template) ->
         $("#advanced_search_modal").show();

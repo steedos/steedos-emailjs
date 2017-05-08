@@ -101,6 +101,8 @@ Template.read_mail.events
 				toastr.info("搜索完成");
 			Session.set("mailLoading",false);
 
+			$(".products-list").scrollTop(0);
+
 
 	'click .next_mail': (event, template)->
 		console.log("click next_mail");
