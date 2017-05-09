@@ -112,18 +112,29 @@ Template.select_mail.rendered = function(){
     this.data.target = $('#' + this.data.atts.id).selectize(selectizeOpt);
 
     var values = this.data.values;
+    values.forEach(function(val){
+      var user = SteedosDataManager.spaceUserRemote.find({email:{$regex: val.address}},{fields: {organizations:1}});
+      if(user.length > 0){
+        var orgId = user[0].organizations[0];
+        var orgName = SteedosDataManager.organizationRemote.findOne({_id:orgId},{fields:{name: 1}}).name;
+        if(!orgName){
+          orgName = '';
+        }
+        val.organization = orgName;
+      }
+    })
 
     var selectize = this.data.target[0].selectize;
 
     if(values && (values instanceof Array)){
         values.forEach(function(v){
-            if(v.name){
-              selectize.createItem(v.name + "\"" + "<" + v.address + ">");
-            }else{
-              selectize.createItem("<" + v.address + ">");
-            }
-
+          if(v.name && v.organization){
+            selectize.createItem(v.name+ "\ " +"(" + v.organization + ")" + "\"" + "<" + v.address + ">");
+          }else if(v.name){
+            selectize.createItem(v.name + "\"" + "<" + v.address + ">");
+          }else {
+            selectize.createItem("<" + v.address + ">");
+          }
         });
-
     }
 }
