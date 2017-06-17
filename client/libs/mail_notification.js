@@ -43,6 +43,9 @@ MailNotification.send = function(messages){
 			// }
 		}
 	    $.notification(options);
+	    // 任务栏高亮显示
+	    nw.Window.get().requestAttention(3);
+		
 		MailNotification._sound.play();
 		return;
 	}
