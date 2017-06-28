@@ -80,3 +80,8 @@ if Meteor.isServer
 # db.mail_accounts.after.find (userId, selector, options, cursor)->
 # 	cursor.forEach (item) ->
 # 		item.password = mailDecrypt.decrypt(item.password, item.email)
+
+if Meteor.isServer
+    db.mail_accounts._ensureIndex({
+        "owner": 1
+    },{background: true})

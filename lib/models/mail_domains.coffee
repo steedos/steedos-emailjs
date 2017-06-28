@@ -69,3 +69,8 @@ db.mail_domains.attachSchema(db.mail_domains._simpleSchema)
 
 #if Meteor.isServer
 	#db.mail_domains.after.insert (domain,) ->
+
+if Meteor.isServer
+    db.mail_domains._ensureIndex({
+        "domain": 1
+    },{background: true})
