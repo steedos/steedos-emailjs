@@ -100,6 +100,51 @@ ImapClientManager.selectMailBox = function(client, mailBox, options, callback){
 	});
 }
 
+ImapClientManager.getBodystructure = function(client, path, sequence, callback){
+	if (!client)
+		client = this.getClient();
+
+	var query = ['uid', 'flags', 'envelope', 'bodystructure'];
+	client.connect().then(function(){
+		client.listMessages(path, sequence, query, {byUid: true}).then(function(messages){
+			try{
+				messages.forEach(function(message){
+
+					if(message && message.uid){
+
+						var hMessage = handerMessage(message);
+						if(!hMessage.bodyHtml && !hMessage.bodyText){
+
+							hMessage.summary = false;
+							hMessage.bodyText = {};
+							hMessage.bodyText.data="";
+
+						}else{
+							hMessage.summary = true;
+						}
+
+						console.log("hMessage", hMessage)
+
+						var local_message = MailManager.getMessageByUid(path, message.uid);
+						if(local_message){
+							MailCollection.getMessageCollection(path).update(local_message._id ,hMessage);
+						}else
+							MailCollection.getMessageCollection(path).insert(hMessage);
+
+						callback(path, hMessage);
+					}
+
+				});
+			}catch(err){
+				console.error(err)
+			}
+
+			client.close();
+
+		});
+	});
+}
+
 
 ImapClientManager.getMessageBodyByPart = function(client, path, sequence, options, bodyPart, callback){
 	if (!client)
@@ -256,7 +301,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 	// 	//callback();
 	// 	return;
 
-	var query = ['uid', 'flags', 'envelope','bodystructure'];
+	var query = ['uid', 'flags', 'envelope'];
 
 	if (client){
 		client.connect().then(function(){
@@ -267,7 +312,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 						var hMessage = handerMessage(message);
 						if(!hMessage.bodyHtml && !hMessage.bodyText){
 
-							hMessage.summary = false;
+							hMessage.summary = true;
 							hMessage.bodyText = {};
 							hMessage.bodyText.data="";
 
@@ -301,7 +346,7 @@ ImapClientManager.listSearchMessages = function(client, path, sequence, options,
 	if (!client)
 		client = this.getClient();
 
-	var query = ['uid', 'flags', 'envelope','bodystructure'];
+	var query = ['uid', 'flags', 'envelope'];
 
 	client.connect().then(function(){
 		client.listMessages(path, sequence, query, options).then(function(messages){
