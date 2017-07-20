@@ -1,5 +1,15 @@
 ImapClientManager = {};
 
+/**
+ * 40: ERROR
+ * 20: INFO
+ * 10: DEBUG
+ * 0: ALL
+ * @type {number}
+ */
+ImapClientManager.LOG_LEVEL = 20
+
+
 var ImapClient, MimeParser, Encoding, MimeCodec, loadStep = MailPage.pageSize;
 
 // if(Steedos.isNode()){
@@ -38,7 +48,7 @@ ImapClientManager.getClient = function(auth){
 
 	var client = new ImapClient(domain.imap_server, domain.imap_port, options);
 
-	client.logLevel = client.LOG_LEVEL_INFO;
+	client.logLevel = ImapClientManager.LOG_LEVEL;
 
 	client._onError(function(){
 		console.error("[ImapClientManager.ImapClient] error");
@@ -141,6 +151,9 @@ ImapClientManager.getBodystructure = function(client, path, sequence, callback){
 
 			client.close();
 
+		}).catch(function (reason) {
+			console.error( 'IMAP getBodystructure function called: ', reason );
+			toastr.error("邮件内容接收失败")
 		});
 	});
 }
