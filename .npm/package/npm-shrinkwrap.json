@@ -42,8 +42,8 @@
     },
     "emailjs-mime-builder": {
       "version": "1.0.1",
-      "resolved": "https://registry.npmjs.org/emailjs-mime-builder/-/emailjs-mime-builder-1.0.1.tgz",
-      "from": "emailjs-mime-builder@1.0.1"
+      "resolved": "git://github.com/steedos/emailjs-mime-builder.git#c49a75037ee0935233896bfe4f0478e3c7e98fca",
+      "from": "emailjs-mime-builder@git://github.com/steedos/emailjs-mime-builder.git"
     },
     "emailjs-mime-codec": {
       "version": "1.0.2",
@@ -73,7 +73,7 @@
     "emailjs-tcp-socket": {
       "version": "1.0.2",
       "resolved": "git://github.com/steedos/emailjs-tcp-socket.git#0e7d8af3cd1adb7a1c905e47e3d27f7b17d69bac",
-      "from": "git://github.com/steedos/emailjs-tcp-socket.git"
+      "from": "emailjs-tcp-socket@git://github.com/steedos/emailjs-tcp-socket.git"
     },
     "emailjs-utf7": {
       "version": "3.0.1",
