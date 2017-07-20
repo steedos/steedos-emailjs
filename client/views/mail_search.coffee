@@ -27,7 +27,7 @@ Template.mail_search.helpers
     searchHelp: ->
         box =  MailManager.getBox(Session.get("mailBox"));
         if box
-            boxName = MailManager.i18n("box.name")
+            boxName = MailManager.i18n(box.name)
         else
             boxName = MailManager.i18n("INBOX")
 

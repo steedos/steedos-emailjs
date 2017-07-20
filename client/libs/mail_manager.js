@@ -150,7 +150,7 @@ MailManager.getSearchMessages = function(uids, path, page, page_size, callback){
     return MailCollection.searchMessageCollection(path).find({uid:{$in: uids}}, {sort: {uid:-1}, skip: page * page_size, limit: page_size}).fetch();
 }
 
-function getMesssageBodyPart(message){
+MailManager.getMesssageBodyPart = function(message){
   if(!message.bodyHtml && !message.bodyText)
     return;
 
@@ -167,22 +167,27 @@ MailManager.getMessage = function(uid){
 
     if(Session.get("mailMessageLoadding") == false){
       Session.set("mailMessageLoadding",true);
-      ImapClientManager.getMessageByUid(path, message.uid, getMesssageBodyPart(message),function(messages){
-        Session.set("mailMessageLoadding",false);
-        messages.forEach(function(m){
-          if(m.flags.indexOf("\\Seen") == -1){
-            if(path == "Inbox"){
-              var tempM = MailCollection.getMessageCollection(path).findOne({uid:m.uid})
-              if(tempM && tempM.dispositionNotificationTo){
-                Session.set("isDispositionNotificationAlertNeeded", true);
-              }
-            }
-            ImapClientManager.updateSeenMessage(path, message.uid, function(){
-                ImapClientManager.updateUnseenMessages();
-            });
-          }
-        });
-      });
+
+      var getMessage = function (path, message) {
+		  ImapClientManager.getMessageByUid(path, message.uid, MailManager.getMesssageBodyPart(message),function(messages){
+			  Session.set("mailMessageLoadding",false);
+			  messages.forEach(function(m){
+				  if(m.flags.indexOf("\\Seen") == -1){
+					  if(path == "Inbox"){
+						  var tempM = MailCollection.getMessageCollection(path).findOne({uid:m.uid})
+						  if(tempM && tempM.dispositionNotificationTo){
+							  Session.set("isDispositionNotificationAlertNeeded", true);
+						  }
+					  }
+					  ImapClientManager.updateSeenMessage(path, message.uid, function(){
+						  ImapClientManager.updateUnseenMessages();
+					  });
+				  }
+			  });
+		  });
+	  }
+
+      ImapClientManager.getBodystructure(null, path, message.uid, getMessage)
     }
   }
   return message;

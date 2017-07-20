@@ -9,13 +9,13 @@ Npm.depends({
 	busboy: "0.2.13",
 	cookies: "0.6.1",
 	mime: "1.3.4",
+	"emailjs-mime-builder": "git://github.com/steedos/emailjs-mime-builder.git",
 	"emailjs-mime-codec": "1.0.2",
 	"emailjs-stringencoding": "1.0.1",
 	"emailjs-mime-parser": "1.0.0",
-	"emailjs-imap-client": "2.0.2",
-	"emailjs-mime-builder": "1.0.1",
-	"emailjs-mime-codec": "1.0.2",
+	"emailjs-imap-client": "2.0.8",
 	"emailjs-smtp-client": "1.0.0",
+	"emailjs-tcp-socket": "git://github.com/steedos/emailjs-tcp-socket.git",
 	"regenerator-runtime": "0.9.5"
 });
 
@@ -24,6 +24,7 @@ Package.onUse(function(api) {
 
 	api.versionsFrom('1.0');
 
+	api.use('ecmascript');
 	api.use('reactive-var');
 	api.use('reactive-dict');
 	api.use('coffeescript');
