@@ -153,7 +153,7 @@ ImapClientManager.getBodystructure = function(client, path, sequence, callback){
 
 		}).catch(function (reason) {
 			console.error( 'IMAP getBodystructure function called: ', reason );
-			toastr.error("邮件内容接收失败")
+			toastr.error("邮件内容查看失败，请登录中油WEB邮箱地址查看")
 		});
 	});
 }
