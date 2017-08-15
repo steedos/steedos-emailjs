@@ -130,7 +130,7 @@ Template.select_mail.rendered = function(){
 
     if(values && (values instanceof Array)){
         values.forEach(function(v){
-          if(v.name && v.organization){
+          if(v.name && v.organization && !Session.get("mailReply") && !Session.get("mailReplyAll")){
             selectize.createItem(v.name+ "\ " +"(" + v.organization + ")" + "\"" + "<" + v.address + ">");
           }else if(v.name){
             selectize.createItem(v.name + "\"" + "<" + v.address + ">");
