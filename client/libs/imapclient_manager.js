@@ -370,7 +370,7 @@ ImapClientManager.listSearchMessages = function(client, path, sequence, options,
 					var hMessage = handerMessage(message);
 					if(!hMessage.bodyHtml && !hMessage.bodyText){
 
-						hMessage.summary = false;
+						hMessage.summary = true;
 						hMessage.bodyText = {};
 						hMessage.bodyText.data="";
 
@@ -412,7 +412,6 @@ ImapClientManager.searchUnseenMessages = function(client, path, query, callback)
 
 ImapClientManager.search = function(client, path, query, callback){
 
-
 	if (!client)
 		client = this.getClient();
 
@@ -424,7 +423,7 @@ ImapClientManager.search = function(client, path, query, callback){
 				return;
 			}
 
-			MailCollection.mail_search.update({},{uids:result});
+			MailCollection.mail_search.update({},{uids:result.reverse()});
 
 			client.close();
 
