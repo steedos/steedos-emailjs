@@ -16,27 +16,30 @@
 						{{>Template.dynamic  template="select_mail" data= (mail_bcc bcc)}}
 					</div>
 
-					<div class="form-group">
+					<div class="form-group" style="margin-bottom: 5px">
 						<div class="input-group">
 							<span class="input-group-addon">主&emsp;题</span>
 							<input class="form-control subject" type="text" placeholder="" value="{{mail_subject subject}}">
 						</div>
 					</div>
 
-					<div class="form-group">
-						<div class="btn btn-default btn-file">
+					<div class="form-group" style="text-align: center;margin-bottom: 0px">
+						<div class="btn btn-default btn-file" style="float: left">
 							<i class="fa fa-paperclip"></i> 添加附件
 							<input type="file" id="attachment_file">
-					</div>
-						<span class="form-group ckb_disposition_notification_box" style="margin-left: 10px">
+						</div>
+						<span class="btn ckb_disposition_notification_box" style="margin-left: 10px;float: left">
 							<input type="checkbox" id="ckb_disposition_notification">
-							<label for="ckb_disposition_notification" class="text-muted">{{_ "mail_alert_disposition_notification_checklabel"}}</label>
+							<label for="ckb_disposition_notification" class="text-muted" style="margin-bottom: 0px">{{_ "mail_alert_disposition_notification_checklabel"}}</label>
+						</span>
+						<span class="btn">
+							<label style="color: red;font-weight: 400;">重要提示：禁止发送涉密和敏感信息！</label>
 						</span>
 					</div>
-						<div class="form-group message-attachments">
-							<div class="col-md-12 col-sm-12 col-xs-12 attachment-item attachments-loading hidden text-warning" id="mail_attachment"><div class="attachment-info-box"><span class="attachment-info-box-icon"><i class="fa fa-spinner fa-spin"></i></span> <div class="attachment-info-box-content overlay {{attachmentLoadding}}" id="attachment_donwLoadding"> 邮件正在加载中....</div></div></div>
-							<div class="row" id="compose_attachment_list"></div>
-						</div>
+					<div class="form-group message-attachments">
+						<div class="col-md-12 col-sm-12 col-xs-12 attachment-item attachments-loading hidden text-warning" id="mail_attachment"><div class="attachment-info-box"><span class="attachment-info-box-icon"><i class="fa fa-spinner fa-spin"></i></span> <div class="attachment-info-box-content overlay {{attachmentLoadding}}" id="attachment_donwLoadding"> 邮件正在加载中....</div></div></div>
+						<div class="row" id="compose_attachment_list"></div>
+					</div>
 				{{/if}}
 			{{/with}}
 
