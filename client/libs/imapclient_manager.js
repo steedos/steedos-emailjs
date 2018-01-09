@@ -295,6 +295,9 @@ ImapClientManager.isNotClient = function(){
 		confirmButtonText: t("mail_refresh"),
 		closeOnConfirm: false
 	},function(reason){
+
+		Meteor.clearTimeout(ImapClientManager.reload_timeoutId);
+
 		if (reason == false){
 			//return ;
 			$('body').removeClass("loading");
@@ -304,6 +307,10 @@ ImapClientManager.isNotClient = function(){
 			sweetAlert.close();
 		}
 	})
+
+	ImapClientManager.reload_timeoutId = Meteor.setTimeout(function () {
+		window.location.reload();
+	}, 5 * 60 * 1000)
 }
 
 ImapClientManager.listMessages = function(client, path, sequence, options, callback){
