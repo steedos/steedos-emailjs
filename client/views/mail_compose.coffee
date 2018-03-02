@@ -1,7 +1,7 @@
 Template.mail_compose.helpers
 
 	isReady: (uid)->
-		if Session.get("mailMessageId") == "compose"
+		if Session.get("mailMessageId") == "compose" || Session.get("localhost_draft")
 			return true;
 		else
 			if uid >= 0
@@ -10,9 +10,13 @@ Template.mail_compose.helpers
 
 	message: ->
 		if Session.get("mailInit") && Session.get("mailBoxInit")
-			return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
+			if Session.get("localhost_draft")
+				return JSON.parse(LocalhostData.read("draft_data.json"))
+			else
+				return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
 
 	mail_to: (to,from) ->
+
 		if Session.get("mailInit") && Session.get("mailBoxInit")
 			rev = {name: "mail_to", title: '收件人', atts:{id: "mail_to", name: "mail_to"}};
 
@@ -22,7 +26,10 @@ Template.mail_compose.helpers
 				rev.values =  to;
 			else if Session.get("mailReply")
 				rev.values =  from;
-			else if Session.get("mailReplyAll")
+			else if Session.get("mailReplyAll") || Session.get("localhost_draft")
+				if Session.get("localhost_draft")
+					from = []
+
 				toAll = from.concat(to);
 
 				fromUserAddress = toAll.filterProperty("address", AccountManager.getAuth().user);
@@ -42,18 +49,20 @@ Template.mail_compose.helpers
 			Session.get("mailMessageId")
 
 			rev = {name: "mail_cc", title: '抄&emsp;送', atts:{id: "mail_cc", name: "mail_cc"}};
-			if Session.get("mailJumpDraft") || Session.get("mailReplyAll")
+			if Session.get("mailJumpDraft") || Session.get("mailReplyAll") || Session.get("localhost_draft")
 				rev.values  = cc;
-
 			return rev;
 
 	mail_bcc:(bcc)->
 		if Session.get("mailInit") && Session.get("mailBoxInit")
-			return rev = {name: "mail_bcc", title: '密&emsp;送', atts:{id: "mail_bcc", name: "mail_bcc"}};
+			rev = {name: "mail_bcc", title: '密&emsp;送', atts:{id: "mail_bcc", name: "mail_bcc"}};
+			if Session.get("localhost_draft")
+				rev.values = bcc
+			return rev
 
 	mail_subject: (subject) ->
 		if Session.get("mailInit") && Session.get("mailBoxInit")
-			if Session.get("mailJumpDraft")
+			if Session.get("mailJumpDraft") || Session.get("localhost_draft")
 				return subject;
 			else if Session.get("mailForward")
 				if subject
@@ -93,6 +102,8 @@ Template.mail_compose.helpers
 					body =  message.bodyHtml.data;
 				else
 					body =  MailForward.getBody(message);
+			if Session.get("localhost_draft")
+				body = JSON.parse(LocalhostData.read("draft_data.json"))?.body || ""
 
 			$("#compose-textarea").html(MailManager.resetHrefs(body));
 
@@ -151,6 +162,28 @@ Template.mail_compose.onRendered ->
 				else
 					body =  MailForward.getBody(message);
 
+			if Session.get("localhost_draft")
+
+				sweetAlert({
+					title: "检测到有发送失败的邮件，请重新发送",
+					type: "warning",
+					confirmButtonText: t('OK'),
+					closeOnConfirm: true
+				})
+				$("#compose_attachment_list").empty()
+				local_draft = JSON.parse(LocalhostData.read("draft_data.json"))
+				local_draft?.attachments.forEach (item) ->
+					node = MailAttachment.getAttachmentNode(item.path, item.size);
+					$("#compose_attachment_list").append(node);
+
+				if local_draft?.cc.length > 0
+					$(".mail_cc").show()
+
+				if local_draft?.bcc.length > 0
+					$(".mail_bcc").show();
+
+				body = local_draft?.body || ""
+
 			$("#compose-textarea").html(MailManager.resetHrefs(body));
 
 			$("#compose-textarea").summernote
@@ -158,3 +191,6 @@ Template.mail_compose.onRendered ->
 				dialogsInBody: true
 		else
 			$("#compose-textarea").html("加载中...");
+
+Template.mail_compose.onDestroyed ->
+	Session.set("localhost_draft", false)

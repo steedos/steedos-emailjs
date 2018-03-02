@@ -112,6 +112,9 @@ Package.onUse(function(api) {
 
 	api.addFiles('client/libs/mail_quartz.js', 'client');
 
+	api.addFiles('client/libs/localhost_data.coffee', 'client');
+	api.addFiles('client/libs/localhost_draft.coffee', 'client');
+
 	api.addFiles('client/layout/header.html', 'client');
 	api.addFiles('client/layout/header.coffee', 'client');
 

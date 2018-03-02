@@ -44,6 +44,7 @@ mailRoutes.route '/b/:mailBox/',
 		if Session.get("mailBox") !=  mailBox
 			Session.set("mailPage",1)
 
+		Session.set("localhost_draft", false)
 		# Session.set("mailLoading", true);
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);
@@ -82,6 +83,8 @@ mailRoutes.route '/b/:mailBox/:mailMessageId',
 		mailBox = FlowRouter._current.path.split("/")[3] #params.mailBox
 		if Session.get("mailBox") != mailBox
 			Session.set("mailPage",1)
+
+		Session.set("localhost_draft", false)
 
 		Session.set("mailForward", false);
 		Session.set("mailReply", false);

@@ -7,7 +7,11 @@
             {{#if isComPose}}
                 {{> mail_compose}}
             {{else}}
-                {{> read_mail}}
+				{{#if hasLocalDraft}}
+					{{> mail_compose}}
+				{{else}}
+                	{{> read_mail}}
+				{{/if}}
             {{/if}}
         </div>
         {{#if isSending}}

@@ -431,7 +431,8 @@ MailManager.getContacts = function(id){
   if(values){
     values.forEach(function(v){
       var c = JSON.parse(v);
-      c.email = c.email.replace("<","").replace(">","")
+      c.email = c.email.replace("<","").replace(">","");
+	  c.address = c.email;
       contacts.push(c);
     })
   }
