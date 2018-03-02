@@ -1,6 +1,6 @@
 Template.mailButton.helpers
 	isComPose: ->
-		return Session.get("mailMessageId") == "compose" || Session.get("mailForward") || Session.get("mailReply") || Session.get("mailReplyAll") || Session.get("mailJumpDraft")
+		return Session.get("mailMessageId") == "compose" || Session.get("mailForward") || Session.get("mailReply") || Session.get("mailReplyAll") || Session.get("mailJumpDraft") || Session.get("localhost_draft")
 
 	message: ->
 		if Session.get("mailInit")
@@ -63,10 +63,16 @@ Template.mailButton.events
 				Session.set("mailContinueSend",false); #是否继续
 				Session.set("mailIsRunbeforSend",false); # 是否运行了beforeSend
 
+			LocalhostData.write("draft_data.json", {to: to, cc: cc, bcc: bcc, subject: subject, body: body, attachments: attachments})
+
 			SmtpClientManager.beforeSendFilter(to, cc, bcc, subject, body, attachments);
 
 			if Session.get("mailContinueSend")
 				SmtpClientManager.sendMail to, cc, bcc, subject, body, attachments, isDispositionNotification, ()->
+
+					LocalhostData.unlink("draft_data.json")
+					Session.set("localhost_draft", false)
+
 					path = Session.get("mailBox")
 
 					if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
