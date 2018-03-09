@@ -11,8 +11,9 @@ LocalhostData.tempDraftFilePath = path.join LocalhostData.tempPath, "draft_data.
 
 console.log "LocalhostData.tempPath ", LocalhostData.tempPath
 
-if !fs.existsSync(LocalhostData.tempPath)
-	fs.mkdirSync(LocalhostData.tempPath)
+if Steedos.isNode()
+	if !fs.existsSync(LocalhostData.tempPath)
+		fs.mkdirSync(LocalhostData.tempPath)
 
 LocalhostData.read = (fileName)->
 	_path = path.join LocalhostData.tempPath, fileName
