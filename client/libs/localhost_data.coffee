@@ -4,10 +4,9 @@ if Steedos.isNode()
 	fs = nw.require("fs");
 	path = nw.require('path');
 
+	LocalhostData.tempPath = path.join process.env.USERPROFILE, "Steedos"
 
-LocalhostData.tempPath = path.join process.env.USERPROFILE, "Steedos"
-
-LocalhostData.tempDraftFilePath = path.join LocalhostData.tempPath, "draft_data.json"
+	LocalhostData.tempDraftFilePath = path.join LocalhostData.tempPath, "draft_data.json"
 
 console.log "LocalhostData.tempPath ", LocalhostData.tempPath
 
@@ -16,25 +15,28 @@ if Steedos.isNode()
 		fs.mkdirSync(LocalhostData.tempPath)
 
 LocalhostData.read = (fileName)->
-	_path = path.join LocalhostData.tempPath, fileName
+	if Steedos.isNode()
+		_path = path.join LocalhostData.tempPath, fileName
 
-	data = fs.readFileSync _path, "utf-8"
+		data = fs.readFileSync _path, "utf-8"
 
-	return data
+		return data
 
 LocalhostData.write = (fileName, data)->
+	if Steedos.isNode()
+		_path = path.join LocalhostData.tempPath, fileName
 
-	_path = path.join LocalhostData.tempPath, fileName
+		if _.isObject(data)
+			data = JSON.stringify(data)
 
-	if _.isObject(data)
-		data = JSON.stringify(data)
-
-	fs.writeFileSync(_path, data)
+		fs.writeFileSync(_path, data)
 
 LocalhostData.unlink = (fileName)->
-	_path = path.join LocalhostData.tempPath, fileName
-	fs.unlinkSync(_path)
+	if Steedos.isNode()
+		_path = path.join LocalhostData.tempPath, fileName
+		fs.unlinkSync(_path)
 
 LocalhostData.exists = (fileName)->
-	_path = path.join LocalhostData.tempPath, fileName
-	return fs.existsSync(_path)
+	if Steedos.isNode()
+		_path = path.join LocalhostData.tempPath, fileName
+		return fs.existsSync(_path)
