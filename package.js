@@ -133,6 +133,7 @@ Package.onUse(function(api) {
 
 	api.addFiles('client/views/contact_modal.html', 'client');
 	api.addFiles('client/views/contact_modal.coffee', 'client');
+	api.addFiles('client/views/contact_modal.less', 'client');
 
 	api.addFiles('client/views/select_mail.less', 'client');
 	api.addFiles('client/views/select_mail.html', 'client');
