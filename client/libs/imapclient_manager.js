@@ -286,26 +286,27 @@ ImapClientManager.isNotClient = function(){
 	if (Meteor.loggingIn())
 		return false;
 	
-	swal({
-		title: t("mail_server_interrupte"),
-		text: t("emailjs_mail_refresh"),
-		type: "warning",
-		showCancelButton: true,
-		cancelButtonText: t("mail_refresh"),
-		confirmButtonText: t("emailjs_email"),
-		closeOnConfirm: false
-	},function(reason){
-		Meteor.clearTimeout(ImapClientManager.reload_timeoutId);
-		if (reason == true){
-			//return ;
-			$('body').removeClass("loading");
-			// Modal.show("app_list_box_modal");
-			Steedos.openApp("hMtinEfwb6piZNthc");
-		} else{
-			window.location.reload();
-			sweetAlert.close();
-		}
-	})
+	// swal({
+	// 	title: t("mail_server_interrupte"),
+	// 	text: t("emailjs_mail_refresh"),
+	// 	type: "warning",
+	// 	showCancelButton: true,
+	// 	cancelButtonText: t("emailjs_mail_cancel"),
+	// 	confirmButtonText: t("mail_refresh"),
+	// 	closeOnConfirm: false
+	// },function(reason){
+
+	// 	Meteor.clearTimeout(ImapClientManager.reload_timeoutId);
+
+	// 	if (reason == false){
+	// 		//return ;
+	// 		$('body').removeClass("loading");
+	// 		Modal.show("app_list_box_modal");
+	// 	} else{
+	// 		window.location.reload();
+	// 		sweetAlert.close();
+	// 	}
+	// })
 
 	ImapClientManager.reload_timeoutId = Meteor.setTimeout(function () {
 		window.location.reload();
