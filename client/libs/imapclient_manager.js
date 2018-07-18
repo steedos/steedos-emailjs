@@ -61,6 +61,7 @@ ImapClientManager.getClient = function(auth){
 	return client;
 }
 
+//获取所有Box信息
 ImapClientManager.mailBox = function(client, callback){
 	if (!client)
 		client = this.getClient();
@@ -145,6 +146,11 @@ ImapClientManager.getBodystructure = function(client, path, sequence, callback){
 					}
 
 				});
+
+				if(messages.length < 1){
+					callback(path, null);
+				}
+
 			}catch(err){
 				console.error(err)
 			}
@@ -172,7 +178,6 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 		client.listMessages(path, sequence, query, options).then(function(messages){
 			try{
 				messages.forEach(function(message){
-
 
 					var local_message = MailManager.getMessageByUid(path, message.uid);
 					if(local_message){
@@ -313,7 +318,7 @@ ImapClientManager.isNotClient = function(){
 	}, 5 * 60 * 1000)
 }
 
-ImapClientManager.listMessages = function(client, path, sequence, options, callback){
+ImapClientManager.listMessages = function(client, path, sequence, options, callback, init){
 	if (!client)
 		client = this.getClient();
 	// if (!client)
@@ -323,8 +328,38 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 
 	var query = ['uid', 'flags', 'envelope'];
 
+	if(init){
+		var box = MailManager.getBoxInfo(path);
+		if(box.uidNext){
+			var _ms = LocalhostBox.read(path, box.uidNext.toString());
+			if(_ms){
+				console.log('从本地文件中加载数据....');
+				_ms.forEach(function(hMessage){
+					if(hMessage && hMessage.uid){
+						if(!hMessage.bodyHtml && !hMessage.bodyText){
+							hMessage.summary = true;
+							hMessage.bodyText = {};
+							hMessage.bodyText.data="";
+
+						}else{
+							hMessage.summary = true;
+						}
+						var local_message = MailManager.getMessageByUid(path, hMessage.uid);
+						if(!local_message){
+							MailCollection.getMessageCollection(path).insert(hMessage);
+						}
+					}
+				});
+				client.close();
+				callback(_ms);
+				return
+			}
+		}
+	}
+
 	if (client){
 		client.connect().then(function(){
+			console.log('从远程服务器下载数据....');
 			client.listMessages(path, sequence, query, options).then(function(messages){
 				messages.forEach(function(message){
 					if(message && message.uid){
@@ -342,11 +377,11 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 						var local_message = MailManager.getMessageByUid(path, message.uid);
 						if(local_message){
 							// MailCollection.getMessageCollection(path).update(local_message._id ,hMessage);
-						}else
+						}else{
 							MailCollection.getMessageCollection(path).insert(hMessage);
+						}
 					}
 				});
-
 				client.close();
 				callback(messages);
 			},function(err){
@@ -514,7 +549,7 @@ ImapClientManager.upload = function(client, path, message, callback){
 * 如果当前box的info 数据不存在；
 * 则收取info信息并获取box下的最新数据，条数根据分页数据计算;
 */
-ImapClientManager.initMailboxInfo = function(mailBox, callback){
+ImapClientManager.initMailboxInfo = function(mailBox, callback, init){
 
 	if(!mailBox)
 		return;
@@ -536,7 +571,7 @@ ImapClientManager.initMailboxInfo = function(mailBox, callback){
 	ImapClientManager.selectMailBox(null, mailBox, {readOnly:false}, function(m){
 		ImapClientManager.updateLoadedMxistsIndex(mailBox.path, m.exists);
 		if(mailBox.path.toLocaleLowerCase() === 'inbox')
-			ImapClientManager.mailBoxMessages(mailBox.path, callback);
+			ImapClientManager.mailBoxMessages(mailBox.path, callback, init);
 	});
 
 }
@@ -736,8 +771,7 @@ function handerMessage(message){
 	return rev;
 }
 
-ImapClientManager.mailBoxMessages = function(path, callback){
-
+ImapClientManager.mailBoxMessages = function(path, callback, init){
 	var box = MailManager.getBox(path);
 
 	if(!box)
@@ -765,7 +799,7 @@ ImapClientManager.mailBoxMessages = function(path, callback){
 		if(typeof(callback) == "function"){
 			callback(messages);
 		}
-	});
+	}, init);
 }
 
 
@@ -806,12 +840,14 @@ ImapClientManager.getAttachment = function(path , sequence, bodyPart, callback){
 	}
 }
 
+//设置已读
 ImapClientManager.updateSeenMessage = function(path, uid, callback){
-
 	var message = MailManager.getMessageByUid(path, uid);
 	ImapClientManager.setFlags(null, path, uid, {set: ['\\Seen']}, {byUid:true}, function(messages){
 		messages.forEach(function(m){
 			MailCollection.getMessageCollection(path).update(message._id, {$set:{flags: m.flags}});
+			if(LocalhostBox.inbox_uids.indexOf(uid) > -1)
+				LocalhostBox.write(path, true)
 		})
 		callback();
 	})

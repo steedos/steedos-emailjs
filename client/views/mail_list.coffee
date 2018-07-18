@@ -120,6 +120,7 @@ Template.mail_list.events
         Session.set("mailLoading",true);
         path = Session.get("mailBox");
         MailManager.getNewBoxMessages path, () ->
+            LocalhostBox.write("Inbox");
             Session.set("mailLoading",false);
 
     'click .list-message-delete': (event, template) ->

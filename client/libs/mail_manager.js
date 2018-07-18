@@ -25,13 +25,14 @@ MailManager.initMail = function(callback){
               console.error("MailManager.initMail callback function error:" + e);
             }
           });
-        })
+        });
 
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);
+        LocalhostBox.write("Inbox");
 
-        $(document.body).removeClass('loading');
-      })
+		$(document.body).removeClass('loading');
+      }, true)
     });
 
     setTimeout(MailQuartz.getNewMessages, 1000 * 120);
@@ -169,22 +170,28 @@ MailManager.getMessage = function(uid){
       Session.set("mailMessageLoadding",true);
 
       var getMessage = function (path, message) {
-		  ImapClientManager.getMessageByUid(path, message.uid, MailManager.getMesssageBodyPart(message),function(messages){
-			  Session.set("mailMessageLoadding",false);
-			  messages.forEach(function(m){
-				  if(m.flags.indexOf("\\Seen") == -1){
-					  if(path == "Inbox"){
-						  var tempM = MailCollection.getMessageCollection(path).findOne({uid:m.uid})
-						  if(tempM && tempM.dispositionNotificationTo){
-							  Session.set("isDispositionNotificationAlertNeeded", true);
+          if(message){
+			  ImapClientManager.getMessageByUid(path, message.uid, MailManager.getMesssageBodyPart(message),function(messages){
+				  Session.set("mailMessageLoadding",false);
+				  messages.forEach(function(m){
+					  if(m.flags.indexOf("\\Seen") == -1){
+						  if(path == "Inbox"){
+							  var tempM = MailCollection.getMessageCollection(path).findOne({uid:m.uid})
+							  if(tempM && tempM.dispositionNotificationTo){
+								  Session.set("isDispositionNotificationAlertNeeded", true);
+							  }
 						  }
+						  ImapClientManager.updateSeenMessage(path, message.uid, function(){
+							  ImapClientManager.updateUnseenMessages();
+						  });
 					  }
-					  ImapClientManager.updateSeenMessage(path, message.uid, function(){
-						  ImapClientManager.updateUnseenMessages();
-					  });
-				  }
+				  });
 			  });
-		  });
+          }else{
+			  Session.set("mailMessageLoadding",false);
+			  toastr.error("邮件已被删除")
+			  MailCollection.getMessageCollection(path).update({uid: uid}, {$set: {summary: false}});
+		  }
 	  }
 
       ImapClientManager.getBodystructure(null, path, message.uid, getMessage)
@@ -326,10 +333,11 @@ MailManager.getNewBoxMessages = function(path, callback){
           ImapClientManager.updateUnseenMessages();
         }
         ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
+
+        if(typeof(callback) == 'function'){
+            callback(messages);
+        }
       });
-      if(typeof(callback) == 'function'){
-        callback(messages);
-      }
     // }else{
     //   if(typeof(callback) == 'function'){
     //     callback();
@@ -352,6 +360,8 @@ MailManager.updateBoxInfo = function(path){
       //ImapClientManager.updateLoadedMxistsIndex(path, sequence_s);
       console.log("MailManager.updateBoxInfo run ...." );
     });
+
+	LocalhostBox.write(path, true);
   });
 }
 
