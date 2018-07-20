@@ -131,6 +131,10 @@ Template.mail_list.events
         if uids && uids.length > 0
             Session.set("mailLoading",true);
             MailManager.judgeDelete path, uids
+            console.log('path', path)
+            console.log('MailManager.getBoxBySpecialUse(\'\\\\Drafts\').path', MailManager.getBoxBySpecialUse('\\Drafts').path)
+            if path == MailManager.getBoxBySpecialUse('\\Drafts').path
+                LocalhostDraft.delete(uids)
         else
             toastr.warning("请先选择需要删除的邮件");
 

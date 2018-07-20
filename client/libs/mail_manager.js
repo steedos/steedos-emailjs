@@ -26,7 +26,7 @@ MailManager.initMail = function(callback){
             }
           });
         });
-
+        LocalhostDraft.load();
         Session.set("mailInit", true);
         Session.set("mailBoxInit", true);
         LocalhostBox.write("Inbox");
@@ -530,3 +530,25 @@ MailManager.mailCodeDownload = function(path, uid, callback){
 		})
 	});
 }
+
+
+MailManager.saveLocalDrafts = function (message) {
+	var uid = Session.get("mailMessageId");
+
+	if(uid === 'compose'){
+		uid = (new Date()).getTime()
+    }
+
+    if(message){
+		if(!message.uid){
+			message.uid = Number(uid)
+        }
+		LocalhostDraft.write(message)
+		if(Session.get("mailMessageId") === 'compose'){
+		  FlowRouter.go('/emailjs/b/drafts/' + draftBox.path + '/'+message.uid)
+		}
+	}
+
+	Session.set("mailSending",false);
+	toastr.success("存草稿成功");
+};

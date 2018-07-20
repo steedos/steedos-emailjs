@@ -78,7 +78,7 @@ Template.mailButton.events
 					if path == 'Drafts' || MailManager.getBoxBySpecialUse(path).specialUse == '\\Drafts'
 						uid = Session.get("mailMessageId")
 						MailCollection.getMessageCollection(path).remove({uid:parseInt(uid)});
-
+						LocalhostDraft.delete([parseInt(uid)])
 						FlowRouter.go('/emailjs/b/' + path);
 						MailManager.updateBoxInfo(path);
 					else
@@ -113,10 +113,11 @@ Template.mailButton.events
 			SmtpClientManager.beforeSaveFilter(to, cc, bcc, subject, body, attachments);
 
 			if Session.get("mailIsRunbeforSave")
-				message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user , to, cc, bcc, subject, body,attachments);
-
-
-				MailManager.saveDrafts(message);
+				if Number(Session.get("mailMessageId")) < 1262304000000
+					message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user , to, cc, bcc, subject, body,attachments);
+					MailManager.saveDrafts(message);
+				else
+					MailManager.saveLocalDrafts({to: to, cc: cc, bcc: bcc, subject: subject, body: body, attachments: attachments})
 
 
 	'click .mail-delete': (event, template)->

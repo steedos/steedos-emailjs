@@ -81,6 +81,7 @@ AccountManager.checkAccount = function(callback){
 				LocalhostData.userFolder = LocalhostData.mkdirFolder(Session.get('email_account'));
 
 				LocalhostData.userInboxFolder = LocalhostData.mkdirFolder("inbox", LocalhostData.userFolder);
+				LocalhostData.userDraftFolder = LocalhostData.mkdirFolder("draft", LocalhostData.userFolder);
 
 				MailCollection.email_accounts.insert({});
 

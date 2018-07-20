@@ -69,3 +69,12 @@ LocalhostData.unlinkOther = (fileName, folderPath) ->
 					curPath = path.join folderPath, _file;
 					if !fs.statSync(curPath).isDirectory()
 						fs.unlinkSync(curPath)
+
+LocalhostData.getFolderFileNames = (folderPath)->
+	files = []
+	if Steedos.isNode()
+		if fs.existsSync(folderPath)
+			_files = fs.readdirSync(folderPath);
+			_files.forEach (_file,index) ->
+				files.push _file
+			return files;

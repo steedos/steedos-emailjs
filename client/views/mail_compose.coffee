@@ -14,6 +14,14 @@ Template.mail_compose.helpers
 				return JSON.parse(LocalhostData.read("draft_data.json"))
 			else
 				return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
+#
+#				if Session.get("mailMessageId") != "compose"
+#					if Number(Session.get("mailMessageId")) < 1262304000000
+#						return MailManager.getMessage(parseInt(Session.get("mailMessageId")));
+#					else
+#						return LocalhostDraft.read(Session.get("mailMessageId"))
+#				else
+#					return {}
 
 	mail_to: (to,from) ->
 
@@ -99,7 +107,7 @@ Template.mail_compose.helpers
 			body = "";
 			if message.uid
 				if Session.get("mailJumpDraft")
-					body =  message.bodyHtml.data;
+					body =  message.bodyHtml?.data || message.body;
 				else
 					body =  MailForward.getBody(message);
 			if Session.get("localhost_draft")
@@ -158,7 +166,7 @@ Template.mail_compose.onRendered ->
 			body = "";
 			if message.uid
 				if Session.get("mailJumpDraft")
-					body =  message.bodyHtml.data;
+					body =  message.bodyHtml?.data || message.body;
 				else
 					body =  MailForward.getBody(message);
 

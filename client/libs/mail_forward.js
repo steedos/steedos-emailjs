@@ -57,20 +57,32 @@ MailForward.getAttachmentsHtml = function(){
 		var t=0;
 		message.attachments.forEach(function(item){
 
-			MailAttachment.download(Session.get("mailBox"), message.uid, item.bodyPart, false, function(dirname, name, filePath){
+			if(Number(Session.get("mailMessageId")) < 1262304000000){
+				MailAttachment.download(Session.get("mailBox"), message.uid, item.bodyPart, false, function(dirname, name, filePath){
 
-				var node = MailAttachment.getAttachmentNode(filePath, item.size);
+					var node = MailAttachment.getAttachmentNode(filePath, item.size);
 
+					$("#compose_attachment_list").append(node);
+
+					t = t + 1;
+
+					if(t > 0 && t == m){
+						$(".message-attachments .attachments-loading").addClass("hidden");
+						Session.set("mail_attachment_downloaded",true);
+						$("attachment_donwLoadding").hide();
+					}
+				});
+			}else{
+				var node = MailAttachment.getAttachmentNode(item.path, item.size);
 				$("#compose_attachment_list").append(node);
-
 				t = t + 1;
-
 				if(t > 0 && t == m){
 					$(".message-attachments .attachments-loading").addClass("hidden");
 					Session.set("mail_attachment_downloaded",true);
 					$("attachment_donwLoadding").hide();
 				}
-			});
+			}
+
 		});
 	}
 }
