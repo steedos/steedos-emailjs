@@ -285,32 +285,11 @@ ImapClientManager.isNotClient = function(){
 		return false;
 	if (Meteor.loggingIn())
 		return false;
-	
-	// swal({
-	// 	title: t("mail_server_interrupte"),
-	// 	text: t("emailjs_mail_refresh"),
-	// 	type: "warning",
-	// 	showCancelButton: true,
-	// 	cancelButtonText: t("emailjs_mail_cancel"),
-	// 	confirmButtonText: t("mail_refresh"),
-	// 	closeOnConfirm: false
-	// },function(reason){
 
-	// 	Meteor.clearTimeout(ImapClientManager.reload_timeoutId);
-
-	// 	if (reason == false){
-	// 		//return ;
-	// 		$('body').removeClass("loading");
-	// 		Modal.show("app_list_box_modal");
-	// 	} else{
-	// 		window.location.reload();
-	// 		sweetAlert.close();
-	// 	}
-	// })
-
-	ImapClientManager.reload_timeoutId = Meteor.setTimeout(function () {
-		window.location.reload();
-	}, 5 * 60 * 1000)
+	// 自动重连
+	setTimeout(function() {
+		MailManager.initMail();
+	}, 3000);
 }
 
 ImapClientManager.listMessages = function(client, path, sequence, options, callback){
