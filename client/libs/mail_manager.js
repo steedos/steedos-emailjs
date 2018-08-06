@@ -132,6 +132,10 @@ MailManager.getboxMessages = function(page, page_size, callback){
     if(message == undefined){
       Session.set("mailMessageNull",true);
     }
+
+    if(typeof(callback) == 'function'){
+        callback(message)
+    }
   });
 
   return MailManager.getMessages(MailCollection.getMessageCollection(Session.get("mailBox")), page, page_size);
