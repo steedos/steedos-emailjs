@@ -114,7 +114,7 @@ Template.mailButton.events
 
 			if Session.get("mailIsRunbeforSave")
 				if Number(Session.get("mailMessageId")) < 1262304000000
-					message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user , to, cc, bcc, subject, body,attachments);
+					message = MailMimeBuilder.getMessageMime(AccountManager.getAuth().user , to, cc, bcc, subject, body, attachments);
 					MailManager.saveDrafts(message);
 				else
 					MailManager.saveLocalDrafts({to: to, cc: cc, bcc: bcc, subject: subject, body: body, attachments: attachments})
@@ -134,7 +134,8 @@ Template.mailButton.events
 		Session.set("mailSending",true);
 		path = Session.get("mailBox");
 		uid = Session.get("mailMessageId");
-		MailAttachment.mailCodeDownload path, uid, true, (dirname, name, filePath)->
+		emailFolder = MailAttachment.downloadPath();
+		MailAttachment.mailCodeDownload path, uid, true, emailFolder, (emailFolder, name, filePath)->
 			toastr.success("请选择存储目录");
 			Session.set("mailSending",false);
 

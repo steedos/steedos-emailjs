@@ -9,7 +9,7 @@ if(Steedos.isNode()){
 	os = nw.require('os');
 	exec = nw.require('child_process').exec;
 
-	dirname = path.join(path.normalize(process.env.HOME? process.env.HOME : process.env.USERPROFILE), "Downloads");
+	dirname = path.join(path.normalize(process.env.USERPROFILE), "Steedos");
 
 	dirtemp = process.env.TEMP;
 
@@ -20,11 +20,12 @@ if(Steedos.isNode()){
 MailAttachment = {};
 
 
-MailAttachment.openFile = function(dirname, name){
+MailAttachment.openFile = function(attachPath, name){
+	var cmd = 'start /wait ';
+	if (os.platform() == 'darwin')
+		cmd = 'open -W ';
 
-	var cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
-
-	var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"');
+	// var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"');
     //
 	// var openFileCMD = "explorer " + dirname;
     //
@@ -38,34 +39,34 @@ MailAttachment.openFile = function(dirname, name){
 	// var nameLen = name.length;
 	// var emlLen = name.indexOf(".eml");
 	// if(emlLen != (nameLen - 4)){
-		cmd = os.platform() == 'darwin' ? 'open -W ' : 'start /wait ';
-		cmd += path.join(openFilePath, '\"' + name + '"');
-		exec(cmd, function(error,stdout,stderr){
-			console.log("文件已关闭：" + dirname);
-		});
+	// cmd += path.join(attachPath, '\"' + name + '"');
+	cmd += path.join(attachPath, name);
+	exec(cmd, function(error,stdout,stderr){
+		console.log("文件已关闭：" + dirname);
+	});
 	// }
 }
 
 //data_array: 此值应该来自于 Array.from(Uint8Array)   // new Buffer(new Uint8Array(data_array))
-MailAttachment.save = function(name, data, callback){
+MailAttachment.save = function(name, data, attachPath, callback){
 
-	var filePath = path.join(path.normalize(dirname), name);
+	var filePath = path.join(path.normalize(attachPath), name);
 
 	var file = fs.createWriteStream(filePath);
 	file.write(new Buffer(data), function (err) {
 		file.end();
         if (err) throw err;
-        callback(dirname, name, filePath);
+        callback(attachPath, name, filePath);
     })
 }
 
-MailAttachment.saveAs = function (name, data, callback) {
-    var filePath = path.join(path.normalize(dirname), name);
+MailAttachment.saveAs = function (name, data, attachPath, callback) {
+    var filePath = path.join(path.normalize(attachPath), name);
 
     var file = new File([data], name, {type: steedosMime.lookup(name)});
     FileSaver.saveAs(file);
 
-    callback(dirname, name, filePath);
+    callback(attachPath, name, filePath);
 }
 
 MailAttachment.handerInline = function(path, message){
@@ -97,37 +98,83 @@ MailAttachment.handerInline = function(path, message){
 }
 
 
-MailAttachment.download = function(path, uid, bodyPart, saveAs, callback){
-
+MailAttachment.download = function(path, uid, bodyPart, saveAs, attachPath, callback){
 	ImapClientManager.getAttachmentByPart(path, uid, bodyPart, function(filename, data){
-		fs.exists(dirname, function(exists){
+		fs.exists(attachPath, function(exists){
             if(saveAs){
-                MailAttachment.saveAs(filename, data, function(dirname, name, filePath){
-                    callback(dirname, name, filePath);
+                MailAttachment.saveAs(filename, data, attachPath, function(attachPath, name, filePath){
+                    callback(attachPath, name, filePath);
                 })
             }else{
                 if(!exists){
-                    fs.mkdir(dirname, function(err) {
+                    fs.mkdir(attachPath, function(err) {
                         if (err) {
                             toastr.error(err);
                         }else{
-                            MailAttachment.save(filename, data, function(dirname, name, filePath){
-                                callback(dirname, name, filePath);
+                            MailAttachment.save(filename, data, attachPath, function(attachPath, name, filePath){
+                                callback(attachPath, name, filePath);
                             })
                         }
                     })
                 }else{
-                    MailAttachment.save(filename, data, function(dirname, name, filePath){
-                        callback(dirname, name, filePath);
+                    MailAttachment.save(filename, data, attachPath, function(attachPath, name, filePath){
+                        callback(attachPath, name, filePath);
                     })
                 }
             }
 		})
-
-	});
-
+	})
 }
 
+MailAttachment.fileExists = function(filePath,name){
+	var file = path.join(filePath,name);
+	
+	if (fs.existsSync(file))
+		return true;
+	
+	return false;
+}
+
+MailAttachment.downloadPath = function(){
+	try{
+		var mailBox = Session.get("mailBox");
+		
+		var message = MailManager.getMessage(parseInt(Session.get("mailMessageId")));
+		
+		var box = MailManager.getBox(Session.get("mailBox"));
+
+		var uid = message.uid;
+		
+		if (box.path == "Drafts")
+			return;
+
+		if (box.path == "Inbox")
+			mailBox = "inbox";
+		
+		if (JSON.stringify(message) == "{}")
+			uid = box.info.uidNext;
+
+		var userFolder = LocalhostData.mkdirFolder(Session.get('email_account'));
+
+		var userInboxFolder = LocalhostData.mkdirFolder(mailBox, userFolder);
+		
+		var emailFolder = LocalhostData.mkdirFolder(uid.toString(), userInboxFolder);
+
+	}catch(e){
+		$(document.body).removeClass('loading');
+		console.error("Open attachment error: ", e);
+		return;
+	}
+	
+	if (emailFolder)
+		return emailFolder;
+	else 
+		return dirname;
+}
+
+MailAttachment.attachFilePath = function(filePath,name){
+	return path.join(filePath,name);
+}
 
 MailAttachment.check = function(fileName){
 	if(!fileName){
@@ -254,29 +301,28 @@ MailAttachment.getAttachmentNode = function(filePath, fileSize){
 }
 
 
-MailAttachment.mailCodeDownload = function(path, uid, saveAs, callback){
+MailAttachment.mailCodeDownload = function(path, uid, saveAs, emailFolder, callback){
 	try{
-
 		ImapClientManager.getMailCode(path, uid, function(filename, data){
             if(saveAs){
-                MailAttachment.saveAs(filename, data, function(dirname, name, filePath){
-                    callback(dirname, name, filePath);
-                })
+                MailAttachment.saveAs(filename, data, emailFolder, function(emailFolder, name, filePath){
+                	callback(emailFolder, name, filePath);
+				})
             }else{
-                fs.exists(dirname, function(exists){
+                fs.exists(emailFolder, function(exists){
                     if(!exists){
-                        fs.mkdir(dirname, function(err) {
+                        fs.mkdir(emailFolder, function(err) {
                             if (err) {
                                 toastr.error(err);
                             }else{
-                                MailAttachment.save(filename, data, function(dirname, name, filePath){
-                                    callback(dirname, name, filePath);
+                                MailAttachment.save(filename, data, emailFolder, function(emailFolder, name, filePath){
+                                    callback(emailFolder, name, filePath);
                                 })
                             }
                         })
                     }else{
-                        MailAttachment.save(filename, data, function(dirname, name, filePath){
-                            callback(dirname, name, filePath);
+                        MailAttachment.save(emailFolder, data, emailFolder, function(emailFolder, name, filePath){
+                            callback(emailFolder, name, filePath);
                         })
                     }
                 })

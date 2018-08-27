@@ -43,6 +43,9 @@ MailForward.getBody = function(message){
 
 MailForward.getAttachmentsHtml = function(){
 	var message = MailManager.getMessage(parseInt(Session.get("mailMessageId")));
+	
+	var emailFolder = MailAttachment.downloadPath();
+	
 	if(message.uid){
 
 		Session.set("mail_attachment_downloaded",true);
@@ -58,9 +61,8 @@ MailForward.getAttachmentsHtml = function(){
 		message.attachments.forEach(function(item){
 
 			if(Number(Session.get("mailMessageId")) < 1262304000000){
-				MailAttachment.download(Session.get("mailBox"), message.uid, item.bodyPart, false, function(dirname, name, filePath){
-
-					var node = MailAttachment.getAttachmentNode(filePath, item.size);
+				if (MailAttachment.fileExists(emailFolder,item.name)){
+					var node = MailAttachment.getAttachmentNode(MailAttachment.attachFilePath(emailFolder,item.name), item.size);
 
 					$("#compose_attachment_list").append(node);
 
@@ -71,7 +73,22 @@ MailForward.getAttachmentsHtml = function(){
 						Session.set("mail_attachment_downloaded",true);
 						$("attachment_donwLoadding").hide();
 					}
-				});
+				}else{
+					MailAttachment.download(Session.get("mailBox"), message.uid, item.bodyPart, false, emailFolder, function(emailFolder, name, filePath){
+
+						var node = MailAttachment.getAttachmentNode(filePath, item.size);
+	
+						$("#compose_attachment_list").append(node);
+	
+						t = t + 1;
+	
+						if(t > 0 && t == m){
+							$(".message-attachments .attachments-loading").addClass("hidden");
+							Session.set("mail_attachment_downloaded",true);
+							$("attachment_donwLoadding").hide();
+						}
+					});
+				}
 			}else{
 				var node = MailAttachment.getAttachmentNode(item.path, item.size);
 				$("#compose_attachment_list").append(node);

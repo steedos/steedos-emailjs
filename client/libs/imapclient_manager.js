@@ -488,7 +488,7 @@ ImapClientManager.moveMessages = function(client, fromPath, toPath, uids, callba
 }
 
 ImapClientManager.deleteMessages = function(client, path, uids,callback){
-		var trash = MailManager.getBoxBySpecialUse("\\Trash").path;
+	var trash = MailManager.getBoxBySpecialUse("\\Trash").path;
 	ImapClientManager.moveMessages(client, path, trash, uids, callback);
 }
 

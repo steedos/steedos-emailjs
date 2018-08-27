@@ -48,10 +48,11 @@ Template.read_mail.helpers
 Template.read_mail.events
 	'click .mailbox-attachment-name': (event, template)->
 		$(document.body).addClass('loading');
-		toastr.info("下载中，请稍后...");
+		# $('.loading-text').text("正在下载...");
+
 		att_index = parseInt(event.target.dataset.index);
 
-		path = Session.get("mailBox");
+		mailBox = Session.get("mailBox");
 
 		message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
 
@@ -59,17 +60,26 @@ Template.read_mail.events
 
 		att = message.attachments[att_index];
 
-		MailAttachment.download path, uid, att.bodyPart, false, (dirname, name, filePath)->
-			toastr.success("附件已打开");
-			$(document.body).removeClass('loading');
-			MailAttachment.openFile(dirname, name);
+		emailFolder = MailAttachment.downloadPath();
 
+		# 判断本地是否已缓存附件
+		if MailAttachment.fileExists(emailFolder, att.name)
+			$(document.body).removeClass('loading');
+			MailAttachment.openFile(emailFolder, att.name);
+
+		else
+			MailAttachment.download mailBox, uid, att.bodyPart, false, emailFolder, (emailFolder, name, filePath)->
+				# toastr.success("附件已打开");
+				$(document.body).removeClass('loading');
+				MailAttachment.openFile(emailFolder, name);
+
+	
 	'click .mailbox-attachment-saveAs': (event, template)->
 		$(document.body).addClass('loading');
-		toastr.info("下载中，请稍后...");
+		# $('.loading-text').text("正在下载...");
 		att_index = parseInt(event.target.dataset.index);
 
-		path = Session.get("mailBox");
+		mailBox = Session.get("mailBox");
 
 		message = MailManager.getMessage(parseInt(Session.get("mailMessageId")))
 
@@ -77,10 +87,13 @@ Template.read_mail.events
 
 		att = message.attachments[att_index];
 
-		MailAttachment.download path, uid, att.bodyPart, true, (dirname, name, filePath)->
+		emailFolder = MailAttachment.downloadPath();
+
+		MailAttachment.download mailBox, uid, att.bodyPart, true, emailFolder, (emailFolder, name, filePath)->
 			toastr.success("请选择存储目录");
 			$(document.body).removeClass('loading');
 
+	
 	'click .mail-address-serach': (event, template)->
 		console.log("click .mail-address");
 		Session.set("mailLoading",true);
