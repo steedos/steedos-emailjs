@@ -48,7 +48,6 @@ Template.read_mail.helpers
 Template.read_mail.events
 	'click .mailbox-attachment-name': (event, template)->
 		$(document.body).addClass('loading');
-		# $('.loading-text').text("正在下载...");
 
 		att_index = parseInt(event.target.dataset.index);
 
@@ -68,6 +67,8 @@ Template.read_mail.events
 			MailAttachment.openFile(emailFolder, att.name);
 
 		else
+			toastr.info("下载中，请稍后...");
+			
 			MailAttachment.download mailBox, uid, att.bodyPart, false, emailFolder, (emailFolder, name, filePath)->
 				# toastr.success("附件已打开");
 				$(document.body).removeClass('loading');
@@ -76,7 +77,7 @@ Template.read_mail.events
 	
 	'click .mailbox-attachment-saveAs': (event, template)->
 		$(document.body).addClass('loading');
-		# $('.loading-text').text("正在下载...");
+		toastr.info("下载中，请稍后...");
 		att_index = parseInt(event.target.dataset.index);
 
 		mailBox = Session.get("mailBox");
