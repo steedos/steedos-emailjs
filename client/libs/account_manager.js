@@ -86,6 +86,9 @@ AccountManager.checkAccount = function(callback){
 				MailCollection.email_accounts.insert({});
 
 				MailManager.initMail(callback);
+
+				// 自动清理一周前本地缓存的附件
+				LocalhostData.rmdir(LocalhostData.userInboxFolder);
 			}else{
 				try{
 					if(callback){
