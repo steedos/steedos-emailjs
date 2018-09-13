@@ -182,7 +182,7 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 					var local_message = MailManager.getMessageByUid(path, message.uid);
 					if(local_message){
 
-						local_message.flags = messages.flags;
+						local_message.flags = message.flags;
 
 						local_message.summary = false;
 
@@ -338,10 +338,12 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 
 	if (client){
 		client.connect().then(function(){
-			console.log('从远程服务器下载数据....');
+			console.log('从远程服务器下载数据....',path, sequence, query, options);
 			client.listMessages(path, sequence, query, options).then(function(messages){
+				console.log('messages.length', messages.length)
 				messages.forEach(function(message){
 					if(message && message.uid){
+						console.log('message', message)
 
 						var hMessage = handerMessage(message);
 						if(!hMessage.bodyHtml && !hMessage.bodyText){
@@ -355,8 +357,10 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 						}
 						var local_message = MailManager.getMessageByUid(path, message.uid);
 						if(local_message){
+							console.log('update.....................')
 							// MailCollection.getMessageCollection(path).update(local_message._id ,hMessage);
 						}else{
+							console.log('update ', path, hMessage)
 							MailCollection.getMessageCollection(path).insert(hMessage);
 						}
 					}
