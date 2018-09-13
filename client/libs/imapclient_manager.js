@@ -312,7 +312,7 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 		if(box.uidNext){
 			var _ms = LocalhostBox.read(path, box.uidNext.toString());
 			if(_ms){
-				console.log('从本地文件中加载数据....');
+				console.log('从本地文件中加载数据.........');
 				_ms.forEach(function(hMessage){
 					if(hMessage && hMessage.uid){
 						if(!hMessage.bodyHtml && !hMessage.bodyText){
@@ -329,8 +329,39 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 						}
 					}
 				});
-				client.close();
-				callback(_ms);
+
+				if (client){
+					client.connect().then(function(){
+						console.log('检测本地数据准确性 从远程服务器下载数据....', path, sequence, ['uid'], options);
+						client.listMessages(path, sequence, ['uid'], options).then(function(messages){
+							// console.log('get uid ------> messages', messages)
+							if(messages && _.isArray(messages)){
+								uidTop20 = messages.getProperty("uid")
+								localUid = MailCollection.getMessageCollection(path).find({}, {fields: {uid: 1},sort:{uid: 1}}).fetch().getProperty("uid")
+								diffUid = _.difference(uidTop20, localUid)
+								// console.log('uidTop20', uidTop20)
+								// console.log('localUid', localUid)
+								console.log('diffUid', diffUid)
+								if(diffUid.length > 0 ){
+									console.log('load diffUid', diffUid)
+									ImapClientManager.listMessages(null, path, diffUid, {byUid: true}, function (_ms) {
+										LocalhostBox.write("Inbox", true)
+									});
+								}
+							}
+							client.close();
+							callback(_ms);
+						},function(err){
+							if (err)
+								ImapClientManager.isNotClient();
+						});
+					},function(err){
+						if (err)
+							ImapClientManager.isNotClient();
+					});
+				} else{
+					ImapClientManager.isNotClient();
+				}
 				return
 			}
 		}
