@@ -21,9 +21,9 @@ MailAttachment = {};
 
 
 MailAttachment.openFile = function(attachPath, name){
-	var cmd = 'start /wait ';
+	var cmd = 'start "" ' + '\"' + path.join(attachPath, name) + '\"';
 	if (os.platform() == 'darwin')
-		cmd = 'open -W ';
+		cmd = 'open "" ' + '\"' + path.join(attachPath, name) + '\"';
 
 	// var openFilePath = path.join(process.env.HOMEDRIVE, '\"'  + path.join(process.env.HOMEPATH,"Downloads") + '\"');
     //
@@ -39,8 +39,8 @@ MailAttachment.openFile = function(attachPath, name){
 	// var nameLen = name.length;
 	// var emlLen = name.indexOf(".eml");
 	// if(emlLen != (nameLen - 4)){
-	// cmd += path.join(attachPath, '\"' + name + '"');
-	cmd += path.join(attachPath, name);
+	// cmd += path.join(attachPath, '\"' + name + '\"');
+	// cmd += '\"' + path.join(attachPath, name) + '\"';
 	exec(cmd, function(error,stdout,stderr){
 		console.log("文件已关闭：" + dirname);
 	});
