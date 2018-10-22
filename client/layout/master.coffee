@@ -15,19 +15,20 @@ Template.emailjsLayout.onRendered ->
 Template.emailjsLayout.helpers 
     
     subsReady: ->
-        if Steedos.subsMail.ready()
-
+        if Steedos.subsMail.ready() && Session.get("spaceId")
             unless Meteor.userId()
               return false
             if Meteor.loggingIn()
               # 正在登录中，则不做处理，因为此时Meteor.userId()不足于证明已登录状态
               return false
+
             AccountManager.checkAccount (message)->
                 if !message
                     Modal.hide("mailAccount");
                 else
                     setTimeout (->
-                      Modal.show "mailAccount"
+                        toastr.error("账户验证失败", "",{timeOut: 1000 * 60 * 30})
+                        Modal.show "mailAccount"
                       ),1000
     
 

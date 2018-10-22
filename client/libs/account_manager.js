@@ -1,13 +1,17 @@
-AccountManager = {};
+AccountManager = {_auth: null};
 
 _AccountsRemote = new AjaxCollection("mail_accounts")
 
 AccountManager.getAuth = function(){
-
+	if(!_.isEmpty(AccountManager._auth)){
+		return AccountManager._auth;
+	}
 	var mail_account = _AccountsRemote.findOne();
+	// console.log('mail_account', mail_account);
 	if(!mail_account)
 		return ;
-	return {user: mail_account.email,pass: mail_account.password};
+	AccountManager._auth = {user: mail_account.email,pass: mail_account.password};
+	return AccountManager._auth;
 }
 
 AccountManager.getMailDomain = function(user){
@@ -58,7 +62,7 @@ AccountManager.checkAccount = function(callback){
 			return false;
 		}
 
-		var imapClient = ImapClientManager.getClient();
+		var imapClient = ImapClientManager.getClient(userAuth);
 		var pro = imapClient.connect();
 
 		pro.then(function(){

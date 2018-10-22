@@ -23,7 +23,7 @@ Meteor.startup ->
 		updateMailAccount:
 			onSuccess: (formType, result) ->
 				toastr.success t('saved_successfully');
-
+				AccountManager._auth = null;
 				AccountManager.checkAccount (message)->
 					if !message
 						Modal.hide("mailAccount");
