@@ -647,6 +647,10 @@ ImapClientManager.base64DecodeToUint8Array = function(str){
 }
 
 ImapClientManager.decodeToUint8Array = function(str, bodyPart){
+	if(bodyPart.encoding == 'base64'){
+		//MimeCodec.base64Decode 函数如果没有传入第二个参数, 会默认为 'buffer' 导致文件乱码, 因此直接使用MimeCodec.base64.decode函数
+		return MimeCodec.base64.decode(str);
+	}
 	return decode(str, bodyPart)
 }
 
