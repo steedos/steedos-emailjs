@@ -9,6 +9,11 @@ ImapClientManager = {};
  */
 ImapClientManager.LOG_LEVEL = 20
 
+ImapClientManager._clientConnectOnError = function(error){
+	console.log('[ImapClientManager._clientConnectOnError]:', error);
+	ImapClientManager.isNotClient();
+};
+
 
 var ImapClient, MimeParser, Encoding, MimeCodec, loadStep = MailPage.pageSize;
 
@@ -86,6 +91,8 @@ ImapClientManager.mailBox = function(client, callback){
 			client.close();
 			callback();
 		});
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
 	});
 }
 
@@ -108,6 +115,8 @@ ImapClientManager.selectMailBox = function(client, mailBox, options, callback){
 			client.close();
 			callback(m);
 		});
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
 	});
 }
 
@@ -161,6 +170,8 @@ ImapClientManager.getBodystructure = function(client, path, sequence, callback){
 			console.error( 'IMAP getBodystructure function called: ', reason );
 			toastr.error("邮件内容查看失败，请登录中油WEB邮箱地址查看")
 		});
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
 	});
 }
 
@@ -215,6 +226,8 @@ ImapClientManager.getMessageBodyByPart = function(client, path, sequence, option
 			client.close();
 			callback(messages);
 		});
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
 	});
 }
 
@@ -242,6 +255,8 @@ ImapClientManager.getMailCode = function(path, uid, callback){
 			callback(filename, code);
 			client.close();
 		});
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
 	});
 }
 
@@ -270,10 +285,10 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 						data = bodyMime;
 					}else if(bodyPart.type.indexOf("image/") > -1){
 						filename = "image.jpg";
-						data = ImapClientManager.base64DecodeToUint8Array(bodyMime);
+						data = ImapClientManager.decodeToUint8Array(bodyMime, bodyPart);
 					}else{
 						filename = bodyPart.dispositionParameters.filename;
-						data = ImapClientManager.base64DecodeToUint8Array(bodyMime);
+						data = ImapClientManager.decodeToUint8Array(bodyMime, bodyPart);
 					}
 					callback(filename, data);
 				});
@@ -282,6 +297,8 @@ ImapClientManager.getAttachmentByPart = function(path, sequence, bodyPart, callb
 			}
 			client.close();
 		});
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
 	});
 }
 
@@ -358,6 +375,8 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 					},function(err){
 						if (err)
 							ImapClientManager.isNotClient();
+					}).catch(function (err) {
+						ImapClientManager._clientConnectOnError(err)
 					});
 				} else{
 					ImapClientManager.isNotClient();
@@ -401,6 +420,8 @@ ImapClientManager.listMessages = function(client, path, sequence, options, callb
 		},function(err){
 			if (err)
 				ImapClientManager.isNotClient();
+		}).catch(function (err) {
+			ImapClientManager._clientConnectOnError(err)
 		});
 	} else{
 		ImapClientManager.isNotClient();
@@ -440,6 +461,8 @@ ImapClientManager.listSearchMessages = function(client, path, sequence, options,
 			client.close();
 			callback(messages);
 		});
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
 	});
 }
 
@@ -458,7 +481,9 @@ ImapClientManager.searchUnseenMessages = function(client, path, query, callback)
 			client.close();
 			callback(result);
 		})
-	})
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
+	});
 }
 
 
@@ -486,7 +511,9 @@ ImapClientManager.search = function(client, path, query, callback){
 			toastr.error("您的邮箱不支持搜索功能");
 			console.error("[ImapClientManager.search] Error: " +  reject);
 		})
-	})
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
+	});
 }
 
 ImapClientManager.setFlags = function(client, path, sequence, flags, options, callback){
@@ -498,6 +525,8 @@ ImapClientManager.setFlags = function(client, path, sequence, flags, options, ca
 			client.close();
 			callback(messages);
 		});
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
 	});
 
 }
@@ -515,7 +544,9 @@ ImapClientManager.moveMessages = function(client, fromPath, toPath, uids, callba
 				callback();
 			}
 		})
-	})
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
+	});
 }
 
 ImapClientManager.deleteMessages = function(client, path, uids,callback){
@@ -537,7 +568,9 @@ ImapClientManager.completeDeleteMessages = function(client, path, uids, callback
 				callback();
 			}
 		})
-	})
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
+	});
 }
 
 ImapClientManager.upload = function(client, path, message, callback){
@@ -551,6 +584,8 @@ ImapClientManager.upload = function(client, path, message, callback){
 				callback();
 			}
 		});
+	}).catch(function (err) {
+		ImapClientManager._clientConnectOnError(err)
 	});
 }
 
@@ -609,6 +644,10 @@ function base64Decode(str, fromCharset){
 
 ImapClientManager.base64DecodeToUint8Array = function(str){
 	return MimeCodec.base64.decode(str)
+}
+
+ImapClientManager.decodeToUint8Array = function(str, bodyPart){
+	return decode(str, bodyPart)
 }
 
 function quotedPrintableDecode(str, fromCharset){
