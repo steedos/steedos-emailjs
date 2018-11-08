@@ -83,7 +83,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, is
 		}
 
 		client.onerror = function(err){
-			client.onclose(isError);
+			client.onclose(err);
 		}
 
 		client.connect();
