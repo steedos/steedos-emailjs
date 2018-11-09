@@ -14,17 +14,23 @@ Template.contacts_modal.events
     'click #confirm': (event, template) ->
         console.log("..confirm");
         
-        # targetId = template.data.targetId;
+        targetId = template.data.targetId;
 
-        selectize = $("#"+template.data.targetId)[0].selectize
+        if $("#"+template.data.targetId).length > 0
 
-        values = ContactsManager.getContactModalValue();
+            selectize = $("#"+template.data.targetId)[0].selectize
 
-        values.forEach (value)->
-#           console.log value.name
-           selectize.createItem(value.name + "<" + value.email + ">")
+            values = ContactsManager.getContactModalValue();
 
-        Modal.hide("contacts_modal");
+            values.forEach (value)->
+    #           console.log value.name
+               selectize.createItem(value.name + "<" + value.email + ">")
+        else
+            values = ContactsManager.getContactModalValue();
+            values.forEach (value)->
+                $("#fssh-webmail-iframe")[0].contentWindow.O(targetId).addressAdd('"'+value.name+'" &lt;'+value.email+'&gt;')
+
+        Modal.hide(template);
 
 Template.contacts_modal.onRendered ->
 	$(".steedos-mail-contacts-modal").css("height", ($(window).height() - 180 - 25) + "px")
