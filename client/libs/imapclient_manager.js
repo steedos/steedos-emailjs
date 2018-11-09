@@ -310,8 +310,9 @@ ImapClientManager.isNotClient = function(){
 	
 	// 自动重连
 	setTimeout(function() {
+		toastr.info("邮件服务器断开，正在尝试重连...");
 		MailManager.initMail();
-	}, 3000);
+	}, 60000*5);
 }
 
 ImapClientManager.listMessages = function(client, path, sequence, options, callback, init){
