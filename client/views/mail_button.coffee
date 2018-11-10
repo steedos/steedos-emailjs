@@ -34,6 +34,9 @@ Template.mailButton.events
 		$(".remove_bcc").hide();
 
 	'click #compose-send': (event)->
+		# 邮件状态设置
+		MailState.value = "sending"
+		
 		# mail_attachment_downloaded"表示邮件转发时正在加载附件，此时不能发送邮件
 		if Session.get("mail_attachment_downloaded") == false
 			toastr.error("附加正在加载中....请稍等");

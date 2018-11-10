@@ -74,10 +74,13 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, is
 
 		client.ondone = function(success){
 			if(success){
+				MailState.value = 0;
+
 				toastr.success("发送成功");
 				Session.set("mailSending",false);
 				callback();
 			}else{
+				MailState.value = 0;
 				toastr.success("发送不成功");
 			}
 		}
