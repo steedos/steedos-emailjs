@@ -30,16 +30,20 @@ SmtpClientManager.getClient = function(){
 
 
 SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, isDispositionNotification, callback){
+	// 邮件状态设置
+	MailState.value = "sending"
+	
 	var auth = AccountManager.getAuth();
 	var from = auth.user;
 	try{
 		var client = SmtpClientManager.getClient();
 
 		var alreadySending  = false;
-
+		
 		client.onidle = function(){
-			if(alreadySending ){
+			if(alreadySending){
 				client.close();
+				MailState.value = 0;
 				return
 			}
 
@@ -75,7 +79,6 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, is
 		client.ondone = function(success){
 			if(success){
 				MailState.value = 0;
-
 				toastr.success("发送成功");
 				Session.set("mailSending",false);
 				callback();
@@ -86,6 +89,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, is
 		}
 
 		client.onerror = function(err){
+			MailState.value = 0;
 			client.onclose(err);
 		}
 

@@ -34,14 +34,12 @@ Template.mailButton.events
 		$(".remove_bcc").hide();
 
 	'click #compose-send': (event)->
-		# 邮件状态设置
-		MailState.value = "sending"
-		
 		# mail_attachment_downloaded"表示邮件转发时正在加载附件，此时不能发送邮件
 		if Session.get("mail_attachment_downloaded") == false
 			toastr.error("附加正在加载中....请稍等");
 		else
 			$(document.body).addClass('loading');
+			
 			if MailManager.getContacts("mail_to") == null || MailManager.getContacts("mail_to").length < 1
 				toastr.warning("请填写收件人")
 				$(document.body).removeClass('loading');
@@ -72,7 +70,6 @@ Template.mailButton.events
 
 			if Session.get("mailContinueSend")
 				SmtpClientManager.sendMail to, cc, bcc, subject, body, attachments, isDispositionNotification, ()->
-
 					LocalhostData.unlink("draft_data.json")
 					Session.set("localhost_draft", false)
 
