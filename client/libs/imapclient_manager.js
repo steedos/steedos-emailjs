@@ -312,6 +312,9 @@ ImapClientManager.isNotClient = function(){
 	if (MailState.value != 1)
 		ImapClientManager.reconnectInfo();
 
+	// 重连前clearTimeout
+	Meteor.clearTimeout(ImapClientManager.reload_timeoutId);
+	
 	// 自动重连
 	ImapClientManager.reload_timeoutId();
 }
