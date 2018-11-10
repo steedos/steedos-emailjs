@@ -308,8 +308,8 @@ ImapClientManager.isNotClient = function(){
 	if (Meteor.loggingIn())
 		return false;
 	
-	// 判断当前状态是否为用户操作 0：系统  1：用户
-	if (MailState.value == 1)
+	// 判断当前状态是否为系统操作 0：无操作  1：系统
+	if (MailState.value != 1)
 		ImapClientManager.reconnectInfo();
 
 	// 自动重连
