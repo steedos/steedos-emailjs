@@ -86,19 +86,24 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, is
 				MailState.value = 0;
 				toastr.error("邮件发送失败");
 			}
+			client.quit();
 		}
 
 		client.onerror = function(err){
 			MailState.value = 0;
 			client.onclose(err);
-		}
+		};
+
+		client.onclose = function (isError) {
+			console.log('smtpClient.onclose...');
+		};
 
 		client.connect();
 
 	}catch(e){
+		client.close();
 		console.error(e);
 	}finally{
-		client.close();
 		Session.set("mailIsRunbeforSend",false);
 		Session.set("mailContinueSend",false);
 	}
