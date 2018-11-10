@@ -95,7 +95,7 @@ SmtpClientManager.sendMail = function(to, cc, bcc,subject, body, attachments, is
 		};
 
 		client.onclose = function (isError) {
-			console.log('smtpClient.onclose...');
+			console.log('smtpClient.onclose...', isError);
 		};
 
 		client.connect();
