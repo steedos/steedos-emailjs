@@ -12,9 +12,11 @@ MailQuartz.getNewMessages = function(){
 	}
 
 	MailQuartz.intervalId = setInterval(function(){
+		MailState.value = 0;
 		MailManager.getNewBoxMessages("Inbox",function(messages){
 			LocalhostBox.write("Inbox");
 			MailNotification.send(messages);
+			MailState.value = 1;
 		});
 	},MailQuartz._millisec);
 }

@@ -308,11 +308,41 @@ ImapClientManager.isNotClient = function(){
 	if (Meteor.loggingIn())
 		return false;
 	
+	// 判断当前状态是否为用户操作 0：系统  1：用户
+	if (MailState.value == 1)
+		ImapClientManager.reconnectInfo();
+
 	// 自动重连
-	setTimeout(function() {
-		toastr.info("邮件服务器断开，正在尝试重连...");
-		MailManager.initMail();
-	}, 60000*5);
+	ImapClientManager.reload_timeoutId();
+}
+
+ImapClientManager.reload_timeoutId = Meteor.setTimeout(function () {
+	toastr.info("邮件服务器断开，正在尝试重连...");
+	MailManager.initMail();
+}, 5 * 60 * 1000)
+
+ImapClientManager.reconnectInfo = function(){
+	swal({
+		title: t("mail_server_interrupte"),
+		text: t("emailjs_mail_refresh"),
+		type: "warning",
+		showCancelButton: true,
+		cancelButtonText: t("emailjs_mail_cancel"),
+		confirmButtonText: t("mail_refresh"),
+		closeOnConfirm: false
+	},function(reason){
+
+		Meteor.clearTimeout(ImapClientManager.reload_timeoutId);
+
+		if (reason == false){
+			//return ;
+			$('body').removeClass("loading");
+			// Modal.show("app_list_box_modal");
+		} else{
+			window.location.reload();
+			sweetAlert.close();
+		}
+	})
 }
 
 ImapClientManager.listMessages = function(client, path, sequence, options, callback, init){

@@ -35,31 +35,31 @@ Package.onUse(function(api) {
 	api.use('underscore');
 	api.use('tracker');
 	api.use('session');
-    api.use('blaze');
-    api.use('templating');
-    api.use('modules');
-    api.use('npm-bcrypt');
-    api.use('steedos:lib');
-    api.use('steedos:base');
-    api.use('steedos:ui');
-    api.use('steedos:contacts');
-    api.use('flemay:less-autoprefixer@1.2.0');
-    api.use('simple:json-routes@2.1.0');
-    api.use('nimble:restivus@0.8.7');
-    api.use('aldeed:simple-schema@1.3.3');
-    api.use('aldeed:collection2@2.5.0');
-    api.use('aldeed:tabular@1.6.1');
-    api.use('aldeed:autoform@5.8.0');
-    api.use('matb33:collection-hooks@0.8.1');
-    api.use('steedos:cfs-standard-packages');
-    api.use('kadira:blaze-layout@2.3.0');
-    api.use('kadira:flow-router@2.10.1');
-    api.use('steedos:cfs-aliyun');
-    api.use('steedos:cfs-s3');
+	api.use('blaze');
+	api.use('templating');
+	api.use('modules');
+	api.use('npm-bcrypt');
+	api.use('steedos:lib');
+	api.use('steedos:base');
+	api.use('steedos:ui');
+	api.use('steedos:contacts');
+	api.use('flemay:less-autoprefixer@1.2.0');
+	api.use('simple:json-routes@2.1.0');
+	api.use('nimble:restivus@0.8.7');
+	api.use('aldeed:simple-schema@1.3.3');
+	api.use('aldeed:collection2@2.5.0');
+	api.use('aldeed:tabular@1.6.1');
+	api.use('aldeed:autoform@5.8.0');
+	api.use('matb33:collection-hooks@0.8.1');
+	api.use('steedos:cfs-standard-packages');
+	api.use('kadira:blaze-layout@2.3.0');
+	api.use('kadira:flow-router@2.10.1');
+	api.use('steedos:cfs-aliyun');
+	api.use('steedos:cfs-s3');
 
-    api.use('meteorhacks:ssr@2.2.0');
-    api.use('meteorhacks:subs-manager');
-    api.use('tap:i18n@1.7.0');
+	api.use('meteorhacks:ssr@2.2.0');
+	api.use('meteorhacks:subs-manager');
+	api.use('tap:i18n@1.7.0');
 	api.use('momentjs:moment', 'client');
 	api.use('mrt:moment-timezone', 'client');
 
@@ -70,10 +70,10 @@ Package.onUse(function(api) {
 	api.addFiles(tapi18nFiles, ['client', 'server']);
 
 
-    api.addFiles('client/libs/file-saver/FileSaver.js', 'client');
-    api.addFiles('client/libs/file-saver/SteedosMimeTypes.js', 'client');
+	api.addFiles('client/libs/file-saver/FileSaver.js', 'client');
+	api.addFiles('client/libs/file-saver/SteedosMimeTypes.js', 'client');
 
-    api.addFiles('lib/core.coffee', ['client', 'server']);
+	api.addFiles('lib/core.coffee', ['client', 'server']);
 	api.addFiles('lib/models/mail_accounts.coffee', ['client', 'server']);
 	api.addFiles('lib/models/mail_domains.coffee', ['client', 'server']);
 
@@ -111,6 +111,8 @@ Package.onUse(function(api) {
 	api.addFiles('client/libs/mail_notification.js', 'client');
 
 	api.addFiles('client/libs/mail_quartz.js', 'client');
+
+	api.addFiles('client/libs/mail_state.js', 'client');
 
 	api.addFiles('client/libs/localhost_data.coffee', 'client');
 	api.addFiles('client/libs/localhost_draft.coffee', 'client');
@@ -179,8 +181,9 @@ Package.onUse(function(api) {
 	api.export("MailAttachment");
 	api.export("MailForward");
 	api.export("SmtpClientManager");
-    api.export("steedosMime");
-    api.export("FileSaver");
+	api.export("steedosMime");
+	api.export("FileSaver");
+	api.export("MailState");
 });
 
 Package.onTest(function(api) {
