@@ -319,6 +319,7 @@ ImapClientManager.isNotClient = function(){
 	ImapClientManager.reload_timeoutId = Meteor.setTimeout(function () {
 		toastr.info("邮件服务器断开，正在尝试重连...");
 		MailManager.initMail();
+		sweetAlert.close();
 	}, 5 * 60 * 1000)
 }
 
