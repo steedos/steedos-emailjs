@@ -316,13 +316,11 @@ ImapClientManager.isNotClient = function(){
 	Meteor.clearTimeout(ImapClientManager.reload_timeoutId);
 	
 	// 自动重连
-	ImapClientManager.reload_timeoutId();
+	ImapClientManager.reload_timeoutId = Meteor.setTimeout(function () {
+		toastr.info("邮件服务器断开，正在尝试重连...");
+		MailManager.initMail();
+	}, 5 * 60 * 1000)
 }
-
-ImapClientManager.reload_timeoutId = Meteor.setTimeout(function () {
-	toastr.info("邮件服务器断开，正在尝试重连...");
-	MailManager.initMail();
-}, 5 * 60 * 1000)
 
 ImapClientManager.reconnectInfo = function(){
 	swal({
