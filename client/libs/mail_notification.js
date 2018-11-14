@@ -8,7 +8,13 @@ MailNotification.send = function(messages){
 		var title, body, openUrl;
 		var inboxPath = MailManager.getBoxBySpecialUse("\\Inbox").path;
 		var emailjsPath = "/emailjs/b/" + inboxPath + "/";
-	    if(messages.length > 1){
+		
+		// 抚顺分支emailjs跳转到webmail
+		if (Meteor.settings.public && Meteor.settings.public.fsshWebMailURL){
+			emailjsPath = "/fssh/webmail?uid=";
+		}
+		
+		if(messages.length > 1){
 	    	title = "新邮件";
 	    	body = "您有" + messages.length + "封新邮件";
 	    	openUrl = emailjsPath;
