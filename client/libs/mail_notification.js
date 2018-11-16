@@ -10,7 +10,7 @@ MailNotification.send = function(messages){
 		var emailjsPath = "/emailjs/b/" + inboxPath + "/";
 		
 		// 抚顺分支emailjs跳转到webmail
-		if (Meteor.settings.public && Meteor.settings.public.fsshWebMailURL){
+		if (Meteor.settings.public && Meteor.settings.public.fsshWebMail){
 			emailjsPath = "/fssh/webmail?uid=";
 		}
 		
