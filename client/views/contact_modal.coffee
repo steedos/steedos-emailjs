@@ -15,6 +15,8 @@ Template.contacts_modal.events
         console.log("..confirm");
         
         targetId = template.data.targetId;
+        ifrFsshWebMail = $("#fssh-webmail-iframe");
+        ifrSogoWeb = $("#sogo-web-iframe");
 
         if $("#"+template.data.targetId).length > 0
 
@@ -25,10 +27,17 @@ Template.contacts_modal.events
             values.forEach (value)->
     #           console.log value.name
                selectize.createItem(value.name + "<" + value.email + ">")
-        else
+        else if ifrSogoWeb.length
+            # sogo邮件系统
             values = ContactsManager.getContactModalValue();
             values.forEach (value)->
-                $("#fssh-webmail-iframe")[0].contentWindow.O(targetId).addressAdd('"'+value.name+'" &lt;'+value.email+'&gt;')
+                ifrSogoWeb[0].contentWindow.addRecipient(value.name + " <" + value.email + ">","to")
+                ifrSogoWeb.contents().find("md-autocomplete-wrap input").eq(0).trigger("click")
+        else if ifrFsshWebMail.length
+            # fssh中邮邮件系统
+            values = ContactsManager.getContactModalValue();
+            values.forEach (value)->
+                ifrFsshWebMail[0].contentWindow.O(targetId).addressAdd('"'+value.name+'" &lt;'+value.email+'&gt;')
 
         Modal.hide(template);
 
