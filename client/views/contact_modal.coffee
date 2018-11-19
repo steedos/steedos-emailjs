@@ -14,13 +14,14 @@ Template.contacts_modal.events
     'click #confirm': (event, template) ->
         console.log("..confirm");
         
+        target = template.data.target;
         targetId = template.data.targetId;
         ifrFsshWebMail = $("#fssh-webmail-iframe");
         ifrSogoWeb = $("#sogo-web-iframe");
 
-        if $("#"+template.data.targetId).length > 0
+        if targetId and $("#"+targetId).length > 0
 
-            selectize = $("#"+template.data.targetId)[0].selectize
+            selectize = $("#"+targetId)[0].selectize
 
             values = ContactsManager.getContactModalValue();
 
@@ -30,9 +31,14 @@ Template.contacts_modal.events
         else if ifrSogoWeb.length
             # sogo邮件系统
             values = ContactsManager.getContactModalValue();
-            values.forEach (value)->
-                ifrSogoWeb[0].contentWindow.addRecipient(value.name + " <" + value.email + ">","to")
-                ifrSogoWeb.contents().find("md-autocomplete-wrap input").eq(0).trigger("click")
+            # "editor.message.editable.to"/"editor.message.editable.cc"/"editor.message.editable.bcc"
+            ngModel = $(target).next().attr("ng-model")
+            targetInput = $(target).next().find("md-autocomplete-wrap input")
+            if ngModel
+                ngModel = ngModel.replace(/editor.message.editable./,"")
+                values.forEach (value)->
+                    ifrSogoWeb[0].contentWindow.addRecipient(value.name + " <" + value.email + ">", ngModel)
+                    targetInput.trigger("click")
         else if ifrFsshWebMail.length
             # fssh中邮邮件系统
             values = ContactsManager.getContactModalValue();
