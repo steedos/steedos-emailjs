@@ -71,18 +71,15 @@ Package.onUse(function(api) {
 	api.addFiles('client/libs/file-saver/FileSaver.js', 'client');
 	api.addFiles('client/libs/file-saver/SteedosMimeTypes.js', 'client');
 
-	api.addFiles('server/publications/mail_accounts.coffee', 'server');
-	api.addFiles('server/publications/mail_domains.coffee', 'server');
 	api.addFiles('server/methods/add_to_books.js', 'server');
 
-	api.addFiles('client/subcribe.coffee', 'client');
 	api.addFiles('client/router.coffee', 'client');
 
 	api.addFiles('client/api.js', 'client');
 
-	api.addFiles('client/libs/account_manager.js','client')
-
-	api.addFiles('client/libs/mail_attachment.js','client')
+	api.addFiles('client/libs/account_manager.js', 'client');
+	
+	api.addFiles('client/libs/mail_attachment.js','client');
 
 	api.addFiles('client/libs/mail_page.js', 'client');
 
@@ -164,7 +161,6 @@ Package.onUse(function(api) {
 	api.export('Mail');
 
 	api.export('MailMimeBuilder');
-	api.export('AccountManager');
 	api.export('MailCollection');
 	api.export("MailManager");
 	api.export("ImapClientManager");
