@@ -66,15 +66,10 @@ Package.onUse(function(api) {
 	tapi18nFiles = ['i18n/en.i18n.json', 'i18n/zh-CN.i18n.json']
 	api.addFiles(tapi18nFiles, ['client', 'server']);
 
+	api.use('steedos:mailbase@0.0.1');
 
 	api.addFiles('client/libs/file-saver/FileSaver.js', 'client');
 	api.addFiles('client/libs/file-saver/SteedosMimeTypes.js', 'client');
-
-	api.addFiles('lib/core.coffee', ['client', 'server']);
-	api.addFiles('lib/models/mail_accounts.coffee', ['client', 'server']);
-	api.addFiles('lib/models/mail_domains.coffee', ['client', 'server']);
-
-	api.addFiles('lib/admin.coffee', ['client', 'server']);
 
 	api.addFiles('server/publications/mail_accounts.coffee', 'server');
 	api.addFiles('server/publications/mail_domains.coffee', 'server');
