@@ -2,6 +2,15 @@ AccountManager = {_auth: null};
 
 _AccountsRemote = new AjaxCollection("mail_accounts")
 
+Meteor.startup(function() {
+    if (Meteor.isClient) {
+        return Accounts.onLogout(function() {
+            return AccountManager._auth = null;
+        });
+    }
+});
+
+
 AccountManager.getAuth = function(){
 	if(!_.isEmpty(AccountManager._auth)){
 		return AccountManager._auth;
