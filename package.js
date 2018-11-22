@@ -103,7 +103,6 @@ Package.onUse(function(api) {
 
 	api.addFiles('client/libs/mail_state.js', 'client');
 
-	api.addFiles('client/libs/localhost_data.coffee', 'client');
 	api.addFiles('client/libs/localhost_draft.coffee', 'client');
 	api.addFiles('client/libs/localhost_box.coffee', 'client');
 
