@@ -78,7 +78,7 @@ Package.onUse(function(api) {
 	api.addFiles('client/api.js', 'client');
 
 	api.addFiles('client/libs/account_manager.js', 'client');
-	
+
 	api.addFiles('client/libs/mail_attachment.js','client');
 
 	api.addFiles('client/libs/mail_page.js', 'client');
@@ -112,7 +112,7 @@ Package.onUse(function(api) {
 	api.addFiles('client/layout/master.html', 'client');
 	api.addFiles('client/layout/master.coffee', 'client');
 	api.addFiles('client/layout/master.less', 'client');
-	
+
 	api.addFiles('client/layout/sidebar.html', 'client');
 	api.addFiles('client/layout/sidebar.coffee', 'client');
 	api.addFiles('client/layout/sidebar.less', 'client');
