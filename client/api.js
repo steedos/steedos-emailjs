@@ -13,11 +13,16 @@ Mail = {};
 // }
 
 Mail.getUnseenMessages = function(limit){
-  if(!limit){
-    limit = 5;
-  }
-  var inboxPath = MailManager.getBoxBySpecialUse("\\Inbox").path;
-  var conn = MailCollection.getMessageCollection(inboxPath);
-  var messages = conn.find({"flags":{$ne:"\\Seen"}},{sort: {uid:-1}, skip: 0, limit: limit}).fetch();
-  return  messages;
+	if(!limit){
+		limit = 5;
+	}
+	var mail_unseen = MailCollection.mail_unseen.findOne()
+	var unredUids = []
+	if(mail_unseen){
+		unredUids = _.last(mail_unseen.uids, 5) || []
+	}
+	var inboxPath = MailManager.getBoxBySpecialUse("\\Inbox").path;
+	var conn = MailCollection.getMessageCollection(inboxPath);
+	var messages = conn.find({uid:  {$in: unredUids}},{sort: {uid:-1}, skip: 0, limit: limit}).fetch();
+	return  messages;
 }
