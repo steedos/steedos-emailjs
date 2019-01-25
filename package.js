@@ -5,19 +5,19 @@ Package.describe({
 	git: ''
 });
 
-Npm.depends({
-	busboy: "0.2.13",
-	cookies: "0.6.1",
-	mime: "1.3.4",
-	"emailjs-mime-builder": "git://github.com/steedos/emailjs-mime-builder.git",
-	"emailjs-mime-codec": "1.0.2",
-	"emailjs-stringencoding": "1.0.1",
-	"emailjs-mime-parser": "1.0.0",
-	"emailjs-imap-client": "git://github.com/steedos/emailjs-imap-client.git",
-	"emailjs-smtp-client": "1.0.0",
-	"emailjs-tcp-socket": "git://github.com/steedos/emailjs-tcp-socket.git",
-	"regenerator-runtime": "0.9.5"
-});
+// Npm.depends({
+// 	busboy: "0.2.13",
+// 	cookies: "0.6.1",
+// 	mime: "1.3.4",
+// 	"emailjs-mime-builder": "git://github.com/steedos/emailjs-mime-builder.git",
+// 	"emailjs-mime-codec": "1.0.2",
+// 	"emailjs-stringencoding": "1.0.1",
+// 	"emailjs-mime-parser": "1.0.0",
+// 	"emailjs-imap-client": "git://github.com/steedos/emailjs-imap-client.git",
+// 	"emailjs-smtp-client": "1.0.0",
+// 	"emailjs-tcp-socket": "git://github.com/steedos/emailjs-tcp-socket.git",
+// 	"regenerator-runtime": "0.9.5"
+// });
 
 
 Package.onUse(function(api) {
@@ -67,6 +67,8 @@ Package.onUse(function(api) {
 
 	api.use('steedos:mailbase@0.0.1');
 
+	api.addFiles('checkNpm.js');
+	
 	api.addFiles('client/libs/file-saver/FileSaver.js', 'client');
 	api.addFiles('client/libs/file-saver/SteedosMimeTypes.js', 'client');
 
