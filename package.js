@@ -67,7 +67,7 @@ Package.onUse(function(api) {
 
 	api.use('steedos:mailbase@0.0.1');
 
-	api.addFiles('checkNpm.js');
+	api.addFiles('checkNpm.js', 'server');
 	
 	api.addFiles('client/libs/file-saver/FileSaver.js', 'client');
 	api.addFiles('client/libs/file-saver/SteedosMimeTypes.js', 'client');
